@@ -1,0 +1,12 @@
+{application, app,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { app_app, []}},
+  {env, [{config_file, "/home/sony/erlang/app/src/f.txt"}]}
+ ]}.

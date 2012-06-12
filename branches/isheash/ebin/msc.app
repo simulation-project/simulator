@@ -1,8 +1,8 @@
-{application,app1,
+{application,msc,
              [{description,[]},
               {vsn,"1"},
               {registered,[]},
               {applications,[kernel,stdlib]},
-              {mod,{app1_app,[]}},
+              {mod,{msc_app,[]}},
               {env,[]},
-              {modules,[app1_app,app1_ch,app1_sup]}]}.
+              {modules,[msc_1st_sup,msc_2nd_sup,msc_app,msc_ch,msc_db]}]}.

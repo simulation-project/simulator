@@ -1,5 +1,5 @@
 
--module(app1_sup).
+-module(msc_1st_sup).
 
 -behaviour(supervisor).
 
@@ -19,12 +19,14 @@
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
+
+
 %% ===================================================================
 %% Supervisor callbacks
 %% ===================================================================
 
-init([]) ->
-    Achild={app1_ch,{app1_ch,start_link,[]},
-	    permanent,2000,worker,[sup_comp_ch]},
+init([]) ->    
+    Achild={msc_2nd_sup,{msc_2nd_sup,start_link,[]},
+	    permanent,5000,supervisor,[msc_2nd_sup]},
     {ok, { {one_for_one, 5, 10}, [Achild]} }.
 

@@ -22,7 +22,7 @@
 %%%         [http://www.iti.gov.eg/]
 %%% @end
 -module(msc_ch).
-%-behaviour(gen_server).
+-behaviour(gen_server).
 
 %%% Include files
 
@@ -101,8 +101,13 @@ terminate(_Reason, _St) ->
     ok.
 
 
-location_update_request(MSC, {2, 1, IMSI, LAI})->
-    gen_server:call(MSC, {2, 1, IMSI, LAI}).
+location_update_request(MSC, IMSI, LAI)->
+    gen_server:cast(MSC, {2, 1, IMSI, LAI,MSC}).
+
+insert_subscriber_data(MSC, IMSI, idle)->
+ gen_server:cast(MSC, {6, 2, IMSI, idle}).
+
+    
 %%%-----------------------------------------------------------------------------
 %%% Handle messages exports
 %%%-----------------------------------------------------------------------------
@@ -134,33 +139,19 @@ location_update_request(MSC, {2, 1, IMSI, LAI})->
 %% @see terminate/2
 %% @end
 
-handle_call({2, 1, IMSI, LAI}, _From, List) ->
-    io:format("aaaaaat child IMSI ~p LAI ~p ~n~n", [IMSI, LAI]),
-    Sub_IMSI=string:substr(integer_to_list(IMSI),6),
-    MGT=string:concat("2010",Sub_IMSI),
-    Sub_MGT=string:substr(MGT,1,5),
-    Sub_MGT_DB=list_to_atom(Sub_MGT),
-    io:format("~p",[MGT]),
-    SPC=msc_db:get_spc(Sub_MGT_DB),
-    io:format("Name of msc ~p~n", [SPC]),
-    {reply, ok, List};
 
 
 handle_call(get_all, _From, List) ->
-    io:format("handle call in child:~n~n"),
-   
     {reply, ok, List};
 
 
 handle_call({par, _Par}, _From, List) ->
-    %L = search_par(Par, List#st.config),
-    %io:format("The ~p is: ~p ~n", [Par, L]),
     {reply, no_reply, List}.
 %% @private
 %% @spec handle_cast(Req, St) -> Result
 %%    Req = term()
 %%    Result = {noreply, NewSt} |
-%%             {noreply, NewSt, Timeout} |
+%%             {noreply, NewSt, Timeout} |*
 %%             {stop, Reason, NewSt}
 %%    NewSt = term()
 %%    Timeout = int() | infinity
@@ -175,8 +166,25 @@ handle_call({par, _Par}, _From, List) ->
 %%
 %% @see terminate/2
 %% @end
-handle_cast(_Req, St) ->
-    {noreply, St}.
+handle_cast({2, 1, IMSI, LAI,MSC}, List) ->
+    VLR=msc_db:get_VLR(MSC),
+    io:format("vooooo ~p",[VLR]),
+    msc_db:insert_subscriber(IMSI,LAI,MSC,VLR),
+    Sub_IMSI=string:substr(integer_to_list(IMSI),6),
+    MGT=string:concat("2010",Sub_IMSI),
+    Sub_MGT=string:substr(MGT,1,5),
+    Sub_MGT_DB=list_to_atom(Sub_MGT),
+    SPC=msc_db:get_spc(Sub_MGT_DB),
+    io:format("Name of SPC ~p~n", [SPC]),
+    Reply=hlr:check_imsi(IMSI,SPC),
+    check_hlr(Reply, {IMSI, VLR, SPC}),
+    {noreply,List};
+
+handle_cast({6, 2, IMSI, idle}, List) ->
+    io:format("~n vvvvvvvv"),
+    msc_db:update_subscriber_info(IMSI,idle),
+    {noreply,List}.
+
 
 %% @private
 %% @spec handle_info(Info, St) -> Result
@@ -209,9 +217,25 @@ handle_info(_Info, St) ->
 %%    OldVsn = undefined | term()
 %%    St = term()
 %%    Extra = term
-%%    NewSt = term()
-%%
+%%    NewSt =show([H|_],msc)->
+   
 %% @doc Converts the process state when code is changed.
 %% @end
 code_change(_OldVsn, St, _Extra) ->
     {ok, St}.
+check_hlr(false, {})->
+    io:format("falseeeeeeee");
+check_hlr(ok, {IMSI, VLR, SPC}) ->
+    io:format("trueeeeeeeeee"),
+    GT = msc_db:get_GT(VLR),
+    update_location(IMSI, VLR, GT, SPC).
+
+
+update_location(IMSI, VLR, GT,SPC)->
+    io:format("update_location in child"),
+    hlr:update_location({6, 1, IMSI, VLR, GT},SPC),
+    io:format("location updated in child"),
+    ok.
+    
+    
+    

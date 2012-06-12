@@ -22,15 +22,13 @@
 %%%         [http://www.iti.gov.eg/]
 %%% @end
 -module(msc_ch).
-%-behaviour(gen_server).
+-behaviour(gen_server).
 
 %%% Include files
 
 %%% Start/Stop exports
 -export([start_link/1]).
 
-%%% External exports
--export([get_info/0, get_par/1]).
 
 %%% Init/Terminate exports
 -export([init/1, terminate/2]).
@@ -104,7 +102,7 @@ terminate(_Reason, _St) ->
 
 
 location_update_request(MSC, {2, 1, IMSI, LAI})->
-    gen_server:call(MSC, {2, 1, IMSI, LAI}).
+    gen_server:cast(MSC, {2, 1, IMSI, LAI}).
 %%%-----------------------------------------------------------------------------
 %%% Handle messages exports
 %%%-----------------------------------------------------------------------------
@@ -136,29 +134,13 @@ location_update_request(MSC, {2, 1, IMSI, LAI})->
 %% @see terminate/2
 %% @end
 
-handle_call({2, 1, IMSI, LAI}, _From, List) ->
-    io:format("aaaaaat child IMSI ~p LAI ~p ~n~n", [IMSI, LAI]),
-    Sub_IMSI=string:substr(integer_to_list(IMSI),6),
-    MGT=string:concat("2010",Sub_IMSI),
-    Sub_MGT=string:substr(MGT,1,5),
-    Sub_MGT_DB=list_to_atom(Sub_MGT),
-    io:format("~p",[MGT]),
-  	SPC=msc_db:get_spc(Sub_MGT),
-
-    io:format("Name of msc ~p~n", [SPC]),
-    ok = pgsql:close(C),
-    {reply, ok, List};
 
 
 handle_call(get_all, _From, List) ->
-    io:format("handle call in child:~n~n"),
-   
     {reply, ok, List};
 
 
 handle_call({par, _Par}, _From, List) ->
-    %L = search_par(Par, List#st.config),
-    %io:format("The ~p is: ~p ~n", [Par, L]),
     {reply, no_reply, List}.
 %% @private
 %% @spec handle_cast(Req, St) -> Result
@@ -179,8 +161,17 @@ handle_call({par, _Par}, _From, List) ->
 %%
 %% @see terminate/2
 %% @end
-handle_cast(_Req, St) ->
-    {noreply, St}.
+handle_cast({2, 1, IMSI, LAI}, List) ->
+    Sub_IMSI=string:substr(integer_to_list(IMSI),6),
+    MGT=string:concat("2010",Sub_IMSI),
+    Sub_MGT=string:substr(MGT,1,5),
+    Sub_MGT_DB=list_to_atom(Sub_MGT),
+    SPC=msc_db:get_spc(Sub_MGT_DB),
+    io:format("Name of SPC ~p~n", [SPC]),
+    Reply=hlr:check_imsi(IMSI,SPC),
+    check_hlr(Reply),
+    {noreply,List}.
+
 
 %% @private
 %% @spec handle_info(Info, St) -> Result
@@ -219,4 +210,8 @@ handle_info(_Info, St) ->
 %% @end
 code_change(_OldVsn, St, _Extra) ->
     {ok, St}.
-
+check_hlr(false)->
+    io:format("falseeeeeeee");
+check_hlr(ok) ->
+    io:format("trueeeeeeeeee").
+    

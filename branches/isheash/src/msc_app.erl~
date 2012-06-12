@@ -23,18 +23,9 @@ stop(_State) ->
 
 
 start_msc(Name)->
-	msc_2nd_sup:start_msc(Name).
+    msc_2nd_sup:start_msc(Name).
 
 location_update_request({2,1,IMSI,LAI})->
-MSC=msc_db:get_msc_name(LAI),
+    MSC=msc_db:get_msc_name(LAI),
     msc_ch:location_update_request(MSC, {2, 1, IMSI, LAI}).
 
-
-
-show([])->
-	not_found;
-
-show([H|_])->
-    {A, _} = H,
-    C = list_to_atom(binary_to_list(A)),
-    C.

@@ -23,7 +23,6 @@ stop(_State) ->
 %% ===================================================================
 %% @spec start_child(Value) -> Result
 %%    Value = term()
-%%    LAI = term()
 %%    Result = atom()
 %%
 %% @doc Sends location update request to MSC.

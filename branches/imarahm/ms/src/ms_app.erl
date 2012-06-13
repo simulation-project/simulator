@@ -6,7 +6,7 @@
 -export([start/2, stop/1]).
 
 %% API functions
--export([start_child/1]).
+-export([create_ms/1,change_state/1]).
 
 %% ===================================================================
 %% Application callbacks
@@ -21,13 +21,25 @@ stop(_State) ->
 %% ===================================================================
 %% API functions
 %% ===================================================================
-%% @spec start_child(Value) -> Result
+
+%% @spec create_ms(Value) -> Result
 %%    Value = term()
 %%    Result = atom()
 %%
 %% @doc Sends location update request to MSC.
 %% @end
 
-start_child(Tuple)->
+create_ms(Tuple)->
     io:format("start_child ~n~p~n",[Tuple]),
     ms_fsm_sup:start_child(Tuple).
+
+%% @spec change_state(Value) -> Result
+%%    Value = term()
+%%    Result = atom()
+%%
+%% @doc Sends location update request to MSC.
+%% @end
+
+change_state(Tuple)->
+    io:format("change_state ~n~p~n",[Tuple]),
+    ms_fsm:send_event(Tuple).

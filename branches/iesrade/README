@@ -1,0 +1,11 @@
+git branch esraaBranch -->  to create new branch 
+
+git checkout esraaBranch --> switch to esraaBranch 
+
+git add *	--> to add files to staged area
+
+git commit -m 'my first commit'	--> commit files 
+
+git push -u origin esraaBranch --> push esraaBranch to remote repository
+
+

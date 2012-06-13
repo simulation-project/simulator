@@ -1,0 +1,9 @@
+{application,request_handler,
+             [{description,[]},
+              {vsn,"1"},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {mod,{request_handler_app,[]}},
+              {env,[]},
+              {modules,[request_handler,request_handler_app,
+                        request_handler_sup]}]}.

@@ -1,0 +1,109 @@
+--- Test run on 2012/06/12 09:25:57 ---
+Converting "/home/marwa/lib/ms/." to "/home/marwa/lib/ms" and re-inserting with add_patha/1
+
+
+Common Test v1.6.1 starting (cwd is /home/marwa/lib/ms)
+
+
+Common Test: Running make in test directories...
+Recompile: ms_app_SUITE
+
+CWD set to: "/home/marwa/lib/ms/logs/ct_run.test@ubuntu.2012-06-12_09.25.57"
+
+TEST INFO: 1 test(s), 3 case(s) in 1 suite(s)
+
+Testing lib.ms: Starting test, 3 test cases
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.90.0>},
+                       {name,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.91.0>},
+                       {name,overload},
+                       {mfargs,{overload,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.89.0>},
+                       {name,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.92.0>},
+                       {name,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+         application: sasl
+          started_at: test@ubuntu
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+          supervisor: {local,ms_sup}
+             started: [{pid,<0.100.0>},
+                       {name,ms_fsm_sup},
+                       {mfargs,{ms_fsm_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 12-Jun-2012::09:25:58 ===
+         application: ms
+          started_at: test@ubuntu
+----------------------------------------------------
+2012-06-12 09:25:58.840
+Starting test case api
+
+----------------------------------------------------
+2012-06-12 09:25:58.841
+Test case api completed
+
+----------------------------------------------------
+2012-06-12 09:25:58.867
+Starting test case api_neg
+
+----------------------------------------------------
+2012-06-12 09:25:58.867
+Test case api_neg completed
+
+----------------------------------------------------
+2012-06-12 09:25:58.893
+Starting test case performance
+
+----------------------------------------------------
+2012-06-12 09:25:58.897
+Test case performance completed
+
+
+=INFO REPORT==== 12-Jun-2012::09:25:58 ===
+    application: sasl
+    exited: stopped
+    type: temporary
+
+=INFO REPORT==== 12-Jun-2012::09:25:58 ===
+    application: ms
+    exited: stopped
+    type: temporary
+Testing lib.ms: TEST COMPLETE, 3 ok, 0 failed of 3 test cases
+
+Updating /home/marwa/lib/ms/logs/index.html... done
+Updating /home/marwa/lib/ms/logs/all_runs.html... done
+

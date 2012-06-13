@@ -1,0 +1,3 @@
+#!/bin/bash
+
+erl -name marwa@iti.com -pa /home/sherif/Desktop/ms/ebin/ -eval 'application:start(sasl)' 

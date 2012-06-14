@@ -101,9 +101,9 @@ imsi_exist(_Name,Imsi)->
     check(Rows).
 %%----------------------------------------------------------------------	
 check([])->
-    notExist;
+    false;
 check(_R) ->
-    exist.
+    ok.
 %%%----------------------------------------------------------------------
 update_location(L,SPC)->
     Name = getNameBySpc(SPC),
@@ -270,12 +270,13 @@ code_change(_OldVsn, St, _Extra) ->
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
-%%%-----------------------------------------------------------------------------
+%%%----------------Name-------------------------------------------------------------
 %%getName({SPC, St})->
 %%    {st,L}=St,
 %%    search({SPC, L}).
 
 getName({SPC, [{Name,SPC,_PID}|_T]})->
+io:format("hlr name : ~p~n", [Name]),
     Name;
 getName({SPC, [_H|T]}) ->
     getName({SPC,T}).

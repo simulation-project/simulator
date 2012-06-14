@@ -83,7 +83,7 @@ start_gen(Conf)->
     {ok,PID} = hlr_server:start_link(Conf),
     SPC =  proplists:get_value(spc, Conf),
     Name = proplists:get_value(hlr_name,Conf),
-    gen_server:call(?MODULE, {save, {Name,SPC,PID}}, 1000),
+    gen_server:call(?MODULE, {save, {Name,SPC,PID}}, infinity),
     io:format("Hlr Starts with configuration  : ~p~n", [Conf]).
 %%%----------------------------------------------------------------------
 printRegServers()->
@@ -108,10 +108,10 @@ check(_R) ->
 update_location(L,SPC)->
     Name = getNameBySpc(SPC),
     AName =  list_to_atom(Name),
-    gen_server:call(AName, {updateLocation, L}).
+    gen_server:call(AName, {updateLocation, L},infinity).
 %%-----------------------------------------------------------------------
 getNameBySpc(SPC)->
-  gen_server:call(?MODULE, {getName,SPC}, 1000).
+  gen_server:call(?MODULE, {getName,SPC}, infinity).
 %%%----------------------------------------------------------------------
 %%printHlrData(Name)->
 %%  gen_server:call(?MODULE, {printHlrData, Name}, 1000).
@@ -284,3 +284,4 @@ getName({SPC, [_H|T]}) ->
 %%---------------------------------------------------------------------------------
 	
 	
+

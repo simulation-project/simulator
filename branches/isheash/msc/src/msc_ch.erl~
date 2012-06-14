@@ -107,9 +107,12 @@ location_update_request(MSC, IMSI, LAI)->
 insert_subscriber_data(MSC, IMSI, idle)->
  gen_server:cast(MSC, {6, 2, IMSI, idle}).
 
-    
+check_msc_spc(MSC,SPC,GT)->
+    io:format("~n chechiiiiing"),
+    gen_server:call(MSC,{SPC,GT,check}).   
+
 %%%-----------------------------------------------------------------------------
-%%% Handle messages exports
+%%%  messages exports
 %%%-----------------------------------------------------------------------------
 %% @private
 %% @spec handle_call(Req, From, St) -> Result
@@ -146,7 +149,14 @@ handle_call(get_all, _From, List) ->
 
 
 handle_call({par, _Par}, _From, List) ->
-    {reply, no_reply, List}.
+    {reply, no_reply, List};
+
+handle_call({SPC,GT,check}, _From,  List) ->
+    io:format("handle call chechiiiiing"),
+    Reply=msc_db:get_msc_name({SPC,GT}),
+    io:format("checking replyyy: ~p",[Reply]),
+    {reply,Reply,List}.
+
 %% @private
 %% @spec handle_cast(Req, St) -> Result
 %%    Req = term()
@@ -176,7 +186,7 @@ handle_cast({2, 1, IMSI, LAI,MSC}, List) ->
     Sub_MGT_DB=list_to_atom(Sub_MGT),
     SPC=msc_db:get_spc(Sub_MGT_DB),
     io:format("Name of SPC ~p~n", [SPC]),
-    Reply=hlr_mgr:check_imsi(IMSI,SPC),
+    Reply=hlr_mgr:imsiExist(SPC,IMSI),
     check_hlr(Reply, {IMSI, VLR, SPC}),
     {noreply,List};
 

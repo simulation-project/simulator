@@ -74,7 +74,7 @@ start_link(Conf) ->
     {ok, PID} = gen_server:start_link({local, A}, ?MODULE, [], []),
     io:format("hlr : ~p starts with configuration :  ~p~n", [A, Conf]),
     NEWL=[{pid,PID}|Conf],
-    gen_server:call(A,  {addConf,  NEWL}, 1000),
+    gen_server:call(A,  {addConf,  NEWL}, infinity),
     %%PID ! {addConf,  NEWL},
     {ok, PID}.
 
@@ -83,9 +83,9 @@ start_link(Conf) ->
 %%% External exports
 %%%-----------------------------------------------------------------------------
 call({addConf, Conf}) ->
-    gen_server:call(?MODULE, {addConf, Conf}, 1000);
+    gen_server:call(?MODULE, {addConf, Conf}, infinity);
 call({updateLocation, L}) ->
-    gen_server:call(?MODULE, {updateLocation, L}, 1000).
+    gen_server:call(?MODULE, {updateLocation, L}, infinity).
 
 
 %%%-----------------------------------------------------------------------------
@@ -265,13 +265,28 @@ sendISD(MSCGT,ISD,IMSI)->
     %%io:format("MSC GT ... ~p ..ISD .. ~p~n",[MSCGT,ISD]).
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
     {ok, _C, SPC} = pgsql:equery(C, "select spc from msc where gt=$1",[MSCGT]),
+     ok = pgsql:close(C),
     %%MSC_name=msc_app:call(Rows),
     [{A}]=ISD,
     [{B}]=SPC,
     NISD = binary_to_list(A),
     NSPC = binary_to_list(B),
-    io:format("MSC GT ... ~p....IMSI .... ~p ..ISD .. ~p ..... SPC....~p ~n",[MSCGT,IMSI,NISD,NSPC]),
-msc_app:insert_subscriber_data(IMSI, NISD, NSPC).
+    checkMscSpc(MSCGT,NSPC,IMSI,NISD),
+    io:format("MSC GT ... ~p....IMSI .... ~p ..ISD .. ~p ..... SPC....~p ~n",[MSCGT,IMSI,NISD,NSPC]).
+%%msc_app:insert_subscriber_data(IMSI, NISD, NSPC).
+%---------------------------------------------------------------------------------
+checkMscSpc(MSCGT,SPC,IMSI,ISD)->
+    Return = msc_app:check_msc_spc(SPC, MSCGT),
+    io:format("Return .............~p~n",[Return]),
+    checkReturn(Return,SPC,IMSI,ISD).
+%--------------------------------
+checkReturn(not_found,_SPC,_IMSI,_ISD) ->
+    io:format("This SPC is not belong to this MSC !!! ");
+checkReturn(_,SPC,IMSI,ISD)->
+    msc_app:insert_subscriber_data(IMSI, ISD, SPC),
+    io:format("ISD is sent from hlr to msc successfuly~n").
+
+
 %%---------------------------------------------------------------------------------    
 printAllSd()->    	
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),

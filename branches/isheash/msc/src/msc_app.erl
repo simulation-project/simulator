@@ -32,3 +32,9 @@ location_update_request(IMSI,LAI)->
 
 insert_subscriber_data(IMSI,INFO,SPC)->
     msc_2nd_sup:insert_subscriber_data(IMSI, INFO, SPC).
+
+check_msc_spc(SPC,GT)->
+    Y=msc_2nd_sup:check_msc_spc(SPC,GT),
+    
+    io:format("~n yyyyyyyyyyyy is ~p~n",[Y]),
+    Y.

@@ -107,9 +107,16 @@ location_update_request(MSC, IMSI, LAI)->
 insert_subscriber_data(MSC, IMSI, idle)->
  gen_server:cast(MSC, {6, 2, IMSI, idle}).
 
-    
+check_msc_spc(MSC,SPC,GT)->
+    io:format("handle call chechiiiiing"),
+io:format("spc isssssssss ~p",[SPC]),
+    Reply=msc_db:get_msc_name({SPC,GT}),
+    io:format("checking replyyy: ~p",[Reply]),
+    io:format("~n chechiiiiing"),
+    Reply.   
+
 %%%-----------------------------------------------------------------------------
-%%% Handle messages exports
+%%%  messages exports
 %%%-----------------------------------------------------------------------------
 %% @private
 %% @spec handle_call(Req, From, St) -> Result
@@ -147,6 +154,7 @@ handle_call(get_all, _From, List) ->
 
 handle_call({par, _Par}, _From, List) ->
     {reply, no_reply, List}.
+
 %% @private
 %% @spec handle_cast(Req, St) -> Result
 %%    Req = term()

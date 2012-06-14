@@ -1,7 +1,7 @@
 -module(msc_db).
 
 -compile([export_all]).
-get_msc_name(SPC) ->
+get_msc_name({SPC,spc}) ->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _C, Rows} = pgsql:equery(C, "select name from msc_data where ni_spc=$1", [SPC]),
     MSC = show(Rows),    

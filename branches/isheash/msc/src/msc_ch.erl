@@ -197,8 +197,8 @@ handle_cast({2, 2, IMSI, LAI,MSC}, List) ->
     io:format("handle cast of 2,2~n~n"),
     Reply = msc_db:check_msc_imsi(MSC, IMSI),   % Reply {not_found | imsi }
     io:format("Reply ~p~n", [Reply]),
-    if
-	Reply == not_found ->
+    case Reply of
+	not_found ->
 	    io:format("inter MSC location update~n~n"),
 	    ok;
 	true ->

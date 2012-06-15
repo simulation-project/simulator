@@ -1,3 +1,0 @@
-{name,"MSC1"}.
-{id,123}.
-{loc, "smartvillage"}.

@@ -1,3 +1,0 @@
-{application,app1}.
-{packages,[]}.
-{modules,[app1_app,app1_sup]}.

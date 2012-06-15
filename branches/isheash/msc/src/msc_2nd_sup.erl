@@ -7,7 +7,7 @@
 -export([start_link/0]).
 
 %% Supervisor callbacks
--export([init/1,start_msc/1, location_update_request/2, insert_subscriber_data/3]).
+-export([init/1,start_msc/1, location_update_request/1, insert_subscriber_data/3]).
 -compile([export_all]).
 %% Helper macro for declaring children of supervisor
 -define(CHILD(I, Type), {I, {I, start_link, []}, permanent, 5000, Type, [I]}).
@@ -30,12 +30,16 @@ init([]) ->
     {ok, { {simple_one_for_one, 5, 10}, [?CHILD(msc_ch,worker)]} }.
 
 
-location_update_request(IMSI, LAI)->
+location_update_request({2, 1, IMSI, LAI})->
     MSC = msc_db:get_msc_name({LAI,lai}),
-    msc_ch:location_update_request(MSC,IMSI, LAI).
+    msc_ch:location_update_request({2, 1, IMSI, LAI}, MSC);
+
+location_update_request({2, 2, IMSI, LAI}) ->
+    MSC = msc_db:get_msc_name({LAI,lai}),
+    msc_ch:location_update_request({2, 2, IMSI, LAI}, MSC).
     
 
-insert_subscriber_data(IMSI,INFO,SPC )->
+insert_subscriber_data(IMSI,_INFO,SPC )->
     MSC=msc_db:get_msc_name({SPC,spc}),
     msc_ch:insert_subscriber_data(MSC, IMSI, idle).
 

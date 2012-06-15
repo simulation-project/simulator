@@ -62,6 +62,13 @@ update_subscriber_info(IMSI,idle)->
     {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [idle,IMSI]),
     io:format("heeeeeeeeeeeeh").
 
+check_msc_imsi(MSC, IMSI)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where msc_name = $1 and imsi=$2", [MSC, IMSI]),
+    IMSI = show(Rows),
+    IMSI.
+
+
 show([])->
     not_found;
 

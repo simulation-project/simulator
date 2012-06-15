@@ -35,11 +35,12 @@ location_update_request(IMSI, LAI)->
     msc_ch:location_update_request(MSC,IMSI, LAI).
     
 
-insert_subscriber_data(IMSI,INFO,SPC )->
+insert_subscriber_data(IMSI,_INFO,SPC )->
     MSC=msc_db:get_msc_name({SPC,spc}),
     msc_ch:insert_subscriber_data(MSC, IMSI, idle).
 
 check_msc_spc(SPC,GT)->
     MSC=msc_db:get_msc_name({GT,gt}),
     X=msc_ch:check_msc_spc(MSC, SPC, GT),
-    io:format("XXXXXX ~p",[X]).
+    io:format("XXXXXX ~p",[X]),
+    X.

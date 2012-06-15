@@ -1,0 +1,466 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: double_y(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION double_y() RETURNS text
+    LANGUAGE sql
+    AS $$
+select name from employee where id=1;
+$$;
+
+
+ALTER FUNCTION public.double_y() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: a; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE a (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.a OWNER TO postgres;
+
+--
+-- Name: produce1; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE produce1 (
+    prodid smallint NOT NULL,
+    prodname character varying(40) NOT NULL,
+    variety character varying(40),
+    instock smallint NOT NULL,
+    onorder smallint NOT NULL,
+    seasonattr smallint NOT NULL
+);
+
+
+ALTER TABLE public.produce1 OWNER TO postgres;
+
+--
+-- Name: comedies; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW comedies AS
+    SELECT produce1.prodid, produce1.prodname, produce1.variety, produce1.instock, produce1.onorder, produce1.seasonattr FROM produce1 WHERE (produce1.prodid = 1);
+
+
+ALTER TABLE public.comedies OWNER TO postgres;
+
+--
+-- Name: comedies2; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW comedies2 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE (produce1.prodid = 1);
+
+
+ALTER TABLE public.comedies2 OWNER TO postgres;
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE country (
+    countryid integer NOT NULL,
+    name character varying(50)
+);
+
+
+ALTER TABLE public.country OWNER TO postgres;
+
+--
+-- Name: employee; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE employee (
+    id integer NOT NULL,
+    name character varying(50),
+    salary integer,
+    sdate date,
+    country_id integer,
+    working_hour integer
+);
+
+
+ALTER TABLE public.employee OWNER TO postgres;
+
+--
+-- Name: hlr1; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr1 (
+    imsi character varying(17) NOT NULL,
+    vlr character varying(14),
+    isd character varying(100)
+);
+
+
+ALTER TABLE public.hlr1 OWNER TO postgres;
+
+--
+-- Name: msc; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msc (
+    gt character varying(10) NOT NULL,
+    spc character varying(10)
+);
+
+
+ALTER TABLE public.msc OWNER TO postgres;
+
+--
+-- Name: produce; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE produce (
+    id integer,
+    name text,
+    type text,
+    instock integer,
+    outstock integer,
+    pdate date,
+    signage text,
+    producevariety text,
+    deliverydate date,
+    totalinstock integer
+);
+
+
+ALTER TABLE public.produce OWNER TO postgres;
+
+--
+-- Name: sal_emp; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE sal_emp (
+    name character varying(50),
+    pay integer[]
+);
+
+
+ALTER TABLE public.sal_emp OWNER TO postgres;
+
+--
+-- Name: subscriber; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE subscriber (
+    imsi character varying(80) NOT NULL,
+    vlradd character varying(80),
+    sup_info character varying(100)
+);
+
+
+ALTER TABLE public.subscriber OWNER TO postgres;
+
+--
+-- Name: view1; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view1 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE (produce1.instock >= 1000);
+
+
+ALTER TABLE public.view1 OWNER TO postgres;
+
+--
+-- Name: view10; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view10 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text ~~ '%a%'::text);
+
+
+ALTER TABLE public.view10 OWNER TO postgres;
+
+--
+-- Name: view11; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view11 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text ~~ '%o%'::text);
+
+
+ALTER TABLE public.view11 OWNER TO postgres;
+
+--
+-- Name: view2; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view2 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE (produce1.instock >= 1000) ORDER BY produce1.prodname;
+
+
+ALTER TABLE public.view2 OWNER TO postgres;
+
+--
+-- Name: view3; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view3 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = '%e%'::text);
+
+
+ALTER TABLE public.view3 OWNER TO postgres;
+
+--
+-- Name: view4; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view4 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'r%'::text);
+
+
+ALTER TABLE public.view4 OWNER TO postgres;
+
+--
+-- Name: view5; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view5 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'r%'::text);
+
+
+ALTER TABLE public.view5 OWNER TO postgres;
+
+--
+-- Name: view6; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view6 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'a%'::text);
+
+
+ALTER TABLE public.view6 OWNER TO postgres;
+
+--
+-- Name: view7; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view7 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = '%a'::text);
+
+
+ALTER TABLE public.view7 OWNER TO postgres;
+
+--
+-- Name: view8; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view8 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = '%a%'::text);
+
+
+ALTER TABLE public.view8 OWNER TO postgres;
+
+--
+-- Name: view9; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view9 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'a*'::text);
+
+
+ALTER TABLE public.view9 OWNER TO postgres;
+
+--
+-- Data for Name: a; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY a (imsi, vlradd, subinfo) FROM stdin;
+0000000001	\N	info
+\.
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY country (countryid, name) FROM stdin;
+1	egypt
+\.
+
+
+--
+-- Data for Name: employee; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY employee (id, name, salary, sdate, country_id, working_hour) FROM stdin;
+1	ahmed	10000	2012-07-01	1	8
+\.
+
+
+--
+-- Data for Name: hlr1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr1 (imsi, vlr, isd) FROM stdin;
+602-02-0001000003	\N	ayhaga
+602-02-0001000044	\N	ayhaga
+602-02-0001000024	\N	ayhaga
+602-02-0001000025	\N	meshayhaga
+602-02-000100055	\N	ayhaga
+602-02-000100056	\N	ayhaga
+602-02-0001005500	\N	ayhaga
+602-02-0001000002	\N	ttt
+602021245555	\N	eee
+6020212455556	\N	eee
+60202124555567	vlr1	eee
+\.
+
+
+--
+-- Data for Name: msc; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msc (gt, spc) FROM stdin;
+gt2	spc2
+gt1	spc3
+\.
+
+
+--
+-- Data for Name: produce; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY produce (id, name, type, instock, outstock, pdate, signage, producevariety, deliverydate, totalinstock) FROM stdin;
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+\.
+
+
+--
+-- Data for Name: produce1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY produce1 (prodid, prodname, variety, instock, onorder, seasonattr) FROM stdin;
+1	ball	foot	2	4	5
+2	apple	red	2000	4000	5000
+3	orange	orange	2500	4500	5500
+\.
+
+
+--
+-- Data for Name: sal_emp; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sal_emp (name, pay) FROM stdin;
+Bill	{1000,1001}
+\.
+
+
+--
+-- Data for Name: subscriber; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY subscriber (imsi, vlradd, sup_info) FROM stdin;
+\.
+
+
+--
+-- Name: a_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY a
+    ADD CONSTRAINT a_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (countryid);
+
+
+--
+-- Name: employee_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY employee
+    ADD CONSTRAINT employee_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hlr1_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr1
+    ADD CONSTRAINT hlr1_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: msc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc
+    ADD CONSTRAINT msc_pkey PRIMARY KEY (gt);
+
+
+--
+-- Name: produce1_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY produce1
+    ADD CONSTRAINT produce1_pkey PRIMARY KEY (prodid);
+
+
+--
+-- Name: subscriber_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY subscriber
+    ADD CONSTRAINT subscriber_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -101,13 +101,16 @@ terminate(_Reason, _St) ->
     ok.
 
 
-location_update_request(MSC, IMSI, LAI)->
-    gen_server:cast(MSC, {2, 1, IMSI, LAI,MSC}).
+location_update_request({2, 1, IMSI, LAI}, MSC)->
+    gen_server:cast(MSC, {2, 1, IMSI, LAI,MSC});
+
+location_update_request({2, 2, IMSI, LAI}, MSC)->
+    gen_server:cast(MSC, {2, 2, IMSI, LAI,MSC}).
 
 insert_subscriber_data(MSC, IMSI, idle)->
  gen_server:cast(MSC, {6, 2, IMSI, idle}).
 
-check_msc_spc(MSC,SPC,GT)->
+check_msc_spc(_MSC,SPC,GT)->
     io:format("handle call chechiiiiing"),
 io:format("spc isssssssss ~p",[SPC]),
     Reply=msc_db:get_msc_name({SPC,GT}),
@@ -177,6 +180,7 @@ handle_call({par, _Par}, _From, List) ->
 handle_cast({2, 1, IMSI, LAI,MSC}, List) ->
     VLR=msc_db:get_VLR(MSC),
     io:format("vooooo ~p",[VLR]),
+   
     msc_db:insert_subscriber(IMSI,LAI,MSC,VLR),
     Sub_IMSI=string:substr(atom_to_list(IMSI),6),
     MGT=string:concat("2010",Sub_IMSI),
@@ -184,9 +188,24 @@ handle_cast({2, 1, IMSI, LAI,MSC}, List) ->
     Sub_MGT_DB=list_to_atom(Sub_MGT),
     SPC=msc_db:get_spc(Sub_MGT_DB),
     io:format("Name of SPC ~p~n", [SPC]),
+    
     Reply=hlr_mgr:imsiExist(SPC,IMSI),
     check_hlr(Reply, {IMSI, VLR, SPC}),
     {noreply,List};
+
+handle_cast({2, 2, IMSI, LAI,MSC}, List) ->
+    io:format("handle cast of 2,2~n~n"),
+    Reply = msc_db:check_msc_imsi(MSC, IMSI),   % Reply {not_found | imsi }
+    io:format("Reply ~p~n", [Reply]),
+    if
+	Reply == not_found ->
+	    io:format("inter MSC location update~n~n"),
+	    ok;
+	true ->
+	    io:format("interaaaa MSC location update~n~n"),
+	    ok
+    end,
+    {noreply, List};
 
 handle_cast({6, 2, IMSI, idle}, List) ->
     io:format("~n vvvvvvvv"),

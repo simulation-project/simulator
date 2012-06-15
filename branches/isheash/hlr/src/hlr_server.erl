@@ -25,7 +25,7 @@
 -behaviour(gen_server).
 
 %%% Include files
--include_lib("../../epgsql/include/pgsql.hrl").
+%-include_lib("../../epgsql/include/pgsql.hrl").
 %%% Start/Stop exports
 -export([start_link/1]).
 

@@ -346,7 +346,7 @@ code_change(_OldVsn, Stn, Std, _Extra) ->
 
 loc_update(IMSI, LAI)->
     %%_MSC = current_msc(),
-    msc_app:location_update_request(IMSI, LAI),
+    msc_app:location_update_request({2, 1, IMSI, LAI}),
     ok.
 
 %%current_msc()->

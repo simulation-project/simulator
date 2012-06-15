@@ -25,7 +25,7 @@
 -behaviour(gen_server).
 
 %%% Include files
--include_lib("../../epgsql/include/pgsql.hrl").
+%-include_lib("../../epgsql/include/pgsql.hrl").
 %%% Start/Stop exports
 -export([start_link/1]).
 
@@ -276,16 +276,16 @@ sendISD(MSCGT,ISD,IMSI)->
 %%msc_app:insert_subscriber_data(IMSI, NISD, NSPC).
 %---------------------------------------------------------------------------------
 checkMscSpc(MSCGT,SPC,IMSI,ISD)->
-    NEWSPC=list_to_atom(SPC),
-    Return = msc_app:check_msc_spc(NEWSPC, MSCGT),
+    Return = msc_app:check_msc_spc(SPC, MSCGT),
     io:format("Return .............~p~n",[Return]),
     checkReturn(Return,SPC,IMSI,ISD).
 %--------------------------------
-checkReturn([],SPC,IMSI,ISD)->
+checkReturn(not_found,_SPC,_IMSI,_ISD) ->
+    io:format("This SPC is not belong to this MSC !!! ");
+checkReturn(_,SPC,IMSI,ISD)->
     msc_app:insert_subscriber_data(IMSI, ISD, SPC),
-    io:format("ISD is sent from hlr to msc successfuly~n");
-checkReturn(_,_SPC,_IMSI,_ISD) ->
-    io:format("This SPC is not belong to this MSC !!! ").
+    io:format("ISD is sent from hlr to msc successfuly~n").
+
 
 %%---------------------------------------------------------------------------------    
 printAllSd()->    	

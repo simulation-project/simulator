@@ -177,6 +177,7 @@ handle_call({par, _Par}, _From, List) ->
 %%
 %% @see terminate/2
 %% @end
+
 handle_cast({2, 1, IMSI, LAI,MSC}, List) ->
     VLR=msc_db:get_VLR(MSC),
     io:format("vooooo ~p",[VLR]),
@@ -194,22 +195,13 @@ handle_cast({2, 1, IMSI, LAI,MSC}, List) ->
     {noreply,List};
 
 handle_cast({2, 2, IMSI, LAI,MSC}, List) ->
-    io:format("handle cast of 2,2~n~n"),
-    Reply = msc_db:check_msc_imsi(MSC, IMSI),   % Reply {not_found | imsi }
-    io:format("Reply ~p~n", [Reply]),
-    case Reply
-	not_found ->
-	    io:format("inter MSC location update~n~n"),
-	    ok;
-	true ->
-	    io:format("interaaaa MSC location update~n~n"),
-	    ok
-    end,
-    {noreply, List};
+    MSC_Name = msc_db:check_msc_imsi(MSC,IMSI),
+    normal_location_update(MSC_Name,IMSI,LAI),
+    {noreply,List};
 
 handle_cast({6, 2, IMSI, idle}, List) ->
     io:format("~n vvvvvvvv"),
-    msc_db:update_subscriber_info(IMSI,idle),
+    msc_db:update_subscriber_info({IMSI, LAI, MSC, VLR}, idle),
     {noreply,List}.
 
 
@@ -257,6 +249,11 @@ check_hlr(ok, {IMSI, VLR, SPC}) ->
     GT = msc_db:get_GT(VLR),
     update_location(IMSI, VLR, GT, SPC).
 
+normal_location_update(not_found, _IMSI, _LAI)->
+    ok;
+normal_location_update(_, IMSI, LAI) ->
+     msc_db:update_location(IMSI, LAI),
+    ok.
 
 update_location(IMSI, VLR, GT,SPC)->
     io:format("update_location in child"),

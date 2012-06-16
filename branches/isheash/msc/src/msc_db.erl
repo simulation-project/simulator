@@ -56,17 +56,23 @@ get_VLR(MSC)->
     io:format("VLLLLLLRRRRRRRRRRR ~p~n~n",[VLR]),
     VLR.
 
-
+%{IMSI,LAI,MSC,VLR},idle
 update_subscriber_info(IMSI,idle)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [idle,IMSI]),
     io:format("heeeeeeeeeeeeh").
 
+
+update_location(IMSI, LAI)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info  set lai=$1 where imsi=$2", [LAI, IMSI]),
+    io:format("intra MSc done ~n~n").
+
 check_msc_imsi(MSC, IMSI)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where msc_name = $1 and imsi=$2", [MSC, IMSI]),
-    IMSI = show(Rows),
-    IMSI.
+    {ok, _C, Rows} = pgsql:equery(C, "select msc_name from sub_info where msc_name = $1 and imsi=$2", [MSC, IMSI]),
+    R = show(Rows),
+    R.
 
 
 show([])->

@@ -1,0 +1,4 @@
+{logdir, "%TEST_DIR%/log"}.
+{config, "%TEST_DIR%/conf/test.conf"}.
+{alias, test, "%TEST_DIR%"}.
+{suites, test, all}.

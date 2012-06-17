@@ -1,0 +1,12 @@
+{application, request_handler,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { request_handler_app, []}},
+  {env, []}
+ ]}.

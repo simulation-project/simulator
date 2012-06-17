@@ -1,0 +1,9 @@
+{application,ms_fsm,
+             [{description,[]},
+              {vsn,"1"},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {mod,{ms_fsm_app,[]}},
+              {env,[]},
+              {modules,[ms_fsm,ms_fsm_app,ms_fsm_sup,ms_gen_event,
+                        ms_gen_server,ms_sup]}]}.

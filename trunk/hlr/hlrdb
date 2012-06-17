@@ -1,0 +1,125 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.4
+-- Dumped by pg_dump version 9.1.4
+-- Started on 2012-06-12 20:11:22
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 163 (class 3079 OID 11639)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1861 (class 0 OID 0)
+-- Dependencies: 163
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 161 (class 1259 OID 16480)
+-- Dependencies: 5
+-- Name: a; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE a (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.a OWNER TO postgres;
+
+--
+-- TOC entry 162 (class 1259 OID 16485)
+-- Dependencies: 5
+-- Name: msc; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msc (
+    gt character varying(10) NOT NULL,
+    nispc character varying(10)
+);
+
+
+ALTER TABLE public.msc OWNER TO postgres;
+
+--
+-- TOC entry 1854 (class 0 OID 16480)
+-- Dependencies: 161
+-- Data for Name: a; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY a (imsi, vlradd, subinfo) FROM stdin;
+0000000001	\N	info
+\.
+
+
+--
+-- TOC entry 1855 (class 0 OID 16485)
+-- Dependencies: 162
+-- Data for Name: msc; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msc (gt, nispc) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1851 (class 2606 OID 16484)
+-- Dependencies: 161 161
+-- Name: a_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY a
+    ADD CONSTRAINT a_pkey PRIMARY KEY (imsi);
+
+
+--
+-- TOC entry 1853 (class 2606 OID 16489)
+-- Dependencies: 162 162
+-- Name: msc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc
+    ADD CONSTRAINT msc_pkey PRIMARY KEY (gt);
+
+
+--
+-- TOC entry 1860 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2012-06-12 20:11:23
+
+--
+-- PostgreSQL database dump complete
+--
+

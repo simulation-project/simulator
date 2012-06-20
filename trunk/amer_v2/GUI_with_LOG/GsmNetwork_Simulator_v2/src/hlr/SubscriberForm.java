@@ -18,9 +18,10 @@ public class SubscriberForm extends javax.swing.JFrame {
     /**
      * Creates new form SubscriberForm
      */
-    DBhandler db;
+    private DBhandler db;
     private String hlrName;
     private long startRange,endRange;
+    private String fullImsi;
     public SubscriberForm() {
         initComponents();
         db=new DBhandler();
@@ -45,7 +46,7 @@ public class SubscriberForm extends javax.swing.JFrame {
         imsiTf1 = new javax.swing.JTextField();
         imsiTf2 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("IMSI");
 
@@ -96,34 +97,30 @@ public class SubscriberForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(284, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(addBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                         .addComponent(closeBtn))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(43, 43, 43))
+                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(imsiTf1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(imsiTf2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(8, 8, 8)
                         .addComponent(imsiTf, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)))
                 .addGap(157, 157, 157))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(subInfoTf, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(subInfoTf, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,26 +186,30 @@ public class SubscriberForm extends javax.swing.JFrame {
     {
         System.out.println(imsi);
         System.out.println(imsi.length());
-        if(checkRange(imsi)){
-        if(imsi.length()==10){
-        try {
-            // TODO add your handling code here:
-           String fullImsi="60202";
-           fullImsi+=imsi;
-           System.out.println("full imsi "+fullImsi);
-            db.addSubscriber(fullImsi,info,name);
-           System.out.println(imsi);
-        } catch (SQLException ex) {
-            Logger.getLogger(SubscriberForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        imsiTf.setText("");
-        subInfoTf.setText("");
+        if(!imsiExist()){
+            if(checkRange(imsi)){
+                if(checkImsi()){
+                try {
+                    // TODO add your handling code here:
+                    fullImsi="60202";
+                    fullImsi+=imsi;
+                    System.out.println("full imsi "+fullImsi);
+                    db.addSubscriber(fullImsi,info,name);
+                    System.out.println(imsi);
+                } catch (SQLException ex) {
+                    Logger.getLogger(SubscriberForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                imsiTf.setText("");
+                subInfoTf.setText("");
+                }
+                else
+                    JOptionPane.showMessageDialog(this, "the length of the imsi should be 10 digits");
+                }
+            else
+                JOptionPane.showMessageDialog(this, "imsi out of range");
         }
         else
-            JOptionPane.showMessageDialog(this, "the length of the imsi should be 10 digits");
-        }
- else
-     JOptionPane.showMessageDialog(this, "imsi out of range");
+            JOptionPane.showMessageDialog(this,"imsi exist");
     }
     /**
      * @param args the command line arguments
@@ -236,5 +237,21 @@ public class SubscriberForm extends javax.swing.JFrame {
             return true;
         else
             return false;
+    }
+
+    private boolean checkImsi() {
+        if(imsiTf.getText().matches("[0-9]{10}"))
+            return true;
+        else
+            return false;
+    }
+    private boolean imsiExist()
+    {
+        try {
+            return db.imsiExist(fullImsi,StartFrame.getHlrName());
+        } catch (SQLException ex) {
+            Logger.getLogger(SubscriberForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }

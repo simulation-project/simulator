@@ -47,7 +47,7 @@ public class IMSIForm extends javax.swing.JFrame {
 
         jCheckBox1.setText("jCheckBox1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTextField1.setEditable(false);
         jTextField1.setText("602");
@@ -145,9 +145,9 @@ public class IMSIForm extends javax.swing.JFrame {
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
         // TODO add your handling code here:
         setRange(startTF.getText(),endTF.getText());
-        if(startTF.getText().length()!=10)
+        if(startTF.getText().matches("[0-9]{10} "))
             JOptionPane.showMessageDialog(this, "the start imsi should be 10 digits");
-        if(endTF.getText().length()!=10)
+        if(endTF.getText().matches("[0-9]{10} "))
             JOptionPane.showMessageDialog(this, "the end imsi should be 10 digits");
         if(!checkRange())
         {

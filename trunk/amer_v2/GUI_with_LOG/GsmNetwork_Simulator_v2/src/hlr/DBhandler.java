@@ -72,9 +72,23 @@ public class DBhandler {
         {
             
             System.out.println("add subscriber");
-            stmt.executeUpdate("insert into "+n+" (imsi,subinfo) values ('"+IMSI+"','"+info+"');");
+            stmt.executeUpdate("insert into "+n+" (imsi,isd) values ('"+IMSI+"','"+info+"');");
             System.out.println("add subscriber DONE");
             
+        }
+        boolean imsiExist(String imsi,String n) throws SQLException
+        {
+        
+            ResultSet rs=null;
+            System.out.println("imsi exist "+n+"  "+imsi);
+            rs=stmt.executeQuery("select * from "+n+" where imsi='"+imsi+"';"); 
+            while(rs.next())
+            {
+                return false;
+            }
+            return false;
+        
+        
         }
 
     void createDB(String name,long s,long e) throws SQLException {
@@ -82,16 +96,16 @@ public class DBhandler {
         start=s;
         end=e;
         System.out.println("create table "+hlrName);
-        stmt.executeUpdate("create table "+hlrName+" (imsi varchar(50) primary key,vlradd varchar(50),subinfo varchar(80));");
+        stmt.executeUpdate("create table "+hlrName+" (imsi varchar(50) primary key,vlr varchar(50),isd varchar(80));");
         System.out.println("create table DONE");
-        stmt.executeUpdate("create table node_"+hlrName+" (nispc varchar(10),gt varchar(10) primary key);");
+        stmt.executeUpdate("create table msc_"+hlrName+" (nispc varchar(50),gt varchar(50) primary key);");
         stmt.executeUpdate("insert into hlrs values ('"+hlrName+"');");
     }
 
     void deleteTable(String name)
     {
         try {
-            stmt.executeQuery("drop table " + name + "; ");
+            stmt.executeQuery("drop table "+name+", msc_"+name+";");
         } catch (SQLException ex) {
             Logger.getLogger(DBhandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -99,10 +113,36 @@ public class DBhandler {
 
     void addMsc(String NiSpc, String Gt) {
         hlrName=StartFrame.getHlrName();
+        System.out.println(hlrName);
         try {
-            stmt.executeUpdate("insert into node_"+hlrName+" (nispc,gt) values(" + NiSpc + "," + Gt + ");");
+            stmt.executeUpdate("insert into msc_"+hlrName+" (nispc,gt) values(" + NiSpc + "," + Gt + ");");
         } catch (SQLException ex) {
             Logger.getLogger(DBhandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+//    boolean checkMsc(String Gt)
+//    {
+//        ResultSet rs=null;
+//        try {
+//            rs=stmt.executeQuery("select * from node_"+StartFrame.getHlrName()+";");
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DBhandler.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        if(rs==null)
+//                return true;
+//            else
+//                return false;
+//    }
+    
+    ResultSet hlrExist(String name)
+    {
+        ResultSet rs=null;
+        try {
+            rs=stmt.executeQuery("select * from hlrs where hlrname='"+name+"';");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBhandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
     }
 }

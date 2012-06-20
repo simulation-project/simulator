@@ -11,6 +11,8 @@
 
 package hlr;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author welcome
@@ -38,12 +40,18 @@ public class MscForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        NiSpcTf = new javax.swing.JTextField();
+        NiTf = new javax.swing.JTextField();
         GtTf = new javax.swing.JTextField();
         addBtn = new javax.swing.JButton();
         closeBtn = new javax.swing.JButton();
+        SpcTf = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        GtTf1 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        GtTf2 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("NI-Spc");
 
@@ -63,6 +71,12 @@ public class MscForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("-");
+
+        jLabel4.setText("-");
+
+        jLabel5.setText("-");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,34 +84,56 @@ public class MscForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(110, 110, 110)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(113, 113, 113)
                         .addComponent(closeBtn)
                         .addGap(42, 42, 42)
                         .addComponent(addBtn))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(NiSpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89)
-                        .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(107, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(NiTf, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                            .addComponent(GtTf))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(22, 22, 22)
+                                .addComponent(GtTf1, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel5)
+                                .addGap(8, 8, 8)
+                                .addComponent(GtTf2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(NiTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NiSpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GtTf1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(GtTf2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(closeBtn))
@@ -109,12 +145,16 @@ public class MscForm extends javax.swing.JFrame {
 
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
         // TODO add your handling code here:
-        NiSpc=NiSpcTf.getText();
-        Gt=GtTf.getText();
-        submit(NiSpc,Gt);
-        GtTf.setText("");
-        NiSpcTf.setText("");
-        GtTf.setText("");
+        if(checkFormat()){
+            NiSpc=NiTf.getText()+SpcTf.getText();
+            Gt=GtTf.getText()+GtTf1.getText()+GtTf2.getText();
+            submit(NiSpc,Gt);
+            NiTf.setText("");
+            SpcTf.setText("");
+            GtTf.setText("");
+            GtTf1.setText("");
+            GtTf2.setText("");
+        }
     }//GEN-LAST:event_addBtnMouseClicked
 
     private void closeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeBtnMouseClicked
@@ -124,8 +164,11 @@ public class MscForm extends javax.swing.JFrame {
 private  void submit(String n,String s)
 {
     NiSpc=n;
-        Gt=s;
-        db.addMsc(NiSpc,Gt);
+    Gt=s;
+  //  if(db.checkMsc(Gt)){    
+    db.addMsc(NiSpc,Gt);
+//    }else
+//        JOptionPane.showMessageDialog(this,"this node is already exist");
 }
     /**
     * @param args the command line arguments
@@ -133,11 +176,43 @@ private  void submit(String n,String s)
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField GtTf;
-    private javax.swing.JTextField NiSpcTf;
+    private javax.swing.JTextField GtTf1;
+    private javax.swing.JTextField GtTf2;
+    private javax.swing.JTextField NiTf;
+    private javax.swing.JTextField SpcTf;
     private javax.swing.JButton addBtn;
     private javax.swing.JButton closeBtn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 
+    private boolean checkFormat() {
+        
+        if(!NiTf.getText().matches("[0|2|3]")){
+            JOptionPane.showMessageDialog(this, "ni should be 0,2, or 3");
+            return false;
+            }
+        if(Long.parseLong(SpcTf.getText())<0||Long.parseLong(SpcTf.getText())>16383){
+            JOptionPane.showMessageDialog(this, "spc should be from 0 to 16383");
+            return false;
+            }
+        if(!GtTf.getText().matches("[0-9]{2}")){
+            JOptionPane.showMessageDialog(this, "first field of GT should be 2 digits");
+            return false;
+            }
+        if(!GtTf1.getText().matches("[0-9]{2}")){
+            JOptionPane.showMessageDialog(this, "second field of GT should be 2 digits");
+            return false;
+            }
+        if(!GtTf2.getText().matches("[0-9]{10}")){
+            JOptionPane.showMessageDialog(this, "third field of GT should be 10 digits");
+            return false;
+            }
+        
+        return true;
+    }
 }
+

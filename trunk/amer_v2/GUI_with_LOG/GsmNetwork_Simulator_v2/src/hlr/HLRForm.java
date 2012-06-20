@@ -8,10 +8,12 @@ import com.ericsson.otp.erlang.*;
 import com.iti.telecom.editor.BasicGraphEditor;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,7 +27,7 @@ public class HLRForm extends javax.swing.JFrame {
     private DBhandler db;
     private IMSIForm iForm;
     private long imsiRangeE,imsiRangeS;
-    private String hlrName;
+    private String hlrName,Nispc,Gt;
     
     public HLRForm() {
         
@@ -58,6 +60,11 @@ public class HLRForm extends javax.swing.JFrame {
         GtTf = new javax.swing.JTextField();
         SubmitBtn = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        GtTf1 = new javax.swing.JTextField();
+        GtTf2 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -70,7 +77,7 @@ public class HLRForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("NI:");
+        jLabel2.setText("NI-Spc");
 
         jLabel3.setText("SPC:");
 
@@ -96,6 +103,12 @@ public class HLRForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("-");
+
+        jLabel6.setText("-");
+
+        jLabel7.setText("-");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -109,21 +122,34 @@ public class HLRForm extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(NiTf, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(nameTf, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(SpcTf, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(GtTf, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
+                            .addComponent(nameTf)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(NiTf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(GtTf1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(GtTf2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(244, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(SubmitBtn)
                 .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(jButton1)
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,16 +161,20 @@ public class HLRForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(NiTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(NiTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                    .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GtTf1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GtTf2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(46, 46, 46)
                 .addComponent(SubmitBtn)
@@ -163,26 +193,48 @@ public class HLRForm extends javax.swing.JFrame {
     }//GEN-LAST:event_NiTfActionPerformed
 
     private void SubmitBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SubmitBtnMouseClicked
-        try {
-            // TODO add your handling code here:
-            sendToErlang();
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(HLRForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            hlrName=nameTf.getText();
-            StartFrame.setHlrName(hlrName);
-            createDB(hlrName);
-        } catch (SQLException ex) {
-            Logger.getLogger(HLRForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        imsiRangeS=iForm.getStart();
-        imsiRangeE=iForm.getEnd();
-        StartFrame.setHlrExist(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_SubmitBtnMouseClicked
+        
+        if(HlrExist(nameTf.getText())){
+            if(checkFormat()){
+                Gt=GtTf.getText()+GtTf1.getText()+GtTf2.getText();
+                Nispc=NiTf.getText()+SpcTf.getText();
+                System.out.println(Gt+" "+Nispc);
+                try {
+                    // TODO add your handling code here:
+                    sendToErlang();
 
+                } catch (SQLException ex) {
+                    Logger.getLogger(HLRForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    hlrName=nameTf.getText();
+                    StartFrame.setHlrName(hlrName);
+                    createDB(hlrName);
+                } catch (SQLException ex) {
+                    Logger.getLogger(HLRForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                imsiRangeS=iForm.getStart();
+                imsiRangeE=iForm.getEnd();
+                StartFrame.setHlrExist(true);
+                this.setVisible(false);
+                }
+        }
+        else
+            JOptionPane.showMessageDialog(this,"hlr with this name is already exist in database");
+    }//GEN-LAST:event_SubmitBtnMouseClicked
+    private boolean HlrExist(String name) {
+        ResultSet rs=null;
+        rs=db.hlrExist(name);
+        try {
+            while(rs.next())
+            {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(HLRForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            return true;
+    }
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
         iForm.setVisible(true);
@@ -196,8 +248,8 @@ public class HLRForm extends javax.swing.JFrame {
     private void sendToErlang() throws SQLException
     {
         hlrName = nameTf.getText();
-        String hlrSpc = NiTf.getText().concat(SpcTf.getText());
-        String hlrGt = GtTf.getText();
+        String hlrSpc = Nispc;
+        String hlrGt = Gt;
 
         OtpErlangObject[] obj1 = new OtpErlangObject[2];
         OtpErlangString ehlrname = new OtpErlangString (hlrName);
@@ -281,6 +333,8 @@ try{
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField GtTf;
+    private javax.swing.JTextField GtTf1;
+    private javax.swing.JTextField GtTf2;
     private javax.swing.JTextField NiTf;
     private javax.swing.JTextField SpcTf;
     private javax.swing.JButton SubmitBtn;
@@ -289,6 +343,9 @@ try{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField nameTf;
     // End of variables declaration//GEN-END:variables
 
@@ -312,6 +369,37 @@ try{
     void setEndRangeTf(long ENDRange) {
         iForm.setEndTf(ENDRange);
     }
+
+    private boolean checkFormat() {
+        if(!nameTf.getText().matches("[A-Z|a-z]([A-za-z0-9])*")){
+            JOptionPane.showMessageDialog(this, "hlr name format is not correct");
+            return false;
+            }
+        if(!NiTf.getText().matches("[0|2|3]")){
+            JOptionPane.showMessageDialog(this, "ni should be 0,2, or 3");
+            return false;
+            }
+        if(Long.parseLong(SpcTf.getText())<0||Long.parseLong(SpcTf.getText())>16383){
+            JOptionPane.showMessageDialog(this, "spc should be from 0 to 16383");
+            return false;
+            }
+        if(!GtTf.getText().matches("[0-9]{2}")){
+            JOptionPane.showMessageDialog(this, "first field of GT should be 2 digits");
+            return false;
+            }
+        if(!GtTf1.getText().matches("[0-9]{2}")){
+            JOptionPane.showMessageDialog(this, "second field of GT should be 2 digits");
+            return false;
+            }
+        if(!GtTf2.getText().matches("[0-9]{10}")){
+            JOptionPane.showMessageDialog(this, "third field of GT should be 10 digits");
+            return false;
+            }
+        
+        return true;
+    }
+
+    
 
 
     

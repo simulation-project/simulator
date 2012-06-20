@@ -98,14 +98,14 @@ public class DBhandler {
         System.out.println("create table "+hlrName);
         stmt.executeUpdate("create table "+hlrName+" (imsi varchar(50) primary key,vlr varchar(50),isd varchar(80));");
         System.out.println("create table DONE");
-        stmt.executeUpdate("create table msc_"+hlrName+" (nispc varchar(50),gt varchar(50) primary key);");
+        stmt.executeUpdate("create table node_"+hlrName+" (nispc varchar(50),gt varchar(50) primary key);");
         stmt.executeUpdate("insert into hlrs values ('"+hlrName+"');");
     }
 
     void deleteTable(String name)
     {
         try {
-            stmt.executeQuery("drop table "+name+", msc_"+name+";");
+            stmt.executeQuery("drop table "+name+", node_"+name+";");
         } catch (SQLException ex) {
             Logger.getLogger(DBhandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -115,7 +115,7 @@ public class DBhandler {
         hlrName=StartFrame.getHlrName();
         System.out.println(hlrName);
         try {
-            stmt.executeUpdate("insert into msc_"+hlrName+" (nispc,gt) values(" + NiSpc + "," + Gt + ");");
+            stmt.executeUpdate("insert into node_"+hlrName+" (nispc,gt) values(" + NiSpc + "," + Gt + ");");
         } catch (SQLException ex) {
             Logger.getLogger(DBhandler.class.getName()).log(Level.SEVERE, null, ex);
         }

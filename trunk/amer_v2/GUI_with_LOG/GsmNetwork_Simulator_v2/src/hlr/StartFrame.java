@@ -57,7 +57,7 @@ public class StartFrame extends javax.swing.JFrame {
         subBtn = new javax.swing.JButton();
         addMscBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         confBtn.setText("edit Configuration ");
         confBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -111,7 +111,7 @@ public class StartFrame extends javax.swing.JFrame {
             // TODO add your handling code here:
 //        hf=new HLRForm();
         hf.setVisible(true);
-        hf.setSize(300,300);
+        hf.setSize(600,300);
     }//GEN-LAST:event_confBtnMouseClicked
 
     private void subBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subBtnMouseClicked
@@ -119,7 +119,7 @@ public class StartFrame extends javax.swing.JFrame {
         if(hlrExist){
             getInfo();
             SubscriberForm sf=new SubscriberForm();
-            sf.setSize(300,300);
+            sf.setSize(600,300);
             sf.setVisible(true);
             sf.setInfo(hlrName,startRange,endRane);
         }
@@ -132,7 +132,7 @@ public class StartFrame extends javax.swing.JFrame {
         if(hlrExist){
             MscForm mf=new MscForm();
             mf.setVisible(true);
-            mf.setSize(300,300);
+            mf.setSize(600,300);
             //            NodeForm nf=new NodeForm();
 //            nf.setVisible(true);
 //            nf.setSize(300,300);
@@ -162,6 +162,7 @@ public class StartFrame extends javax.swing.JFrame {
         hf.setNispcTf(hlr.getNiSpc());
         //hf.stNispcTf(hlr.getNiSpc());
         hf.setHlrNameTf(hlr.getHlrName());
+        StartFrame.setHlrName(hlr.getHlrName());
         System.out.println("get cell properties 2");
         hf.setStartRangeTf(hlr.getStartRange());
         hf.setEndRangeTf(hlr.getendRange());
@@ -173,7 +174,7 @@ public class StartFrame extends javax.swing.JFrame {
         hlrName=n;
     }
     static public String getHlrName()
-    {
+    {System.out.println("start frame get hlr name");
         return hlrName;
     }
     static void setHlrExist(boolean b)

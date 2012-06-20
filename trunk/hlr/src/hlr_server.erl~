@@ -72,9 +72,9 @@ start_link(Conf) ->
     Name = proplists:get_value(hlr_name,Conf),
     A = list_to_atom(Name),
     {ok, PID} = gen_server:start_link({local, A}, ?MODULE, [], []),
-    io:format("hlr : ~p starts with configuration :  ~p~n", [A, Conf]),
+    %%io:format("hlr : ~p starts with configuration :  ~p~n", [A, Conf]),
     NEWL=[{pid,PID}|Conf],
-    gen_server:call(A,  {addConf,  NEWL}, infinity),
+    gen_server:call(A,  {addConf,  NEWL}, 1000),
     %%PID ! {addConf,  NEWL},
     {ok, PID}.
 
@@ -83,9 +83,9 @@ start_link(Conf) ->
 %%% External exports
 %%%-----------------------------------------------------------------------------
 call({addConf, Conf}) ->
-    gen_server:call(?MODULE, {addConf, Conf}, infinity);
+    gen_server:call(?MODULE, {addConf, Conf}, 1000);
 call({updateLocation, L}) ->
-    gen_server:call(?MODULE, {updateLocation, L}, infinity).
+    gen_server:call(?MODULE, {updateLocation, L}, 1000).
 
 
 %%%-----------------------------------------------------------------------------
@@ -113,6 +113,7 @@ init([]) ->
 %% Return value is ignored by <u>gen_server</u>.
 %% @end
 terminate(_Reason, _St) ->
+       io:format("terminate is called~n"),
     ok.
 
 %%%-----------------------------------------------------------------------------
@@ -147,10 +148,10 @@ terminate(_Reason, _St) ->
 %% @end
 handle_call({addConf, Conf}, _From, _St) ->
     {reply, ok,  #st{conf= Conf}};
-handle_call({updateLocation, L}, _From, St) ->
+handle_call({updateLocation, Name, L}, _From, St) ->
     {IMSI,VLR,GT}=L,
     LU={6,1,IMSI,VLR,GT},
-    {reply, updateLocation(LU), St};
+    {reply, updateLocation(Name, LU), St};
 handle_call(printAllSd, _From, St) ->
     {reply, printAllSd(), St};
 handle_call({insert,IMSI,ISD}, _From, St) ->
@@ -207,6 +208,7 @@ handle_cast(_Req, St) ->
 
 
 handle_info(_info, St) ->
+    io:format("handle info is called~n"),
    {noreply, St}.
 %%handle_info( {addConf, L}, St) ->
 %%    {noreply,  #st{conf=L}};
@@ -244,48 +246,57 @@ code_change(_OldVsn, St, _Extra) ->
 %%% Internal functions
 %%%-----------------------------------------------------------------------------
 %%---------------------------------------------------------------------------------
-updateLocation({6,1,IMSI,VLR,CgPA}) ->
-    insertVlr(IMSI, VLR, CgPA).
+updateLocation(Name, {6,1,IMSI,VLR,CgPA}) ->
+    insertVlr(Name, IMSI, VLR, CgPA).
 
 %%update vlr in DB
 %%get subscriber_info from DB 
 %%translate gt to spc to msc_name
 %%msc_name:call(subscriber_info)
 %---------------------------------------------------------------------------------
-insertVlr(IMSI,VLR,CgPA)->
+insertVlr(Name, IMSI, VLR, CgPA)->
      {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
      %%{ok, _C, Rows} = pgsql:squery(C, "select * from hlr1"),
-    {ok, Count} = pgsql:equery(C, "update hlr1 set vlr=$1 where imsi=$2", [VLR, IMSI]),
-    io:format("updated ~p rows~n", [Count]),
-    {ok, _C, ISD} = pgsql:equery(C, "select isd from hlr1 where imsi=$1",[IMSI]),
+    DB = Name,
+    Query = "update " ++ DB ++ " set vlr=$1 where imsi=$2",
+    {ok, _Count} = pgsql:equery(C, Query, [VLR, IMSI]),
+    %%io:format("updated ~p rows~n", [Count]),
+    io:format("IMSI : ~p is updated to VLR address : ~p ~n", [IMSI, VLR]), 
+    Query2 = "select isd from " ++ DB ++ "  where imsi=$1 ",
+    {ok, _C, ISD} = pgsql:equery(C, Query2, [IMSI]),
     ok = pgsql:close(C),
     sendISD(CgPA,ISD,IMSI).
 %---------------------------------------------------------------------------------
 sendISD(MSCGT,ISD,IMSI)->
     %%io:format("MSC GT ... ~p ..ISD .. ~p~n",[MSCGT,ISD]).
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
-    {ok, _C, SPC} = pgsql:equery(C, "select spc from msc where gt=$1",[MSCGT]),
-     ok = pgsql:close(C),
+    DB = "msc",
+    Query = "select spc from " ++ DB ++ "  where gt=$1 ",
+    {ok, _C, SPC} = pgsql:equery(C, Query, [MSCGT]),
+    ok = pgsql:close(C),
     %%MSC_name=msc_app:call(Rows),
     [{A}]=ISD,
     [{B}]=SPC,
     NISD = binary_to_list(A),
     NSPC = binary_to_list(B),
-    checkMscSpc(MSCGT,NSPC,IMSI,NISD),
-    io:format("MSC GT ... ~p....IMSI .... ~p ..ISD .. ~p ..... SPC....~p ~n",[MSCGT,IMSI,NISD,NSPC]).
+    checkMscSpc(MSCGT,NSPC,IMSI,NISD).
+%% io:format("MSC GT ... ~p....IMSI .... ~p ..ISD .. ~p ..... SPC....~p ~n",[MSCGT,IMSI,NISD,NSPC]).
 %%msc_app:insert_subscriber_data(IMSI, NISD, NSPC).
 %---------------------------------------------------------------------------------
 checkMscSpc(MSCGT,SPC,IMSI,ISD)->
-    NEWSPC=list_to_atom(SPC),
-    Return = msc_app:check_msc_spc(NEWSPC, MSCGT),
-    io:format("Return .............~p~n",[Return]),
+    ASPC = list_to_atom(SPC),
+    Return = msc_app:check_msc_spc(ASPC, MSCGT),
     checkReturn(Return,SPC,IMSI,ISD).
 %--------------------------------
 checkReturn([],SPC,IMSI,ISD)->
-    msc_app:insert_subscriber_data(IMSI, ISD, SPC),
-    io:format("ISD is sent from hlr to msc successfuly~n");
+    %msc_app:insert_subscriber_data(IMSI, ISD, SPC),
+    %io:format("ISD is sent from hlr to msc successfuly~n");
+io:format("This SPC is not belong to this MSC !!! ");
 checkReturn(_,_SPC,_IMSI,_ISD) ->
-    io:format("This SPC is not belong to this MSC !!! ").
+
+msc_app:insert_subscriber_data(IMSI, ISD, SPC),
+    io:format("ISD is sent from hlr to msc successfuly~n").
+    %io:format("This SPC is not belong to this MSC !!! ").
 
 %%---------------------------------------------------------------------------------    
 printAllSd()->    	

@@ -286,7 +286,6 @@ normal_location_update(not_found,MSC,IMSI,LAI)->
     VLR=msc_db:get_VLR(MSC),
     io:format("vlrrrrrr ~p",[VLR]),
     msc_db:update_subscriber_info({IMSI,LAI,MSC,VLR},newstatus),
-    
     Sub_IMSI=string:substr(atom_to_list(IMSI),6),
     MGT=string:concat("2010",Sub_IMSI),
     Sub_MGT=string:substr(MGT,1,5),

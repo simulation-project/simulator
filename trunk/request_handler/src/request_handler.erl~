@@ -11,13 +11,18 @@
 
 
 erlang_receive(newms,Msg)->
-%ms_app:create_ms(Msg),
+ms_app:create_ms(Msg),
 io:format("new mobile : ~p ~n",[Msg]),
 erlang_send(new_mobile_created);
 
 
 erlang_receive(mslu,Msg)->
-%ms_app:change_state(Msg),
+ms_app:change_state(Msg),
+io:format("mobile location update : ~p ~n ",[Msg]),
+erlang_send(location_update);
+
+erlang_receive(msnormallu,Msg)->
+ms_app:change_lai(Msg),
 io:format("mobile location update : ~p ~n ",[Msg]),
 erlang_send(location_update);
 
@@ -38,5 +43,16 @@ erlang_receive(V,Msg)->
 
 
 erlang_send(Msg)->
-%M = "outputlog|"+Msg,
-    {mbox,java_receiver@localhost} ! Msg.
+H='outputlog|',
+Hs=atom_to_list(H),
+Msgs=atom_to_list(Msg),
+Ms=string:concat(Hs,Msgs),
+M=list_to_atom(Ms),
+{mbox,java_receiver@localhost} ! M,
+data_sent.
+
+
+
+
+
+

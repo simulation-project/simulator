@@ -74,7 +74,14 @@ stop(_St) ->
 %% this name is then used to call the module of that msc.
 %% @end
 start_msc(Name)->
-    msc_2nd_sup:start_msc(Name).
+    msc_2nd_sup:start_msc(Name),
+ %%   Msg = 'New MSC created with given name ' ++ Name,
+ 
+    Mst = "New MSC created with given name ",
+    Namest = atom_to_list(Name),  
+    Msgst=string:concat(Mst,Namest),    
+    io:format("MSg ~p~n ",[list_to_atom(Msgst)]),
+    request_handler:erlang_send(list_to_atom(Msgst)).
 
 %% @spec location_update_request(Parameter) -> Result
 %%    Result = ok   
@@ -93,7 +100,11 @@ location_update_request({2, 2, IMSI, LAI}) ->
     msc_2nd_sup:location_update_request({2, 2, IMSI, LAI});
 
 location_update_request({2, 3, IMSI, LAI})->
-    msc_2nd_sup:location_update_request({2, 3, IMSI, LAI}).
+ok;
+   % msc_2nd_sup:location_update_request({2, 3, IMSI, LAI});
+
+location_update_request({2, 4, IMSI, LAI}) ->
+    msc_2nd_sup:location_update_request({2,4, IMSI, LAI}).
 %% @spec insert_subscriber_data(IMSI,INFO,SPC) -> Result
 %% Result = ok
 %% IMSI = atom()

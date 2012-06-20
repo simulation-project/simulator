@@ -27,7 +27,8 @@
 
 
 %%% External exports
--export([ get_msc_name/1, get_SPC/1, get_GT/1, get_VLR/1, insert_subscriber/4, update_subscriber_info/2, check_msc_imsi/2]).
+-export([ get_msc_name/1, get_SPC/1, get_GT/1, get_VLR/1, insert_subscriber/4, update_subscriber_info/2, check_msc_imsi/2,
+	  check_periodic_lai/2]).
 
 -compile([export_all]).
 
@@ -133,10 +134,17 @@ update_subscriber_info(IMSI,idle)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [idle,IMSI]),
     io:format("msc_db:update_subscriber_info(turn_on): done  ~n");
+
+update_subscriber_info(IMSI,off)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [off, IMSI]),
+    io:format("msc_db:update_subscriber_info(turn_off): done  ~n");
+
 update_subscriber_info({IMSI,LAI,MSC,VLR},newstatus)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _} = pgsql:equery(C, "update sub_info  set msc_name=$1,vlr_add=$2,lai=$3,status=$4 where imsi=$5", [MSC,VLR,LAI,idle,IMSI]),
     io:format("msc_db:update_subscriber_info(inter msc): done  ~n");
+
 update_subscriber_info(IMSI, LAI) ->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _} = pgsql:equery(C, "update sub_info set lai=$1 where imsi=$2", [LAI, IMSI]),
@@ -153,6 +161,17 @@ check_msc_imsi(MSC, IMSI)->
 R = show(Rows),
 R.
 
+%% @spec check_periodic_lai(IMSI, LAI) -> Result
+%%   IMSI = atom() 
+%%   LAI = atom()   
+%%   Result = atom()
+%%% @doc This function checks that the LAI for the given IMSI is correct in perodic update.
+%% @end
+check_periodic_lai(IMSI, LAI)->
+{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+{ok, _C, Rows} = pgsql:equery(C, "select lai from sub_info where imsi = $1 and lai=$2", [IMSI, LAI]),
+R = show(Rows),
+R.
 
 %% ===================================================================
 %% Internal exports

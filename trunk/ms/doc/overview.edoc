@@ -1,0 +1,89 @@
+Overview page
+
+@copyright 2012 ITI Egypt.
+@author Marwa El-Shahed <marwa.elshahed@hotmail.com>
+        [http://www.iti.gov.eg]
+
+@doc MS Application 
+
+<p>This application simulates the behaviour of the mobile station in the form of a finite state machine (ms_fsm) which is dynamically allocated to the supervisor (ms_fsm_sup) and the supervisor is the child of another supervisor (ms_sup) which is started with application (ms) itself.</p>
+
+=== Contents ===
+
+<ol>
+  <li>{@section Introduction}</li>
+  <li>{@section Motivation}</li>
+  <li>{@section Architecture}</li>
+  <li>{@section Usage}
+    <ol>
+      <li>{@section Configuration}</li>
+    </ol>
+  </li>
+  <li>{@section Installation}</li>
+  <li>{@section Known issues}
+    <ol>
+      <li>{@section Performance constraints}</li>
+    </ol>
+  </li>
+  <li>{@section TODO}</li>
+  <li>{@section Contributors}</li>
+</ol>
+
+=== Introduction ===
+
+<p>This application is a simulation of mobile station.</p>
+
+=== Motivation ===
+
+<p>N/A</p>
+
+=== Usage ===
+
+<p>APIs to be used will be explained later.</p>
+
+== Configuration ==
+
+<p>The configuration parameters are defined in the <b>.config</b> file. A
+sample configuration file is shown below:</p>
+
+<pre>
+[{appname, [{param, value}, {opt_param, opt_value}]}].
+</pre>
+
+=== Mandatory parameters ===
+
+<dl>
+  <dt>param: </dt><dd>N/A.</dd>
+</dl>
+
+=== Optional parameters ===
+
+<dl>
+  <dt>opt_param: </dt><dd>N/A.</dd>
+</dl>
+
+=== Architecture ===
+
+<p></p>
+
+<img src="MS.png" alt="Architecture"/>
+
+<p></p>
+
+=== Installation ===
+
+<p>
+First, you need to start the application. Then, you can the APIs.
+</p>
+
+=== TODO ===
+
+<ul>
+  <li>N/A</li>
+</ul>
+
+=== Contributors ===
+
+<ul>
+  <li>Marwa El-Shahed</li>
+</ul>

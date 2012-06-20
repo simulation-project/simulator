@@ -1,0 +1,3 @@
+{application,ms}.
+{packages,[]}.
+{modules,[ms_app,ms_fsm,ms_fsm_sup,ms_sup]}.

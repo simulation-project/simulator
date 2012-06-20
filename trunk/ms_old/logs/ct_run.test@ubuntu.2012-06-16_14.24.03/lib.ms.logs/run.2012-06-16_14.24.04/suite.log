@@ -1,0 +1,64 @@
+=== Suite started at 2012-06-16 14:24:04
+=== Starting test, 3 test cases
+=cases         3
+=user          marwa
+=host          ubuntu
+=hosts         ubuntu 
+=emulator_vsn  5.9.1
+=emulator      beam
+=otp_release   R15B01
+=started       2012-06-16 14:24:04
+=case          ms_app_SUITE:init_per_suite
+=logfile       ms_app_suite.init_per_suite.html
+=started       2012-06-16 14:24:04
+=ended         2012-06-16 14:24:05
+=result        failed: {{badmatch,
+                            {error,
+                                {"no such file or directory","epgsql.app"}}},
+                        [{ms_app_SUITE,init_per_suite,1,
+                             [{file,"ms_app_SUITE.erl"},{line,86}]},
+                         {test_server,ts_tc,3,
+                             [{file,"test_server.erl"},{line,1834}]},
+                         {test_server,run_test_case_eval1,6,
+                             [{file,"test_server.erl"},{line,1434}]},
+                         {test_server,run_test_case_eval,9,
+                             [{file,"test_server.erl"},{line,1302}]}]}, [{ms_app_SUITE,
+                                                                          init_per_suite,
+                                                                          86},
+                                                                         {test_server,
+                                                                          ts_tc,
+                                                                          1834},
+                                                                         {test_server,
+                                                                          run_test_case_eval1,
+                                                                          1434},
+                                                                         {test_server,
+                                                                          run_test_case_eval,
+                                                                          1302}]
+=== *** FAILED *** init_per_suite
+=== 
+=case          ms_app_SUITE:api
+=started         2012-06-16 14:24:05
+=result          skipped: init_per_suite failed
+=== *** Skipping test case #1 {ms_app_SUITE,api} ***
+=== 
+=case          ms_app_SUITE:api_neg
+=started         2012-06-16 14:24:05
+=result          skipped: init_per_suite failed
+=== *** Skipping test case #2 {ms_app_SUITE,api_neg} ***
+=== 
+=case          ms_app_SUITE:performance
+=started         2012-06-16 14:24:05
+=result          skipped: init_per_suite failed
+=== *** Skipping test case #3 {ms_app_SUITE,performance} ***
+=== 
+=case          ms_app_SUITE:end_per_suite
+=started         2012-06-16 14:24:05
+=result          skipped: init_per_suite failed
+=== *** Skipping test case #0 {ms_app_SUITE,end_per_suite} ***
+=== TEST COMPLETE, 0 ok, 0 failed, 3 skipped of 3 test cases
+
+=finished      2012-06-16 14:24:05
+=failed        0
+=successful    0
+=user_skipped  0
+=auto_skipped  3

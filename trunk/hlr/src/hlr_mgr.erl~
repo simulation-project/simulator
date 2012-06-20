@@ -23,7 +23,6 @@
 %%% @end
 -module(hlr_mgr).
 -behaviour(gen_server).
-
 %%% Include files
 
 %%% Start/Stop exports
@@ -80,11 +79,21 @@ start_gen(Conf)->
     %%N = proplists:get_value(hlr_name,C),
     %%S = string:concat("hlr",N),
     %%L=[{hlr_fullname,S}|C],
-    {ok,PID} = hlr_server:start_link(Conf),
     SPC =  proplists:get_value(spc, Conf),
     Name = proplists:get_value(hlr_name,Conf),
-    gen_server:call(?MODULE, {save, {Name,SPC,PID}}, 1000),
-    io:format("Hlr Starts with configuration  : ~p~n", [Conf]).
+    Return = checkNameExist(Name),
+    start(Return, Name, SPC, Conf).
+%-----
+start(no, Name, SPC, Conf)->
+    {ok,PID} = hlr_server:start_link(Conf),
+    gen_server:call(?MODULE, {save, {Name,SPC,PID}}),
+    io:format("HLR Starts with configuration :\nName : ~p\nSPC : ~p~n", [Name, SPC]),
+    printRegServers();
+start(ok, Name,_SPC,_PID)->
+    io:format("this HLR Name : ~p is already exists~n",[Name]).
+%%--------------------------------
+checkNameExist(Name)->
+       gen_server:call(?MODULE, {checkNameExist, Name}). 
 %%%----------------------------------------------------------------------
 printRegServers()->
   gen_server:call(?MODULE, printAll, 1000).
@@ -94,7 +103,14 @@ imsiExist(SPC,IMSI)->
     Name = getNameBySpc(SPC),
     imsi_exist(Name,IMSI).
 %%----------------------------------------------------------------------
-imsi_exist(_Name,Imsi)->
+imsi_exist(Name,Imsi)->
+    %{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
+    %io:format("~n Naaaaaaaaem is ~p~n~n",[Name]),
+    %Query = "select * from " ++ Name ++ "where imsi=$1",
+    %{ok, _C, Rows} = pgsql:equery(C, Query, [Imsi]),
+    %ok = pgsql:close(C),
+    %check(Rows).
+	
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
     {ok, _C, Rows} = pgsql:equery(C, "select * from hlr1  where imsi=$1",[Imsi]),
     ok = pgsql:close(C),
@@ -108,7 +124,7 @@ check(_R) ->
 update_location(L,SPC)->
     Name = getNameBySpc(SPC),
     AName =  list_to_atom(Name),
-    gen_server:call(AName, {updateLocation, L}).
+    gen_server:call(AName, {updateLocation, Name, L},infinity).
 %%-----------------------------------------------------------------------
 getNameBySpc(SPC)->
   gen_server:call(?MODULE, {getName,SPC}, 1000).
@@ -147,6 +163,7 @@ init([]) ->
 %% Return value is ignored by <u>gen_server</u>.
 %% @end
 terminate(_Reason, _St) ->
+    io:format("terminate is called~n"),
     ok.
 
 %%%-----------------------------------------------------------------------------
@@ -181,12 +198,16 @@ terminate(_Reason, _St) ->
 %% @end
 handle_call({save, {Name,SPC,PID}}, _From, St) ->
     {st,M}=St,
-    io:format("manager :handle Call : servers are saved : ~p~n", [[  {Name,SPC,PID}|M]]),
+  %%io:format("manager :handle Call : servers are saved : ~p~n", [[  {Name,SPC,PID}|M]]),
     {reply, ok, {st, [{Name,SPC,PID}|M]} };
+
+handle_call({checkNameExist, Name}, _From, St) ->
+    {st,M}=St,
+    {reply,nameExist(Name, M) , St};
 handle_call(printAll,  _From, St) ->
     {st,M}=St,
-    io:format("manager : servers are  ~p~n", [M]),
-    {reply, ok, St };
+    %%io:format("manager : servers are  ~p~n", [M]),
+    {reply, printAll(M), St };
 handle_call({getName, SPC},  _From, St) ->
    %% io:format("manager : get Name of SPC ~p~n", [SPC]),
     {st,L}=St,
@@ -251,6 +272,7 @@ handle_cast(_Req, St) ->
 %% @see terminate/2
 %% @end
 handle_info(_Info, St) ->
+    io:format("handleinfois called~n"),
     {noreply, St}.
 
 %%%-----------------------------------------------------------------------------
@@ -280,7 +302,26 @@ io:format("hlr name : ~p~n", [Name]),
     Name;
 getName({SPC, [_H|T]}) ->
     getName({SPC,T}).
-    
+     
 %%---------------------------------------------------------------------------------
-	
-	
+ printAll(M)->
+    L = length(M),
+    io:format("Now you have ~p HLR :\n",[L]),
+    printEach(M).
+%-------------------------------------------------
+printEach([])->
+    ok;
+printEach([H|T])->
+    {Name,SPC,_PID}= H,
+    io:format("~p : ~p\n",[Name, SPC]),
+    printEach(T).
+
+ %%------------------------------------------------------------------------------------
+nameExist(Name, [{Name,_SPC,_PID}|_T])->
+    ok;
+nameExist(Name, [_H|T])->
+    nameExist(Name,T);
+nameExist(_Name,[]) ->
+    no.
+
+    

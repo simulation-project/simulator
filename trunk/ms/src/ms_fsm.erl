@@ -104,8 +104,8 @@ turn_off(turn_on_idle, Std) ->
     io:format("turn_on_idle ~n"),
     T_ref = erlang:send_after(30000,self(),{idle,3}),
     loc_update(T_ref,{2,1,Std#st.imsi,Std#st.lai}),%% imsi_attach
-    %%P_ref = erlang:send_after(120000,self(),repeat),
-    {next_state, turn_on_idle, Std};
+    P_ref = erlang:send_after(120000,self(),repeat),
+    {next_state, turn_on_idle, Std#st{timer = P_ref}};
 turn_off(turn_on_active, Std) ->
      io:format("~p~n",[Std]),
      io:format("turn_on_active"),
@@ -295,8 +295,8 @@ handle_info(repeat, Stn, Std) ->
     %%loc_update(T_ref,{2,3,Std#st.imsi,Std#st.lai}),
     periodic_loc_update(Std#st.imsi,Std#st.lai),
     reply_msg('periodic location update is sent'),
-    %%P_ref = erlang:send_after(120000,self(),repeat),
-    {next_state, Stn, Std};
+    P_ref = erlang:send_after(120000,self(),repeat),
+    {next_state, Stn, Std#st{timer = P_ref}};
 
 handle_info({idle,0},Stn,Std) ->
     io:format("turn_on_idle request failed"),
@@ -398,17 +398,16 @@ loc_update(T_ref,{First,Second,IMSI,LAI})->
 %% @doc Sends Periodic location update request to MSC.
 %% @end
 
-periodic_loc_update(_IMSI, _LAI)->
-ok.
-%%    io:format("periodic_loc_update is Called~n"),
-    %%case msc_app:location_update_request({2,3,IMSI, LAI}) of
-%%	ok ->
-%%	    %%erlang:cancel_timer(T_ref),
-%%	    io:format("request sent to msc_app:periodic_loc_update"),
-%%	    done;
-%%	_ ->
-%%	    ok
-%%    end.
+periodic_loc_update(IMSI, LAI)->
+    io:format("periodic_loc_update is Called~n"),
+    case msc_app:location_update_request({2,3,IMSI, LAI}) of
+	ok ->
+	    %%erlang:cancel_timer(T_ref),
+	    io:format("request sent to msc_app:periodic_loc_update"),
+	    done;
+	_ ->
+	    ok
+    end.
 
 %%@private
 %% @spec reply_msg(Msg) -> Result
@@ -417,10 +416,9 @@ ok.
 %%
 %% @doc Sends confirmation messages to the user.
 %% @end
-reply_msg(_Msg) ->
-    %%request_handler:erlang_send(Msg)
-    ok.
-
+reply_msg(Msg) ->
+    %request_handler:erlang_send(Msg).
+ok.
 %%%-----------------------------------------------------------------------------
 %%% API functions
 %%%-----------------------------------------------------------------------------

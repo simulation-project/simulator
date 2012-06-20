@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test ms_app_SUITE:init_per_suite result</title>
+<meta http-equiv="cache-control" content="no-cache">
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></head>
+<body>
+
+=== <a href="ms_app_suite.src.html#init_per_suite">source code for ms_app_SUITE:init_per_suite/1</a>
+
+<pre>
+<a name="top"></a>
+=== Test case started with:
+ms_app_SUITE:init_per_suite([{tc_logfile,
+                                 "/home/marwa/lib/ms/logs/ct_run.test@ubuntu.2012-06-16_14.24.03/lib.ms.logs/run.2012-06-16_14.24.04/ms_app_suite.init_per_suite.html"},
+                             {tc_group_properties,[]},
+                             {tc_group_path,[]},
+                             {data_dir,
+                                 "/home/marwa/lib/ms/test/ms_app_SUITE_data/"},
+                             {priv_dir,
+                                 "/home/marwa/lib/ms/logs/ct_run.test@ubuntu.2012-06-16_14.24.03/lib.ms.logs/run.2012-06-16_14.24.04/log_private/"}])
+
+=== Current directory is "/home/marwa/lib/ms/logs/ct_run.test@ubuntu.2012-06-16_14.24.03"
+
+=== Started at 2012-06-16 14:24:04
+
+<br />
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.133 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+         application: sasl
+          started_at: test@ubuntu
+
+</div>
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.146 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+          supervisor: {local,crypto_sup}
+             started: [{pid,<0.144.0>},
+                       {name,crypto_server},
+                       {mfargs,{crypto_server,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+</div>
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.180 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+         application: crypto
+          started_at: test@ubuntu
+
+</div>
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.200 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+         application: public_key
+          started_at: test@ubuntu
+
+</div>
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.338 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+          supervisor: {local,ssl_sup}
+             started: [{pid,<0.153.0>},
+                       {name,ssl_manager},
+                       {mfargs,{ssl_manager,start_link,[[]]}},
+                       {restart_type,permanent},
+                       {shutdown,4000},
+                       {child_type,worker}]
+
+</div>
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.341 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+          supervisor: {local,ssl_sup}
+             started: [{pid,<0.155.0>},
+                       {name,ssl_connection},
+                       {mfargs,{ssl_connection_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,4000},
+                       {child_type,supervisor}]
+
+</div>
+<div class="sasl"><b>*** User 2012-06-16 14:24:05.422 ***</b>
+
+=PROGRESS REPORT==== 16-Jun-2012::14:24:05 ===
+         application: ssl
+          started_at: test@ubuntu
+
+</div>
+<div class="ct_error_notify"><b>*** CT Error Notification 2012-06-16 14:24:05.423 ***</b>
+ms_app_SUITE:init_per_suite failed
+Reason: {badmatch,{error,{"no such file or directory","epgsql.app"}}}
+</div>
+<a name="end"></a>
+
+
+=== Ended at 2012-06-16 14:24:05
+=== location [{ms_app_SUITE,init_per_suite,<a href="ms_app_suite.src.html#80">86</a>},
+              {test_server,ts_tc,1834},
+              {test_server,run_test_case_eval1,1434},
+              {test_server,run_test_case_eval,1302}]
+=== reason = no match of right hand side value 
+                 {error,{"no such file or directory","epgsql.app"}}
+  in function  ms_app_SUITE:init_per_suite/1 (ms_app_SUITE.erl, line 86)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1834)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1434)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 1302)
+=== 
+*** init_per_suite failed.
+    Skipping all cases.
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>
+</p>
+<div class="copyright">Copyright &copy; 2012 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!date>Sat Jun 16 2012 14:24:04<!/date><br />
+</div>
+</center>
+</body>
+</html>

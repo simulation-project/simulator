@@ -15,7 +15,7 @@
 %%% Portions created by Ericsson are Copyright 1999, Ericsson Utvecklings
 %%% AB. All Rights Reserved.
 
-%%% @doc 
+%%% @doc This is gen_server module that responsible for handling MSCs operations.
 %%%
 %%% @copyright 2012 ITI Egypt.
 %%% @author Esraa Adel <esraa.elmelegy@hotmail.com>
@@ -115,14 +115,20 @@ terminate(_Reason, _St) ->
 %% @doc This function is called when the mobile station is turned on or moves to a new
 %% location area or make periodic update to update it's location and state in the VLR and HLR.
 %% @end
-location_update_request(MSC, {2, 1, IMSI, LAI})->
-    gen_server:cast(MSC, {2, 1, IMSI, LAI,MSC});
+location_update_request({2, 1, IMSI, LAI}, MSC)->
+    gen_server:cast(MSC, {2, 1, IMSI, LAI, MSC}),
+    ok;
 
-location_update_request(MSC, {2, 2, IMSI, LAI})->
-    gen_server:cast(MSC, {2, 2, IMSI, LAI,MSC});
+location_update_request({2, 2, IMSI, LAI}, MSC)->
+    gen_server:cast(MSC, {2, 2, IMSI, LAI, MSC}),
+    ok;
 
-location_update_request(_MSC, {2, 3, _IMSI, _LAI}) ->
-    %gen_server:cast(MSC, {2, 3, IMSI, LAI,MSC}).
+location_update_request({2, 3, IMSI, LAI}, MSC) ->
+   gen_server:cast(MSC, {2, 3, IMSI, LAI}),
+    ok;
+
+location_update_request({2, 4, IMSI}, MSC) ->
+    gen_server:cast(MSC, {2, 4, IMSI, MSC}),
     ok.
 
 %% @spec insert_subscriber_data(IMSI,INFO,SPC) -> Result
@@ -134,7 +140,7 @@ location_update_request(_MSC, {2, 3, _IMSI, _LAI}) ->
 %% to the MSC to insert the subsceiber data in the VLR.
 %% @end
 insert_subscriber_data(MSC, IMSI, idle)->
- gen_server:cast(MSC, {6, 2, IMSI, idle}).
+ gen_server:cast(MSC, {6, 2, IMSI, idle, MSC}).
 
 %% @spec check_msc_spc(MSC, SPC, GT) -> Result
 %%    Result = not_found | MSC 
@@ -210,15 +216,23 @@ handle_call(_Req, _From, St) ->
 %% @end
 handle_cast({2, 1, IMSI, LAI, MSC}, List) ->
     VLR=msc_db:get_VLR(MSC),
-    io:format("vooooo ~p",[VLR]),
-    msc_db:insert_subscriber(IMSI,LAI,MSC,VLR),
-    Sub_IMSI=string:substr(atom_to_list(IMSI),6),
-    MGT=string:concat("2010",Sub_IMSI),
-    Sub_MGT=string:substr(MGT,1,5),
-    Sub_MGT_DB=list_to_atom(Sub_MGT),
-    SPC=msc_db:get_SPC(Sub_MGT_DB),
-    io:format("Name of SPC ~p~n", [SPC]),
+    create_record(IMSI,LAI,MSC,VLR),
+    
+    Sub_MGT = imsi_analysis(IMSI, MSC),
+
+    Sub_MGT_DB = list_to_atom(Sub_MGT),
+
+    SPC = gt_translation(Sub_MGT_DB, MSC),
+    
+    io:format("Name of SPCCCCCCC ~p~n", [SPC]),
+
     Reply=hlr_mgr:imsiExist(SPC,IMSI),
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": sending update location to HLR with SPC = "),
+    Msg2 = string:concat(Msg1,atom_to_list(SPC)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    
     check_hlr(Reply, {IMSI, VLR, SPC}),
     {noreply, List};
 
@@ -227,9 +241,29 @@ handle_cast({2, 2, IMSI, LAI, MSC}, List) ->
     normal_location_update(Reply, MSC, IMSI, LAI),
     {noreply, List};
 
-handle_cast({6, 2, IMSI, idle}, List) ->
+handle_cast({2, 3, IMSI, LAI}, List) ->
+    Reply = msc_db:check_periodic_lai(IMSI, LAI),  
+    io:format("periodic update ~p~n", [Reply]),
+    {noreply, List};
+
+handle_cast({2, 4, IMSI, MSC}, List) ->
+    msc_db:update_subscriber_info(IMSI, off),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": marks the IMSI as detached"),
+    io:format("MSg ~p~n ",[list_to_atom(Msg1)]),
+    request_handler:erlang_send(list_to_atom(Msg1)),
+    {noreply, List};
+
+
+handle_cast({6, 2, IMSI, idle, MSC}, List) ->
     io:format("~n vvvvvvvv"),
     msc_db:update_subscriber_info(IMSI, idle),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": Received subsceiber info from HLR and update its state to idle "),
+    io:format("MSg ~p~n ",[list_to_atom(Msg1)]),
+    request_handler:erlang_send(list_to_atom(Msg1)),
     {noreply, List}.
 
 %% @private
@@ -285,6 +319,17 @@ check_hlr(ok, {IMSI, VLR, SPC}) ->
 normal_location_update(not_found,MSC,IMSI,LAI)->
     VLR=msc_db:get_VLR(MSC),
     io:format("vlrrrrrr ~p",[VLR]),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": sending inter location update  with new MSC = "),
+    Msg2 = string:concat(Msg1,atom_to_list(MSC)),
+    Msg3 = string:concat(Msg2,"and new LAI= "),
+    Msg4 = string:concat(Msg3,atom_to_list(LAI)),
+
+    io:format("MSg ~p~n ",[list_to_atom(Msg4)]),
+    request_handler:erlang_send(list_to_atom(Msg4)),
+    
+
     msc_db:update_subscriber_info({IMSI,LAI,MSC,VLR},newstatus),
     Sub_IMSI=string:substr(atom_to_list(IMSI),6),
     MGT=string:concat("2010",Sub_IMSI),
@@ -294,7 +339,14 @@ normal_location_update(not_found,MSC,IMSI,LAI)->
     io:format("Nameee of SPC ~p~n", [SPC]),
     Reply=hlr_mgr:imsiExist(SPC,IMSI),
     check_hlr(Reply, {IMSI, VLR, SPC});
-normal_location_update(_, _MSC, IMSI, LAI) ->
+
+normal_location_update(_, MSC, IMSI, LAI) ->
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": sending intra location update  with new LAI = "),
+    Msg2 = string:concat(Msg1,atom_to_list(LAI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    
     msc_db:update_subscriber_info(IMSI, LAI).
 
 update_location(IMSI, VLR, GT,SPC)->
@@ -303,6 +355,36 @@ update_location(IMSI, VLR, GT,SPC)->
     io:format("location updated in child"),
     ok.
 
+
+create_record(IMSI, LAI, MSC, VLR)->
+    msc_db:insert_subscriber(IMSI,LAI,MSC,VLR),
+    Mscname0 = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg0 = string:concat(Mscname0,": insert subscriber info in VLR"),  
+    io:format("MSg ~p~n ", [Msg0]),
+    request_handler:erlang_send(list_to_atom(Msg0)).
+   
+imsi_analysis(IMSI, MSC)->
+    Sub_IMSI=string:substr(atom_to_list(IMSI),6),
+    MGT=string:concat("2010",Sub_IMSI),
+    Sub_MGT=string:substr(MGT,1,5),
+  
+    Mscname0 = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg10= string:concat(Mscname0,": IMSI analysis, generating MGT from IMSI, MGT = "),
+    Msg20 = string:concat(Msg10, Sub_MGT),    
+    io:format("MSg ~p~n ",[Msg20]),
+    request_handler:erlang_send(list_to_atom(Msg20)),
+    io:format("at imsi analysis ~p~n", [Sub_MGT]),
+    Sub_MGT.
     
     
-    
+gt_translation(Sub_MGT_DB, MSC)->    
+    SPC=msc_db:get_SPC(Sub_MGT_DB), 
+    Mscname0 = string:concat("MSC ",atom_to_list(MSC)),        
+
+    Msg100= string:concat(Mscname0,": GT translation, geting SPC of HLR by MGT , SPC = "),
+    Msg200 = string:concat(Msg100,atom_to_list(SPC)),    
+    io:format("MSg ~p~n ",[Msg200]),
+    request_handler:erlang_send(list_to_atom(Msg200)),
+    io:format("at gt translation ~p~n", [SPC]),
+    SPC.
+

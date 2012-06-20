@@ -25,7 +25,7 @@ start_link() ->
 
 init([]) ->
      AChild = {hlr_mgr,{hlr_mgr,start_link,[]},
-              permanent,2000,worker,[hlr_mgr]},
+              permanent,2000,supervisor,[hlr_mgr]},
     {ok,{{one_for_all,0,1}, [AChild]}}.
 
 

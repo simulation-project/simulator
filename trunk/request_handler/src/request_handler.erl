@@ -27,9 +27,9 @@ io:format("mobile location update : ~p ~n ",[Msg]),
 erlang_send(location_update);
 
 erlang_receive(newhlr,Msg)->
-%hlr_mgr:start_gen(Msg),
 io:format("new hlr : ~p ~n",[Msg]),
-erlang_send(new_hlr);
+hlr_mgr:start_gen(Msg),
+erlang_send(new_hlr_crteated);
 
 erlang_receive(newmsc,Msg)->
 io:format("before new msc : ~p ~n",[Msg]),
@@ -43,5 +43,16 @@ erlang_receive(V,Msg)->
 
 
 erlang_send(Msg)->
-%M = "outputlog|"+Msg,
-    {mbox,java_receiver@localhost} ! Msg.
+H='outputlog|',
+Hs=atom_to_list(H),
+Msgs=atom_to_list(Msg),
+Ms=string:concat(Hs,Msgs),
+M=list_to_atom(Ms),
+{mbox,java_receiver@localhost} ! M,
+data_sent.
+
+
+
+
+
+

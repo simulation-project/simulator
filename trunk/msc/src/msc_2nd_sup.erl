@@ -84,27 +84,56 @@ init([]) ->
 start_msc(Name)->
     supervisor:start_child(?MODULE, [Name]).
 
-%% @spec location_update_request({2,1,IMSI,LAI}) -> Result
+%% @spec location_update_request(Parameter) -> Result
 %%    Result = ok   
+%%    Parameter = {2,1,IMSI,LAI} |
+%%                {2, 2, IMSI, LAI} |
+%%                {2, 3, IMSI, LAI}
 %%    IMSI = atom()
 %%    LAI = atom() 
-%% @doc This function is called when the mobile station is turned on
-%% to update it's location and state in the VLR and HLR.
+%% @doc This function is called when the mobile station is turned on or moves to a new
+%% location area or make periodic update to update it's location and state in the VLR and HLR.
 %% @end
 location_update_request({2,1,IMSI, LAI})->
     MSC = msc_db:get_msc_name({LAI,lai}),
-    msc_ch:location_update_request(MSC,{2,1,IMSI, LAI});
+    msc_ch:location_update_request({2,1,IMSI, LAI}, MSC),
 
-%% @spec location_update_request({2,2,IMSI,LAI}) -> Result
-%%    Result = ok   
-%%    IMSI = atom()
-%%    LAI = atom() 
-%% @doc This function is called when the mobile station moves to a new
-%% location area to update it's location in the VLR and HLR.
-%% @end
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": imsi attach request from "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2));
+
 location_update_request({2,2,IMSI, LAI})->
     MSC = msc_db:get_msc_name({LAI,lai}),
-    msc_ch:location_update_request(MSC,{2,2,IMSI, LAI}).
+    msc_ch:location_update_request({2,2,IMSI, LAI}, MSC),
+    
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": normal location update from  "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2));
+
+location_update_request({2, 3, IMSI, LAI}) ->
+    MSC = msc_db:get_msc_name({LAI,lai}),
+    msc_ch:location_update_request({2, 3, IMSI, LAI}, MSC),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": periodic location update from  "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2));
+
+location_update_request({2, 4, IMSI, LAI}) ->
+    MSC = msc_db:get_msc_name({LAI,lai}),
+    msc_ch:location_update_request({2, 4, IMSI}, MSC),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": IMSI detach request from  "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)).
+
     
 %% @spec insert_subscriber_data(IMSI,INFO,SPC) -> Result
 %%    Result = ok   

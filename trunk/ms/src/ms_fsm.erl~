@@ -399,11 +399,10 @@ loc_update(T_ref,{First,Second,IMSI,LAI})->
 %% @end
 
 periodic_loc_update(IMSI, LAI)->
-    io:format("periodic_loc_update is Called~n"),
     case msc_app:location_update_request({2,3,IMSI, LAI}) of
 	ok ->
 	    %%erlang:cancel_timer(T_ref),
-	    io:format("request sent to msc_app:periodic_loc_update"),
+	    io:format("request sent to msc_app:periodic_loc_update~n~n~n"),
 	    done;
 	_ ->
 	    ok
@@ -416,9 +415,9 @@ periodic_loc_update(IMSI, LAI)->
 %%
 %% @doc Sends confirmation messages to the user.
 %% @end
-reply_msg(Msg) ->
-    request_handler:erlang_send(Msg).
-
+reply_msg(_Msg) ->
+    %request_handler:erlang_send(Msg).
+ok.
 %%%-----------------------------------------------------------------------------
 %%% API functions
 %%%-----------------------------------------------------------------------------

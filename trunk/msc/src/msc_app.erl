@@ -93,18 +93,25 @@ start_msc(Name)->
 %% @doc This function is called when the mobile station is turned on or moves to a new
 %% location area or make periodic update to update it's location and state in the VLR and HLR.
 %% @end
+
+
 location_update_request({2, 1, IMSI, LAI})->
-    msc_2nd_sup:location_update_request({2, 1, IMSI, LAI});
+    msc_2nd_sup:location_update_request({2, 1, IMSI, LAI}),
+ok;
 
 location_update_request({2, 2, IMSI, LAI}) ->
-    msc_2nd_sup:location_update_request({2, 2, IMSI, LAI});
+    msc_2nd_sup:location_update_request({2, 2, IMSI, LAI}),
+ok;
 
 location_update_request({2, 3, IMSI, LAI})->
-ok;
-   % msc_2nd_sup:location_update_request({2, 3, IMSI, LAI});
+	io:format("PPPPPPPPPPEriodic update ~n~n"),
+    msc_2nd_sup:location_update_request({2, 3, IMSI, LAI}),
+	ok;
 
 location_update_request({2, 4, IMSI, LAI}) ->
-    msc_2nd_sup:location_update_request({2,4, IMSI, LAI}).
+    msc_2nd_sup:location_update_request({2,4, IMSI, LAI}),
+ok.
+
 %% @spec insert_subscriber_data(IMSI,INFO,SPC) -> Result
 %% Result = ok
 %% IMSI = atom()

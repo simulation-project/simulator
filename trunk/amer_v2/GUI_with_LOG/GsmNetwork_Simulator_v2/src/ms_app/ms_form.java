@@ -60,9 +60,9 @@ public class ms_form extends JDialog {
         this.cell = agentsCell;
         this.mobileStation = (MS) cell;
         getCellProperties();
-        //mcc.setText("MCC");
-        //mnc.setText("MNC");
-        //msin.setText("        MSIN");
+  //      mcc.setText("MCC");
+  //      mnc.setText("MNC");
+  //      msin.setText("        MSIN");
         
     }
 
@@ -479,9 +479,9 @@ public class ms_form extends JDialog {
         //     lac.setText(mobileStation.getSlai3());
 
 
-     //   mcc.setEditable(mobileStation.getaftersubmit());
-        mnc.setEditable(mobileStation.getaftersubmit());
-        msin.setEditable(mobileStation.getaftersubmit());
+        mcc.setEnabled(mobileStation.getaftersubmit());
+        mnc.setEnabled(mobileStation.getaftersubmit());
+        msin.setEnabled(mobileStation.getaftersubmit());
         jButton1.setEnabled(mobileStation.getaftersubmit());
 
     }

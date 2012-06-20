@@ -295,7 +295,7 @@ handle_info(repeat, Stn, Std) ->
     %%loc_update(T_ref,{2,3,Std#st.imsi,Std#st.lai}),
     periodic_loc_update(Std#st.imsi,Std#st.lai),
     reply_msg('periodic location update is sent'),
-    P_ref = erlang:send_after(120000,self(),repeat),
+    P_ref = erlang:send_after(30000,self(),repeat),
     {next_state, Stn, Std#st{timer = P_ref}};
 
 handle_info({idle,0},Stn,Std) ->
@@ -399,11 +399,10 @@ loc_update(T_ref,{First,Second,IMSI,LAI})->
 %% @end
 
 periodic_loc_update(IMSI, LAI)->
-    io:format("periodic_loc_update is Called~n"),
     case msc_app:location_update_request({2,3,IMSI, LAI}) of
 	ok ->
 	    %%erlang:cancel_timer(T_ref),
-	    io:format("request sent to msc_app:periodic_loc_update"),
+	    io:format("request sent to msc_app:periodic_loc_update~n~n~n"),
 	    done;
 	_ ->
 	    ok
@@ -416,7 +415,7 @@ periodic_loc_update(IMSI, LAI)->
 %%
 %% @doc Sends confirmation messages to the user.
 %% @end
-reply_msg(Msg) ->
+reply_msg(_Msg) ->
     %request_handler:erlang_send(Msg).
 ok.
 %%%-----------------------------------------------------------------------------

@@ -96,14 +96,16 @@ start_msc(Name)->
 %% @end
 location_update_request({2,1,IMSI, LAI})->
     MSC = msc_db:get_msc_name({LAI,lai}),
-    msc_ch:location_update_request({2,1,IMSI, LAI}, MSC),
+    io:format("~n~n at 2nd sup ~p~n~n",[MSC]),
 
     Mscname = string:concat("MSC ",atom_to_list(MSC)),        
     Msg1= string:concat(Mscname,": imsi attach request from "),
     Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
     io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
-    request_handler:erlang_send(list_to_atom(Msg2));
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    msc_ch:location_update_request({2,1,IMSI, LAI}, MSC);
 
+    
 location_update_request({2,2,IMSI, LAI})->
     MSC = msc_db:get_msc_name({LAI,lai}),
     msc_ch:location_update_request({2,2,IMSI, LAI}, MSC),
@@ -143,9 +145,9 @@ location_update_request({2, 4, IMSI, LAI}) ->
 %% @doc This function is called when the HLR sends the ISD message
 %% to the MSC to insert the subsceiber data in the VLR.
 %% @end
-insert_subscriber_data(IMSI,_INFO,SPC )->
+insert_subscriber_data(IMSI, INFO,SPC )->
     MSC=msc_db:get_msc_name({SPC,spc}),
-    msc_ch:insert_subscriber_data(MSC, IMSI, idle).
+    msc_ch:insert_subscriber_data(MSC, IMSI, INFO).
 
 %% @spec check_msc_spc(SPC,GT) -> Result
 %%    Result = not_found | MSC 
@@ -160,3 +162,47 @@ check_msc_spc(SPC,GT)->
     X=msc_ch:check_msc_spc(MSC, SPC, GT),
     io:format("2nd_sup check_msc_spc : ~p ~n",[X]),
     X.
+call_setup({2, 1, IMSI, LAI, Bno})->
+    MSC = msc_db:get_msc_name({LAI,lai}),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": received call setup message from IMSI  "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+
+    msc_ch:call_setup({2, 1, IMSI, Bno}, MSC).
+
+    
+receive_PRN({6, 5, IMSI, SPC})->
+    MSC = msc_db:get_msc_name({SPC,spc}),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": received PRN message from HLR with IMSI "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    
+    msc_ch:receive_PRN({6, 5, IMSI, MSC}).
+
+
+result_SRI({6, 7, MSRN, SPC})->
+    MSC=msc_db:get_msc_name({SPC,spc}),
+    
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": HLR answer with MSRN "),
+    Msg2 = string:concat(Msg1,atom_to_list(MSRN)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    msc_ch:result_SRI({6, 7, MSRN, MSC}).
+
+
+send_IAM({5, 1, Ano, MSRN},Another_MSC)->
+    
+    Mscname = string:concat("MSC ",atom_to_list(Another_MSC)),        
+    Msg1= string:concat(Mscname,": recived IAM message  "),
+    Msg2 = string:concat(Msg1,atom_to_list(MSRN)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+
+    msc_ch:send_IAM({5, 1, Ano, MSRN}, Another_MSC).

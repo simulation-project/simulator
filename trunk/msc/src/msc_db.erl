@@ -51,6 +51,16 @@ get_msc_name({SPC,spc}) ->
     io:format("msc_db:get_msc_name(SPC):  ~p~n", [MSC]),
     ok = pgsql:close(C),
     MSC;    
+
+get_msc_name({MSRN,msrn}) ->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select msc_name from msrn where msrn_no=$1", [MSRN]),
+    MSC = show(Rows),    
+    io:format("msc_db:get_msc_name from MSRN msrn table:  ~p~n", [MSC]),
+    ok = pgsql:close(C),
+    MSC;    
+
+
 get_msc_name({LAI,lai})->    
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _C, Rows} = pgsql:equery(C, "select msc_name from msc_lai where lai=$1", [LAI]),
@@ -95,6 +105,52 @@ get_GT(VLR)->
     GT = show(Rows),
     GT.
 
+get_GT_MSC(MSC)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select gt from msc_data where name = $1", [MSC]),
+    GT = show(Rows),
+    GT.
+
+%% @spec get_IMSI(IMSI) -> Result
+%%    Result = atom()
+%%    IMSI = atom()  
+%%% @doc This function check if IMSI exists in VLR or not.
+%% @end
+get_IMSI(IMSI)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where imsi = $1", [IMSI]),
+    I = show(Rows),
+    I.
+
+
+get_MSRN(MSC)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select msrn_no from msrn where msc_name = $1 and state='free' limit 1", [MSC]),
+    I = show(Rows),
+    I.
+update_MSRN(MSRN)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update msrn set state='used' where msrn_no=$1", [MSRN]),
+    io:format("msc_db:update MSRN: done  ~n").
+
+
+update_MSRN_sub(MSRN, IMSI)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info set msrn=$1 where imsi=$2", [MSRN, IMSI]),
+    io:format("msc_db:update MSRN in sub_info: done  ~n").
+
+
+get_MSISDN(IMSI)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select info from sub_info where imsi = $1", [IMSI]),
+    I = show(Rows),
+    I.
+
+get_msc_spc_MSRN(MSRN)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series = $1", [MSRN]),
+    I = show(Rows),
+    I.
 %% @spec get_VLR(MSC) -> Result
 %%    Result = atom()
 %%    MSC = atom()  
@@ -117,7 +173,7 @@ get_VLR(MSC)->
 %% @end
 insert_subscriber(IMSI,LAI,MSC,VLR)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _I} = pgsql:equery(C, "insert into sub_info values ($1, $2, $3, $4, $5)", [MSC, VLR, 'null', IMSI, LAI]),   
+    {ok, _I} = pgsql:equery(C, "insert into sub_info values ($1, $2, $3, $4, $5, $6, $7)", [MSC, VLR, 'null', IMSI, LAI, 'null', 'null']),   
     io:format("msc_db:insert_subscriber_data: done  ~n").
 
 %% @spec update_subscriber_info(Parameter, Status) -> Result
@@ -130,9 +186,17 @@ insert_subscriber(IMSI,LAI,MSC,VLR)->
 %%   Result = ok
 %%% @doc This function updates the status for a given IMSI .
 %% @end
-update_subscriber_info(IMSI,idle)->
+
+
+update_subscriber_info({IMSI,INFO}, idle)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [idle,IMSI]),
+    {ok, _} = pgsql:equery(C, "update sub_info  set info=$1 where imsi=$2", [INFO, IMSI]),
+    {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [idle, IMSI]),
+    io:format("msc_db:update_subscriber_info(turn_on): done  ~n");
+
+update_subscriber_info(IMSI, update_idle)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info  set status=$1 where imsi=$2", [idle, IMSI]),
     io:format("msc_db:update_subscriber_info(turn_on): done  ~n");
 
 update_subscriber_info(IMSI,off)->
@@ -160,6 +224,14 @@ check_msc_imsi(MSC, IMSI)->
 {ok, _C, Rows} = pgsql:equery(C, "select msc_name from sub_info where msc_name = $1 and imsi=$2", [MSC, IMSI]),
 R = show(Rows),
 R.
+
+
+get_IMSI_MSRN(MSRN)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where msrn = $1", [MSRN]),
+    I = show(Rows),
+    I.
+
 
 %% @spec check_periodic_lai(IMSI, LAI) -> Result
 %%   IMSI = atom() 

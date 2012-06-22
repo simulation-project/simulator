@@ -1,6 +1,12 @@
  application:start(ms).
-hlr_mgr:start_gen([{hlr_name,"hlr1"}, {spc,'3-100'}, {gt,"20101"}]).
+code:add_path("../msc/test/stub").
+hlr_mgr:start_gen([{hlr_name,"esraa"}, {spc,"3-100"}, {gt,"20101"}]).
 msc_app:start_msc(msc1). 
-ms_app:create_ms({'60202124555567',lai1}).   
+	ms_app:create_ms({'60202124555567',lai2}).
+ms_app:create_ms({'602020000000011',lai1}).      
+
 ms_app:change_state({'60202124555567',turn_on_idle}).
+ms_app:change_state({'602020000000011',turn_on_idle}).
+
+ms_app:callsetup({2,1,'602020000000011', lai1,'010001233333'}).
 

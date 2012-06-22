@@ -61,6 +61,7 @@ import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
 import com.mxgraph.view.mxGraph;
 import java.awt.*;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -538,8 +539,10 @@ public class BasicGraphEditor extends JPanel {
      */
     public void exit() {
         JFrame frame = (JFrame) SwingUtilities.windowForComponent(this);
-
+       // JOptionPane.showMessageDialog(this, "closinngggggg");
         if (frame != null) {
+            //JOptionPane.showMessageDialog(this, "closinngggggg");
+            //System.out.println("closinngggg");
             frame.dispose();
         }
     }
@@ -572,6 +575,13 @@ public class BasicGraphEditor extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(menuBar);
         frame.setSize(870, 640);
+        frame.addWindowListener(new WindowAdapter(){
+         public void windowClosing(WindowEvent we){
+             System.out.println("Deleting DB");
+              ms_app.DatabaseHandler.deleteDB_HLR();
+              ms_app.DatabaseHandler.deleteDB_MSC();
+            }
+         });
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Rectangle maximumWindowBounds = ge.getMaximumWindowBounds();
         frame.setSize(maximumWindowBounds.getSize());

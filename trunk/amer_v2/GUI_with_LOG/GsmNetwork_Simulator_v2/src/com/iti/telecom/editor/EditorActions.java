@@ -253,6 +253,7 @@ public class EditorActions
 
 			if (editor != null)
 			{
+                                System.out.println("marwaaaaa");
 				editor.exit();
 			}
 		}

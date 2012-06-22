@@ -51,6 +51,7 @@ public class CellPropertise {
     }
 
     public void SwitchedOn() {
+        JOptionPane.showMessageDialog(parent, "Switching ON");
         MS mobileStation = (MS) cellBean;
         mobileStation.getFormObject().switchOn();
         mobileStation.setSwitchedOn(false);
@@ -62,9 +63,11 @@ public class CellPropertise {
     public void SwitchedOFF() {
         JOptionPane.showMessageDialog(parent, "Switching OFF");
         MS mobileStation = (MS) cellBean;
+        mobileStation.getFormObject().switchOff();
         mobileStation.setSwitchedOn(true);
         mobileStation.setSwitchedOff(false);
         mobileStation.setCall(false);
+        BasicGraphEditor.logMsg("Switching Off");
     }
 
     public void MakeCall() {

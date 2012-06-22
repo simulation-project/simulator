@@ -32,8 +32,9 @@
 -export([start/2, stop/1]).
 
 %%% External exports
--export([ start_msc/1, location_update_request/1, insert_subscriber_data/3, check_msc_spc/2]).
+-export([ start_msc/1, location_update_request/1, insert_subscriber_data/3, check_msc_spc/2, call_setup/1]).
 
+-compile([export_all]).
 %%% Macros
 
 %%% Data types
@@ -97,20 +98,20 @@ start_msc(Name)->
 
 location_update_request({2, 1, IMSI, LAI})->
     msc_2nd_sup:location_update_request({2, 1, IMSI, LAI}),
-ok;
+    ok;
 
 location_update_request({2, 2, IMSI, LAI}) ->
     msc_2nd_sup:location_update_request({2, 2, IMSI, LAI}),
-ok;
+    ok;
 
 location_update_request({2, 3, IMSI, LAI})->
-	io:format("PPPPPPPPPPEriodic update ~n~n"),
+    io:format("PPPPPPPPPPEriodic update ~n~n"),
     msc_2nd_sup:location_update_request({2, 3, IMSI, LAI}),
-	ok;
+    ok;
 
 location_update_request({2, 4, IMSI, LAI}) ->
     msc_2nd_sup:location_update_request({2,4, IMSI, LAI}),
-ok.
+    ok.
 
 %% @spec insert_subscriber_data(IMSI,INFO,SPC) -> Result
 %% Result = ok
@@ -135,3 +136,17 @@ check_msc_spc(SPC,GT)->
     Y=msc_2nd_sup:check_msc_spc(SPC,GT),
     io:format("~n MSC_app check_msc_spc:  ~p~n",[Y]),
     Y.
+
+
+call_setup({2, 1, IMSI, LAI, Bno})-> %{2,1, '602020000000011',lai2, '010001233333'}
+    msc_2nd_sup:call_setup({2, 1, IMSI, LAI, Bno}),
+    ok.
+
+receive_PRN({6, 5, IMSI, SPC})->%IMSI for Bno to assign MSRN
+    msc_2nd_sup:receive_PRN({6, 5, IMSI, SPC}).
+
+result_SRI({6, 7, MSRN, SPC})->
+    msc_2nd_sup:result_SRI({6, 7, MSRN, SPC}).
+
+send_IAM({5, 1, Ano, MSRN},Another_MSC)->
+    msc_2nd_sup:send_IAM({5, 1, Ano, MSRN},Another_MSC).

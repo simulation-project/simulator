@@ -43,6 +43,27 @@ public class sendtoerl {
         }
     }
 
+     public void sendimsideattach(String ms, String locupdate) throws OtpErlangExit, OtpErlangDecodeException, Exception {
+        OtpErlangAtom atom1 = new OtpErlangAtom(ms);
+        erlobjs_ms[0] = atom1;
+        OtpErlangAtom atom2 = new OtpErlangAtom("turn_off");
+        erlobjs_ms[1] = atom2;
+        OtpErlangTuple t2 = new OtpErlangTuple(erlobjs_ms);
+        OtpErlangObject[] ob = new OtpErlangObject[1];
+        ob[0] = t2;
+                        
+        try {
+            com.iti.telecom.main.GraphEditor.sender.sendtoerl("mslu", ob);
+            System.out.println("marwaaaaaaaaaaaa");
+        } catch (Exception ex) {
+            Logger.getLogger(sendtoerl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    
+    
+    
+    
     public void sendnewms(String ms_name, String imsi, String lai) throws OtpErlangExit, OtpErlangDecodeException, Exception {
         OtpErlangAtom atom = new OtpErlangAtom(imsi);
         erlobjs[0] = atom;

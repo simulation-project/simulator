@@ -6,7 +6,7 @@
 -export([start/2, stop/1]).
 
 %% API functions
--export([create_ms/1,change_state/1,change_lai/1]).
+-export([create_ms/1,change_state/1,change_lai/1, receiving_setup/2, callsetup/1]).
 
 %% ===================================================================
 %% Application callbacks
@@ -53,3 +53,14 @@ change_state(Tuple)->
 change_lai({IMSI,New_LAI})->
     io:format("change_lai ~n~p~n~p~n",[IMSI,New_LAI]),
     ms_fsm:change_loc_area(IMSI,New_LAI).
+
+receiving_setup(IMSI,Ano)->
+ms_fsm:send_event({IMSI,turn_on_active}),
+io:format("~n~n~nreceiving_setup ~p ~p ~n",[IMSI,Ano]).
+
+callsetup({2,1,IMSI,LAI,Bno})->
+ms_fsm:send_event({IMSI,turn_on_active}),
+io:format("~n~n~ncallsetup ~p ~n ~n",[IMSI]),
+msc_app:call_setup({2,1,IMSI,LAI,Bno}).
+
+

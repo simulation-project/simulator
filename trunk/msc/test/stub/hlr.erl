@@ -1,12 +1,17 @@
 -module(hlr).
 -compile([export_all]).
 
-check_imsi(IMSI,SPC)->
-    ok;
 check_imsi(x,SPC) ->
-    false .
-update_location({6, 1, IMSI, VLR, GT},SPC)->
-   code:add_path("../../ebin"),
-    msc_app:insert_subscriber_data(IMSI,info,spc1 ),
+    false ;
+check_imsi(IMSI,SPC)->
     ok.
-    
+
+
+
+imsiExist(SPC,IMSI) ->
+	ok.
+
+
+send_routing_info('010001233333', '3-100' ,'gt1')->
+	msc_app:receive_PRN({6, 5, '60202124555567', 'spc2'}),
+	msc_app:result_SRI({6, 7, '5', 'spc1'}).

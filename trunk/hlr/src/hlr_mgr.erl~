@@ -104,17 +104,17 @@ imsiExist(SPC,IMSI)->
     imsi_exist(Name,IMSI).
 %%----------------------------------------------------------------------
 imsi_exist(Name,Imsi)->
-    %{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
-    %io:format("~n Naaaaaaaaem is ~p~n~n",[Name]),
-    %Query = "select * from " ++ Name ++ "where imsi=$1",
-    %{ok, _C, Rows} = pgsql:equery(C, Query, [Imsi]),
-    %ok = pgsql:close(C),
-    %check(Rows).
-	
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
-    {ok, _C, Rows} = pgsql:equery(C, "select * from hlr1  where imsi=$1",[Imsi]),
+    io:format("~n Naaaaaaaaem is ~p~n IMSI  ~p ~n",[Name, Imsi]),
+    Query = "select * from " ++ Name ++ "  where imsi=$1 ",
+    {ok, _C, Rows} = pgsql:equery(C, Query, [Imsi]),
     ok = pgsql:close(C),
     check(Rows).
+	
+    %{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
+    %{ok, _C, Rows} = pgsql:equery(C, "select * from hlr1  where imsi=$1",[Imsi]),
+    %ok = pgsql:close(C),
+    %check(Rows).
 %%----------------------------------------------------------------------	
 check([])->
     false;

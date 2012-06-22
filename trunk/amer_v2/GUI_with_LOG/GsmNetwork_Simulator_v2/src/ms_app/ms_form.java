@@ -33,7 +33,7 @@ public class ms_form extends JDialog {
     private BasicGraphEditor editor;
     // String[] lais;
     static public Vector<String> lai_vect = new Vector<String>();
-    //static public Vector<String> hlr_vect = new Vector<String>();
+    static public Vector<String> used_imsi_vect = new Vector<String>();
     static public Vector<String> imsi_vect = new Vector<String>();
     /**
      * Creates new form ms_form
@@ -100,7 +100,7 @@ public class ms_form extends JDialog {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Mobile Station Form"));
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel2.setText("IMSI :");
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
@@ -215,12 +215,9 @@ public class ms_form extends JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel2))
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
@@ -228,7 +225,8 @@ public class ms_form extends JDialog {
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(mnc)
-                                .addComponent(mcc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(mcc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -295,28 +293,24 @@ public class ms_form extends JDialog {
         }
     }
     
-    private void msinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_msinFocusGained
-        // TODO add your handling code here:
-        if (mobileStation.getaftersubmit())
-        msin.setText("");
-}//GEN-LAST:event_msinFocusGained
-
-    private void msinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msinActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_msinActionPerformed
-
-    private void mncFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_mncFocusGained
-        // TODO add your handling code here:
-        if (mobileStation.getaftersubmit())
-        mnc.setText("");
-}//GEN-LAST:event_mncFocusGained
-
-    private void mccFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_mccFocusGained
-        // TODO add your handling code here:
-   //     if (mobileStation.getaftersubmit())
-   //     mcc.setText("");
-}//GEN-LAST:event_mccFocusGained
-
+    public  void switchOff()
+    {
+        try {
+            String imsi1 = mobileStation.getSimsi1() + mobileStation.getSimsi2() + mobileStation.getSimsi3();
+            System.out.println(imsi1);
+            serl.sendimsideattach(imsi1, "turn_off");
+            
+       mobileStation.setnormallu(false);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(ms_form.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         //     String ms_name = jTextField10.getText();
@@ -348,9 +342,11 @@ public class ms_form extends JDialog {
         mobileStation.setSlai1(lai);
         if(lai != null && imsi !=null){
             if(checkimsi(imsi)){
+                if(checkusedimsi(imsi)){
         try {
             serl.sendnewms("ms_name", imsi, lai);
              lai_vect.add(lai); 
+             used_imsi_vect.add(imsi);
         } catch (Exception ex) {
             
             String message = ex.getMessage();
@@ -362,6 +358,9 @@ public class ms_form extends JDialog {
         mobileStation.setSwitchedOn(true);
         mobileStation.setMsNumber(imsi);
         dispose();
+                }
+                else
+                    JOptionPane.showMessageDialog(this, "This IMSI is used, Try another one");
         }
             else
                // jLabel15.setText("IMSI doesn't exist in any HLR");
@@ -416,6 +415,30 @@ public class ms_form extends JDialog {
 
         }}        // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1PopupMenuWillBecomeInvisible
+
+    private void msinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_msinFocusGained
+        // TODO add your handling code here:
+        if (mobileStation.getaftersubmit()) {
+            msin.setText("");
+        }
+    }//GEN-LAST:event_msinFocusGained
+
+    private void msinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msinActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_msinActionPerformed
+
+    private void mncFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_mncFocusGained
+        // TODO add your handling code here:
+        if (mobileStation.getaftersubmit()) {
+            mnc.setText("");
+        }
+    }//GEN-LAST:event_mncFocusGained
+
+    private void mccFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_mccFocusGained
+        // TODO add your handling code here:
+        //     if (mobileStation.getaftersubmit())
+        //     mcc.setText("");
+    }//GEN-LAST:event_mccFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -677,6 +700,18 @@ public class ms_form extends JDialog {
         return false;
     }
 
+    public static boolean checkusedimsi(String imsi)
+    {
+        //Vector<String> imsi_Vector = DatabaseHandler.getimsis();
+        for (String str : used_imsi_vect)
+        {
+            if(imsi.equals(str))
+                imsi_vect.remove(str);
+                return false;
+        }
+        return true;
+    }
+    
      public static String getAllIMSI(Vector<String> vect)
         {
             String allimsi = "";

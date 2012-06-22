@@ -130,9 +130,15 @@ public class StartFrame extends javax.swing.JFrame {
     private void addMscBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMscBtnMouseClicked
         // TODO add your handling code here:
         if(hlrExist){
-            MscForm mf=new MscForm();
-            mf.setVisible(true);
-            mf.setSize(600,300);
+           // MscForm mf=new MscForm();
+           // mf.setVisible(true);
+           // mf.setSize(600,300);
+            
+String hname = hlrName;
+GT_translation screen = new GT_translation(hname);
+screen.setVisible(true);
+            
+            
             //            NodeForm nf=new NodeForm();
 //            nf.setVisible(true);
 //            nf.setSize(300,300);

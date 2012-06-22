@@ -26,7 +26,7 @@ stop(_State) ->
 %%    Value = term()
 %%    Result = atom()
 %%
-%% @doc Sends location update request to MSC.
+%% @doc Starts a new ms_fsm.
 %% @end
 
 create_ms(Tuple)->
@@ -37,13 +37,30 @@ create_ms(Tuple)->
 %%    Value = term()
 %%    Result = atom()
 %%
-%% @doc Sends location update request to MSC.
+%% @doc Sends a request to change the current state of ms_fsm.
 %% @end
 
 change_state(Tuple)->
     io:format("change_state ~n~p~n",[Tuple]),
     ms_fsm:send_event(Tuple).
 
+%% @spec change_lai(Value) -> Result
+%%    Value = term()
+%%    Result = atom()
+%%
+%% @doc Sends a request to change current location area of the MS.
+%% @end
 change_lai({IMSI,New_LAI})->
     io:format("change_lai ~n~p~n~p~n",[IMSI,New_LAI]),
     ms_fsm:change_loc_area(IMSI,New_LAI).
+
+receiving_setup(IMSI,Ano)->
+ms_fsm:send_event({IMSI,turn_on_active}),
+io:format("receiving_setup ~p ~p ~n",[IMSI,Ano]).
+
+callsetup({2,1,IMSI,LAI,Bno})->
+ms_fsm:send_event({IMSI,turn_on_active}),
+io:format("callsetup ~n"),
+msc_app:call_setup({2,1,IMSI,LAI,Bno}).
+
+

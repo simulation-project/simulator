@@ -265,13 +265,13 @@ insertVlr(Name, IMSI, VLR, CgPA)->
     Query2 = "select isd from " ++ DB ++ "  where imsi=$1 ",
     {ok, _C, ISD} = pgsql:equery(C, Query2, [IMSI]),
     ok = pgsql:close(C),
-    sendISD(CgPA,ISD,IMSI).
+    sendISD(CgPA,ISD,IMSI, Name).
 %---------------------------------------------------------------------------------
-sendISD(MSCGT,ISD,IMSI)->
-    %%io:format("MSC GT ... ~p ..ISD .. ~p~n",[MSCGT,ISD]).
+sendISD(MSCGT,ISD,IMSI, Name)->
+    io:format("~n~n send ISD  at HLR    ~p~n ~p ~n~n",[MSCGT,ISD]),
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
-    DB = "msc",
-    Query = "select spc from " ++ DB ++ "  where gt=$1 ",
+    DB = "node_" ++ Name,
+    Query = "select nispc from " ++ DB ++ "  where gt=$1 ",
     {ok, _C, SPC} = pgsql:equery(C, Query, [MSCGT]),
     ok = pgsql:close(C),
     %%MSC_name=msc_app:call(Rows),

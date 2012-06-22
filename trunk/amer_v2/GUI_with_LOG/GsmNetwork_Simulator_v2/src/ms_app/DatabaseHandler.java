@@ -173,9 +173,78 @@ public class DatabaseHandler {
             ex.printStackTrace();
         }
                 }
+        hlr_vect.clear();
         DBConnection.CloseConnection1(con);
         return imsi_vect;
             }
+
+       public static void deleteDB_HLR()
+       {
+       
+           Connection con = null;
+           con = DBConnection.getConnection1();     
+           java.sql.Statement s = null;
+           
+            for (String hlr_name : gethlrs()){
+        try {
+            s = con.createStatement();
+     //       ResultSet rs = new ResultSet() {};
+            
+               s.executeUpdate("drop table "+hlr_name+";");
+               s.executeUpdate("drop table node_"+hlr_name+";");
+              
+            //rs = st.executeQuery("INSERT INTO msc_data VALUES ('"+name+"','"+ni+"','"+spc+"','"+gt+"','"+vlr+"','"+la+"')");
+            //int k=0;
+           // System.out.println("rsss info rara : "+rs.getFetchSize());
+       
+            
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("no data");
+            ex.printStackTrace();
+        }
+                }
+        try {
+              s = con.createStatement();
+            int rs = s.executeUpdate("delete from hlrs;");
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       // hlr_vect.clear();
+        DBConnection.CloseConnection1(con);
         
+       }
+       
+       public static void deleteDB_MSC()
+       {
+       
+           Connection con = null;
+           con = DBConnection.getConnection();     
+           java.sql.Statement s = null;
+           
+            
+        try {
+            s = con.createStatement();
+            
+                s.executeUpdate("delete from sub_info ;");
+                s.executeUpdate("delete from gt_translation ;");
+                s.executeUpdate("delete from imsi_analysis ;");
+                s.executeUpdate("delete from msc;");
+                s.executeUpdate("delete from msc_lai;");
+                s.executeUpdate("delete from msc_data;");
+                
+                //s.executeUpdate("delete from msc_data;");
+            
+        } catch (SQLException ex) {
+            
+            System.out.println("no data");
+            ex.printStackTrace();
+        }
+                
+        DBConnection.CloseConnection(con);
+        
+       }
+       
 }
 

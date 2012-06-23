@@ -162,6 +162,7 @@ check_msc_spc(SPC,GT)->
     X=msc_ch:check_msc_spc(MSC, SPC, GT),
     io:format("2nd_sup check_msc_spc : ~p ~n",[X]),
     X.
+
 call_setup({2, 1, IMSI, LAI, Bno})->
     MSC = msc_db:get_msc_name({LAI,lai}),
 
@@ -197,12 +198,61 @@ result_SRI({6, 7, MSRN, SPC})->
     msc_ch:result_SRI({6, 7, MSRN, MSC}).
 
 
-send_IAM({5, 1, Ano, MSRN},Another_MSC)->
-    
+send_IAM({5, 1, Ano, MSRN},SPC,GT)->
+     Another_MSC = msc_db:get_msc_name({SPC,spc}),
+
     Mscname = string:concat("MSC ",atom_to_list(Another_MSC)),        
     Msg1= string:concat(Mscname,": recived IAM message  "),
     Msg2 = string:concat(Msg1,atom_to_list(MSRN)),    
     io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
     request_handler:erlang_send(list_to_atom(Msg2)),
 
-    msc_ch:send_IAM({5, 1, Ano, MSRN}, Another_MSC).
+    msc_ch:send_IAM({5, 1, Ano, MSRN}, Another_MSC,GT).
+
+
+
+receive_alert({1, 5, IMSI, LAI})->
+    
+    MSC = msc_db:get_msc_name({LAI,lai}),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": received alert_ack message from IMSI  "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+
+    msc_ch:receive_alert({1, 5, IMSI}, MSC).
+
+send_ACM({5,2,Ano,SPC})->
+     MSC = msc_db:get_msc_name({SPC,spc}),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": receiving ACM message  "   ),
+    io:format("MSg ~p~n ",[list_to_atom(Msg1)]),
+    request_handler:erlang_send(list_to_atom(Msg1)),
+
+    msc_ch:receive_ACM({5,2,Ano,MSC}).
+    
+
+receive_connect({1,6,IMSI,LAI})->
+    
+    MSC = msc_db:get_msc_name({LAI,lai}),
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": Bno send connect message to MSC "),
+    Msg2 = string:concat(Msg1,atom_to_list(MSC )),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+
+    msc_ch:receive_connect   ({1, 6, IMSI}, MSC).
+
+receive_ANM({5,3,Ano,SPC})->
+    
+    MSC = msc_db:get_msc_name({SPC,spc}),
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": receiving ANM  message "),
+    io:format("MSg ~p~n ",[list_to_atom(Msg1)]),
+    request_handler:erlang_send(list_to_atom(Msg1)),
+
+    msc_ch:receive_ANM({5,3,Ano,MSC}).
+    

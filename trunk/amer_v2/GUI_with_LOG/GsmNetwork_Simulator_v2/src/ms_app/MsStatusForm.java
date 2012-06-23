@@ -16,6 +16,7 @@ package ms_app;
  * @author Dr.Hassan
  */
 
+import com.iti.telecom.beans.MS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -30,8 +31,14 @@ public class MsStatusForm extends javax.swing.JFrame {
 
     /** Creates new form MsStatusForm */
     boolean bool = false;
+    
+    public MS mobileStation;
+    
     public MsStatusForm() {
         initComponents();
+        
+        
+        
         jTextField1.setInputVerifier(new TextFieldVerifier());
     }
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test ms_app_SUITE:normal_case result</title>
+<meta http-equiv="cache-control" content="no-cache">
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></head>
+<body>
+
+=== <a href="ms_app_suite.src.html#normal_case">source code for ms_app_SUITE:normal_case/1</a>
+
+<pre>
+<a name="top"></a>
+=== Test case started with:
+ms_app_SUITE:normal_case([{watchdog,<0.60.0>},
+                          {tc_logfile,"/home/marwa/projV3/ms/logs/ct_run.test@ubuntu.2012-06-17_16.58.27/projV3.ms.logs/run.2012-06-17_16.58.27/ms_app_suite.normal_case.html"},
+                          {tc_group_properties,[]},
+                          {tc_group_path,[]},
+                          {data_dir,"/home/marwa/projV3/ms/test/ms_app_SUITE_data/"},
+                          {priv_dir,"/home/marwa/projV3/ms/logs/ct_run.test@ubuntu.2012-06-17_16.58.27/projV3.ms.logs/run.2012-06-17_16.58.27/log_private/"}])
+
+=== Current directory is "/home/marwa/projV3/ms/logs/ct_run.test@ubuntu.2012-06-17_16.58.27"
+
+=== Started at 2012-06-17 16:58:27
+
+<br />
+start_child 
+{ms1,lai1}
+
+change_state 
+{ms1,turn_on_idle}
+
+turn_on_idle
+
+change_state 
+{ms1,turn_on_idle}
+
+turn_on_idle
+
+change_lai 
+ms1
+lai2
+
+<div class="error_logger"><b>*** User 2012-06-17 16:58:27.850 ***</b>
+
+=ERROR REPORT==== 17-Jun-2012::12:58:27 ===
+** State machine ms1 terminating 
+** Last event in was turn_on_idle
+** When State == turn_off
+**      Data  == {st,ms1,lai1,undefined}
+** Reason for termination = 
+** {'module could not be loaded',
+       [{msc_app,location_update_request,[{2,1,ms1,lai1}],[]},
+        {ms_fsm,loc_update,2,[{file,"src/ms_fsm.erl"},{line,383}]},
+        {ms_fsm,turn_off,2,[{file,"src/ms_fsm.erl"},{line,106}]},
+        {gen_fsm,handle_msg,7,[{file,"gen_fsm.erl"},{line,494}]},
+        {proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,227}]}]}
+
+</div>
+<a name="end"></a>
+
+
+=== Ended at 2012-06-17 16:58:27
+=== successfully completed test case
+=== returned value = ok
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>
+</p>
+<div class="copyright">Copyright &copy; 2012 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!date>Sun Jun 17 2012 16:58:27<!/date><br />
+</div>
+</center>
+</body>
+</html>

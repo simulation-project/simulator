@@ -31,7 +31,7 @@
 -export([start_link/1]).
 
 %%% External exports
--export([send_event/1,change_loc_area/2]).
+-export([send_event/1,change_loc_area/2,call_setup/1,send_alert/2,receiving_alert/1,connect_msg/2, reply_msg/2]).
 
 %%% States exports
 -export([turn_off/2,turn_on_idle/2,turn_on_active/2]).
@@ -131,6 +131,8 @@ turn_off(turn_on_active, Std) ->
 turn_on_idle(turn_on_active, Std) ->
      io:format("~p~n",[Std]),
      io:format("turn_on_active"),
+    %% msc_app:alert_msg(Std#st.imsi,Std#st.lai),
+     reply_msg(Std#st.imsi,' : Alert message is sent to MSC'),
     {next_state, turn_on_active, Std};
 turn_on_idle(turn_off, Std) ->
     io:format("~p~n",[Std]),
@@ -159,6 +161,7 @@ turn_on_idle(turn_off, Std) ->
 turn_on_active(turn_on_idle,Std)->
     io:format("~p~n",[Std]),
     io:format("turn_on_idle"),
+    %%msc_app:receive_connect(Std#st.imsi,Std#st.lai),
     {next_state, turn_on_idle, Std};
 turn_on_active(turn_off, Std) ->
     io:format("~p~n",[Std]),
@@ -268,6 +271,16 @@ state_name(_Event, _From, Std) ->
 %%
 %% @doc Handles events received by <u>gen_fsm:send_all_state_event/2</u>.
 %% @end
+handle_event(send_alert, turn_on_idle,Std) ->
+	io:format("send_alert ~n~n"),
+    msc_app:receiving_alert({1,5,Std#st.imsi,Std#st.lai}),
+    reply_msg(Std#st.imsi,' : Sending Alert message to MSC'),
+    {next_state,turn_on_idle, Std};
+handle_event(receive_alert, turn_on_idle,Std) ->
+	io:format("receive_alert ~n~n"),
+    %%msc_app:receiving_alert({1,5,Std#st.imsi,Std#st.lai}),
+    reply_msg(Std#st.imsi,' : Sending Alert message to MSC'),
+    {next_state,turn_on_idle, Std};
 handle_event(Event, turn_on_idle, Std) ->
     T_ref = erlang:send_after(30000,self(),{normal,3}),
     loc_update(T_ref,{2,2,Std#st.imsi,Event}),%%normal_loc_update
@@ -294,14 +307,14 @@ handle_info(repeat, Stn, Std) ->
     io:format("repeat"),
     %%loc_update(T_ref,{2,3,Std#st.imsi,Std#st.lai}),
     periodic_loc_update(Std#st.imsi,Std#st.lai),
-    reply_msg('periodic location update is sent'),
+    reply_msg(Std#st.imsi,' : periodic location update is sent'),
     P_ref = erlang:send_after(30000,self(),repeat),
     {next_state, Stn, Std#st{timer = P_ref}};
 
 handle_info({idle,0},Stn,Std) ->
     io:format("turn_on_idle request failed"),
     erlang:cancel_timer(Std#st.timer),
-     reply_msg('turn_on_idle idle request failed'),
+    reply_msg(Std#st.imsi,' : turn_on_idle idle request failed'),
     {next_state, Stn, Std};
 handle_info({idle,N},Stn,Std) ->
     io:format("idle request retry "),
@@ -311,7 +324,7 @@ handle_info({idle,N},Stn,Std) ->
 
 handle_info({off,0},Stn,Std) ->
     io:format("turn_off request failed"),
-    reply_msg('turn_off request failed'),
+    reply_msg(Std#st.imsi,' : turn_off request failed'),
     {next_state, Stn, Std};
 handle_info({off,N},Stn,Std) ->
     io:format("off request retry "),
@@ -322,7 +335,7 @@ handle_info({off,N},Stn,Std) ->
 
 handle_info({normal,0},Stn,Std)->
     io:format("normal update request failed"),
-    reply_msg('normal update request failed'),
+    reply_msg(Std#st.imsi,' : normal update request failed'),
     {next_state, Stn, Std};
 handle_info({normal,N},Stn,Std)->
     io:format("normal request retry "),
@@ -383,7 +396,7 @@ loc_update(T_ref,{First,Second,IMSI,LAI})->
     case msc_app:location_update_request({First,Second,IMSI,LAI})of
 	ok ->
 	    io:format("request{~p,~p,~p,~p} is sent to msc_app",[First,Second,IMSI,LAI]),
-	     reply_msg('request succeeded'),
+	     reply_msg(IMSI,' : request sent to MSC'),
 	    erlang:cancel_timer(T_ref);
 	_ ->
 	    ok
@@ -402,6 +415,7 @@ periodic_loc_update(IMSI, LAI)->
     case msc_app:location_update_request({2,3,IMSI, LAI}) of
 	ok ->
 	    %%erlang:cancel_timer(T_ref),
+	    reply_msg(IMSI,' : request sent to MSC'),
 	    io:format("request sent to msc_app:periodic_loc_update~n~n~n"),
 	    done;
 	_ ->
@@ -409,15 +423,22 @@ periodic_loc_update(IMSI, LAI)->
     end.
 
 %%@private
-%% @spec reply_msg(Msg) -> Result
+%% @spec reply_msg(Var,Msg) -> Result
+%%    Var = term()
 %%    Msg = term()
 %%    Result = atom()
 %%
 %% @doc Sends confirmation messages to the user.
 %% @end
-reply_msg(_Msg) ->
-    %request_handler:erlang_send(Msg).
-ok.
+reply_msg(Var,Msg) ->
+    Z = atom_to_list('MS '),
+    V=atom_to_list(Var),
+    K = string:concat(Z,V),
+    Msgs=atom_to_list(Msg),
+    Ms=string:concat(K,Msgs),
+    M=list_to_atom(Ms),
+    request_handler:erlang_send(M),
+    ok.
 %%%-----------------------------------------------------------------------------
 %%% API functions
 %%%-----------------------------------------------------------------------------
@@ -443,3 +464,16 @@ change_loc_area(IMSI,New_LAI) ->
     gen_fsm:send_all_state_event(IMSI,New_LAI).
 
 
+call_setup({2,1,IMSI,LAI,Bno})->
+    msc_app:call_setup({2,1,IMSI,LAI,Bno}).
+
+send_alert(IMSI,Ano)->
+    io:format("send_alert to ~p~n",[Ano]),
+    gen_fsm:send_all_state_event(IMSI,send_alert).
+
+receiving_alert(IMSI)->
+    gen_fsm:send_all_state_event(IMSI,receive_alert).
+
+connect_msg(IMSI,LAI)->
+    msc_app:receive_connect({1,6,IMSI,LAI}),
+    ms_fsm:send_event({IMSI,turn_on_active}).

@@ -171,10 +171,10 @@ normal_case()->
 
 normal_case(_Conf)->
    {ok,_PID} = ms_app:create_ms({ms1,lai1}),
-    {ok,_PID} = ms_app:create_ms({ms1,lai1}),
+    %%{ok,_PID} = ms_app:create_ms({ms1,lai1}),
     ok = ms_app:change_state({ms1,turn_on_idle}),
-    ok = ms_app:change_state({ms1,turn_on_idle}),
-    ok = ms_app:change_lai({ms1,lai2}).
+    ok = ms_app:change_lai({ms1,lai2}),
+    ok = ms_app:change_lai({ms1,turn_off}).
     
 
 %%%-----------------------------------------------------------------------------

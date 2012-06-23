@@ -1,0 +1,1171 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: double_y(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION double_y() RETURNS text
+    LANGUAGE sql
+    AS $$
+select name from employee where id=1;
+$$;
+
+
+ALTER FUNCTION public.double_y() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: a; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE a (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.a OWNER TO postgres;
+
+--
+-- Name: produce1; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE produce1 (
+    prodid smallint NOT NULL,
+    prodname character varying(40) NOT NULL,
+    variety character varying(40),
+    instock smallint NOT NULL,
+    onorder smallint NOT NULL,
+    seasonattr smallint NOT NULL
+);
+
+
+ALTER TABLE public.produce1 OWNER TO postgres;
+
+--
+-- Name: comedies; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW comedies AS
+    SELECT produce1.prodid, produce1.prodname, produce1.variety, produce1.instock, produce1.onorder, produce1.seasonattr FROM produce1 WHERE (produce1.prodid = 1);
+
+
+ALTER TABLE public.comedies OWNER TO postgres;
+
+--
+-- Name: comedies2; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW comedies2 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE (produce1.prodid = 1);
+
+
+ALTER TABLE public.comedies2 OWNER TO postgres;
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE country (
+    countryid integer NOT NULL,
+    name character varying(50)
+);
+
+
+ALTER TABLE public.country OWNER TO postgres;
+
+--
+-- Name: employee; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE employee (
+    id integer NOT NULL,
+    name character varying(50),
+    salary integer,
+    sdate date,
+    country_id integer,
+    working_hour integer
+);
+
+
+ALTER TABLE public.employee OWNER TO postgres;
+
+--
+-- Name: esraa; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE esraa (
+    imsi character varying(20) NOT NULL,
+    vlr character varying(20),
+    isd character varying(20)
+);
+
+
+ALTER TABLE public.esraa OWNER TO postgres;
+
+--
+-- Name: h1; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE h1 (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.h1 OWNER TO postgres;
+
+--
+-- Name: hlr11; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr11 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.hlr11 OWNER TO postgres;
+
+--
+-- Name: hlr12; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr12 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.hlr12 OWNER TO postgres;
+
+--
+-- Name: hlr13; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr13 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.hlr13 OWNER TO postgres;
+
+--
+-- Name: hlr150; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr150 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.hlr150 OWNER TO postgres;
+
+--
+-- Name: hlr22; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr22 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.hlr22 OWNER TO postgres;
+
+--
+-- Name: hlr5; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlr5 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.hlr5 OWNER TO postgres;
+
+--
+-- Name: hlrs; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE hlrs (
+    hlrname character varying(10) NOT NULL
+);
+
+
+ALTER TABLE public.hlrs OWNER TO postgres;
+
+--
+-- Name: jiji; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE jiji (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.jiji OWNER TO postgres;
+
+--
+-- Name: kiki; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE kiki (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.kiki OWNER TO postgres;
+
+--
+-- Name: lola; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lola (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.lola OWNER TO postgres;
+
+--
+-- Name: mahmoud; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE mahmoud (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.mahmoud OWNER TO postgres;
+
+--
+-- Name: msc; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msc (
+    gt character varying(10) NOT NULL,
+    spc character varying(10)
+);
+
+
+ALTER TABLE public.msc OWNER TO postgres;
+
+--
+-- Name: node_esraa; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE node_esraa (
+    nispc character varying(20),
+    gt character varying(20)
+);
+
+
+ALTER TABLE public.node_esraa OWNER TO postgres;
+
+--
+-- Name: node_h1; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE node_h1 (
+    nispc character varying(10),
+    gt character varying(10) NOT NULL
+);
+
+
+ALTER TABLE public.node_h1 OWNER TO postgres;
+
+--
+-- Name: node_hlr12; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE node_hlr12 (
+    nispc character varying(50),
+    gt character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.node_hlr12 OWNER TO postgres;
+
+--
+-- Name: node_test22; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE node_test22 (
+    nispc character varying(50),
+    gt character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.node_test22 OWNER TO postgres;
+
+--
+-- Name: produce; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE produce (
+    id integer,
+    name text,
+    type text,
+    instock integer,
+    outstock integer,
+    pdate date,
+    signage text,
+    producevariety text,
+    deliverydate date,
+    totalinstock integer
+);
+
+
+ALTER TABLE public.produce OWNER TO postgres;
+
+--
+-- Name: sal_emp; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE sal_emp (
+    name character varying(50),
+    pay integer[]
+);
+
+
+ALTER TABLE public.sal_emp OWNER TO postgres;
+
+--
+-- Name: subscriber; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE subscriber (
+    imsi character varying(80) NOT NULL,
+    vlradd character varying(80),
+    sup_info character varying(100)
+);
+
+
+ALTER TABLE public.subscriber OWNER TO postgres;
+
+--
+-- Name: test; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE test (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.test OWNER TO postgres;
+
+--
+-- Name: test22; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE test22 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.test22 OWNER TO postgres;
+
+--
+-- Name: test9; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE test9 (
+    imsi character varying(50) NOT NULL,
+    vlr character varying(50),
+    isd character varying(80)
+);
+
+
+ALTER TABLE public.test9 OWNER TO postgres;
+
+--
+-- Name: view1; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view1 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE (produce1.instock >= 1000);
+
+
+ALTER TABLE public.view1 OWNER TO postgres;
+
+--
+-- Name: view10; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view10 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text ~~ '%a%'::text);
+
+
+ALTER TABLE public.view10 OWNER TO postgres;
+
+--
+-- Name: view11; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view11 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text ~~ '%o%'::text);
+
+
+ALTER TABLE public.view11 OWNER TO postgres;
+
+--
+-- Name: view2; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view2 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE (produce1.instock >= 1000) ORDER BY produce1.prodname;
+
+
+ALTER TABLE public.view2 OWNER TO postgres;
+
+--
+-- Name: view3; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view3 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = '%e%'::text);
+
+
+ALTER TABLE public.view3 OWNER TO postgres;
+
+--
+-- Name: view4; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view4 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'r%'::text);
+
+
+ALTER TABLE public.view4 OWNER TO postgres;
+
+--
+-- Name: view5; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view5 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'r%'::text);
+
+
+ALTER TABLE public.view5 OWNER TO postgres;
+
+--
+-- Name: view6; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view6 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'a%'::text);
+
+
+ALTER TABLE public.view6 OWNER TO postgres;
+
+--
+-- Name: view7; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view7 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = '%a'::text);
+
+
+ALTER TABLE public.view7 OWNER TO postgres;
+
+--
+-- Name: view8; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view8 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = '%a%'::text);
+
+
+ALTER TABLE public.view8 OWNER TO postgres;
+
+--
+-- Name: view9; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW view9 AS
+    SELECT produce1.prodname, produce1.variety, produce1.instock FROM produce1 WHERE ((produce1.prodname)::text = 'a*'::text);
+
+
+ALTER TABLE public.view9 OWNER TO postgres;
+
+--
+-- Data for Name: a; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY a (imsi, vlradd, subinfo) FROM stdin;
+0000000001	\N	info
+\.
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY country (countryid, name) FROM stdin;
+1	egypt
+\.
+
+
+--
+-- Data for Name: employee; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY employee (id, name, salary, sdate, country_id, working_hour) FROM stdin;
+1	ahmed	10000	2012-07-01	1	8
+\.
+
+
+--
+-- Data for Name: esraa; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY esraa (imsi, vlr, isd) FROM stdin;
+602020000000011	vlr1	01001234567890
+60202124555567	vlr2	010001233333
+\.
+
+
+--
+-- Data for Name: h1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY h1 (imsi, vlradd, subinfo) FROM stdin;
+602020000000001	\N	
+602020000000002	\N	
+602020000000005	\N	
+\.
+
+
+--
+-- Data for Name: hlr11; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr11 (imsi, vlr, isd) FROM stdin;
+602020000000111	\N	idle
+\.
+
+
+--
+-- Data for Name: hlr12; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr12 (imsi, vlr, isd) FROM stdin;
+602020000000011	\N	idle
+\.
+
+
+--
+-- Data for Name: hlr13; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr13 (imsi, vlr, isd) FROM stdin;
+602020000000011	\N	idle
+\.
+
+
+--
+-- Data for Name: hlr150; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr150 (imsi, vlr, isd) FROM stdin;
+602022222200001	\N	idle
+\.
+
+
+--
+-- Data for Name: hlr22; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr22 (imsi, vlr, isd) FROM stdin;
+602020000000111	\N	idle
+602020000000011	\N	idle
+\.
+
+
+--
+-- Data for Name: hlr5; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlr5 (imsi, vlr, isd) FROM stdin;
+602020000000110	\N	idle
+\.
+
+
+--
+-- Data for Name: hlrs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hlrs (hlrname) FROM stdin;
+esraa
+\.
+
+
+--
+-- Data for Name: jiji; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY jiji (imsi, vlradd, subinfo) FROM stdin;
+\.
+
+
+--
+-- Data for Name: kiki; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY kiki (imsi, vlradd, subinfo) FROM stdin;
+\.
+
+
+--
+-- Data for Name: lola; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY lola (imsi, vlradd, subinfo) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mahmoud; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY mahmoud (imsi, vlradd, subinfo) FROM stdin;
+602020000000001	\N	
+\.
+
+
+--
+-- Data for Name: msc; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msc (gt, spc) FROM stdin;
+gt2	spc2
+gt1	spc1
+\.
+
+
+--
+-- Data for Name: node_esraa; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY node_esraa (nispc, gt) FROM stdin;
+spc2	gt2
+spc1	gt1
+\.
+
+
+--
+-- Data for Name: node_h1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY node_h1 (nispc, gt) FROM stdin;
+1	2
+\.
+
+
+--
+-- Data for Name: node_hlr12; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY node_hlr12 (nispc, gt) FROM stdin;
+3123	11221234567890
+\.
+
+
+--
+-- Data for Name: node_test22; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY node_test22 (nispc, gt) FROM stdin;
+2230	13131234567890
+\.
+
+
+--
+-- Data for Name: produce; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY produce (id, name, type, instock, outstock, pdate, signage, producevariety, deliverydate, totalinstock) FROM stdin;
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+109	Carrots	\N	4500	1500	2004-10-15	On Addition !	\N	2004-10-19	\N
+110	Broccoli	\N	800	2500	2004-10-15	On Addition !	\N	2004-10-19	\N
+113	Zucchini	\N	1000	1300	2004-10-09	On Addition !	\N	2004-10-13	\N
+117	Cucumbers	\N	2500	1200	2004-10-14	On Addition !	\N	2004-10-18	\N
+107	Grapes	Red seedless	3500	1500	2004-10-13	On Addition !	<Grapes>(<Red seedless>)	2004-10-17	\N
+108	Grapes	Green seedless	3500	1500	2004-10-12	On Addition !	<Grapes>(<Green seedless>)	2004-10-16	\N
+111	Cherries	Bing	2500	2500	2004-10-11	On Addition !	<Cherries>(<Bing>)	2004-10-15	\N
+112	Cherries	Rainier	1500	1500	2004-10-12	On Addition !	<Cherries>(<Rainier>)	2004-10-16	\N
+114	Mushrooms	Shitake	800	900	2004-10-10	On Addition !	<Mushrooms>(<Shitake>)	2004-10-14	\N
+115	Mushrooms	Porcini	400	600	2004-10-11	On Addition !	<Mushrooms>(<Porcini>)	2004-10-15	\N
+116	Mushrooms	Portobello	900	1100	2004-10-13	On Addition !	<Mushrooms>(<Portobello>)	2004-10-17	\N
+105	Oranges	Valencia	1200	1600	2004-10-11	On Arrived !	<Oranges>(<Valencia>)	2004-10-15	\N
+106	Oranges	Seville	1300	1000	2004-10-12	On Arrived !	<Oranges>(<Seville>)	2004-10-16	\N
+101	Apples	Red Delicious	2000	1000	2004-10-12	On Sale !	<Apples>(<Red Delicious>)	2004-10-16	\N
+102	Apples	Fuji	1500	1200	2004-10-11	On Sale !	<Apples>(<Fuji>)	2004-10-15	\N
+103	Apples	Golden Delicious	500	1000	2004-10-12	On Sale !	<Apples>(<Golden Delicious>)	2004-10-16	\N
+104	Apples	Granny Smith	300	800	2004-10-12	On Sale !	<Apples>(<Granny Smith>)	2004-10-16	\N
+\.
+
+
+--
+-- Data for Name: produce1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY produce1 (prodid, prodname, variety, instock, onorder, seasonattr) FROM stdin;
+1	ball	foot	2	4	5
+2	apple	red	2000	4000	5000
+3	orange	orange	2500	4500	5500
+\.
+
+
+--
+-- Data for Name: sal_emp; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sal_emp (name, pay) FROM stdin;
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+Bill	{1000,1001}
+\.
+
+
+--
+-- Data for Name: subscriber; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY subscriber (imsi, vlradd, sup_info) FROM stdin;
+\.
+
+
+--
+-- Data for Name: test; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY test (imsi, vlr, isd) FROM stdin;
+602020000000011	\N	idle
+\.
+
+
+--
+-- Data for Name: test22; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY test22 (imsi, vlr, isd) FROM stdin;
+602020000000011	13131234567890	idle
+\.
+
+
+--
+-- Data for Name: test9; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY test9 (imsi, vlr, isd) FROM stdin;
+602020000000011	\N	idle
+\.
+
+
+--
+-- Name: a_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY a
+    ADD CONSTRAINT a_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (countryid);
+
+
+--
+-- Name: employee_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY employee
+    ADD CONSTRAINT employee_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: esraa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY esraa
+    ADD CONSTRAINT esraa_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: h1_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY h1
+    ADD CONSTRAINT h1_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlr11_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr11
+    ADD CONSTRAINT hlr11_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlr12_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr12
+    ADD CONSTRAINT hlr12_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlr13_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr13
+    ADD CONSTRAINT hlr13_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlr150_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr150
+    ADD CONSTRAINT hlr150_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlr22_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr22
+    ADD CONSTRAINT hlr22_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlr5_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlr5
+    ADD CONSTRAINT hlr5_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: hlrs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY hlrs
+    ADD CONSTRAINT hlrs_pkey PRIMARY KEY (hlrname);
+
+
+--
+-- Name: jiji_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY jiji
+    ADD CONSTRAINT jiji_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: kiki_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY kiki
+    ADD CONSTRAINT kiki_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: lola_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lola
+    ADD CONSTRAINT lola_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: mahmoud_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY mahmoud
+    ADD CONSTRAINT mahmoud_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: msc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc
+    ADD CONSTRAINT msc_pkey PRIMARY KEY (gt);
+
+
+--
+-- Name: node_h1_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY node_h1
+    ADD CONSTRAINT node_h1_pkey PRIMARY KEY (gt);
+
+
+--
+-- Name: node_hlr12_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY node_hlr12
+    ADD CONSTRAINT node_hlr12_pkey PRIMARY KEY (gt);
+
+
+--
+-- Name: node_test22_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY node_test22
+    ADD CONSTRAINT node_test22_pkey PRIMARY KEY (gt);
+
+
+--
+-- Name: produce1_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY produce1
+    ADD CONSTRAINT produce1_pkey PRIMARY KEY (prodid);
+
+
+--
+-- Name: subscriber_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY subscriber
+    ADD CONSTRAINT subscriber_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: test22_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY test22
+    ADD CONSTRAINT test22_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: test9_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY test9
+    ADD CONSTRAINT test9_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: test_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY test
+    ADD CONSTRAINT test_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

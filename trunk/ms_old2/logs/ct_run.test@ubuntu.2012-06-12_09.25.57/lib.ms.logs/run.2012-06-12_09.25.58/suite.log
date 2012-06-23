@@ -1,0 +1,48 @@
+=== Suite started at 2012-06-12 09:25:58
+=== Starting test, 3 test cases
+=cases         3
+=user          marwa
+=host          ubuntu
+=hosts         ubuntu 
+=emulator_vsn  5.9.1
+=emulator      beam
+=otp_release   R15B01
+=started       2012-06-12 09:25:58
+=case          ms_app_SUITE:init_per_suite
+=logfile       ms_app_suite.init_per_suite.html
+=started       2012-06-12 09:25:58
+=ended         2012-06-12 09:25:58
+=result        ok
+=elapsed       0.162599
+=case          ms_app_SUITE:api
+=logfile       ms_app_suite.api.html
+=started       2012-06-12 09:25:58
+=ended         2012-06-12 09:25:58
+=result        ok
+=elapsed       2.0e-6
+=case          ms_app_SUITE:api_neg
+=logfile       ms_app_suite.api_neg.html
+=started       2012-06-12 09:25:58
+=ended         2012-06-12 09:25:58
+=result        ok
+=elapsed       1.0e-6
+=case          ms_app_SUITE:performance
+=logfile       ms_app_suite.performance.html
+=started       2012-06-12 09:25:58
+=ended         2012-06-12 09:25:58
+=result        ok
+=elapsed       0.003405
+=case          ms_app_SUITE:end_per_suite
+=logfile       ms_app_suite.end_per_suite.html
+=started       2012-06-12 09:25:58
+=ended         2012-06-12 09:25:58
+=result        ok
+=elapsed       0.001175
+=group_time    0.271s
+=== TEST COMPLETE, 3 ok, 0 failed of 3 test cases
+
+=finished      2012-06-12 09:25:58
+=failed        0
+=successful    3
+=user_skipped  0
+=auto_skipped  0

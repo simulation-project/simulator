@@ -148,5 +148,17 @@ receive_PRN({6, 5, IMSI, SPC})->%IMSI for Bno to assign MSRN
 result_SRI({6, 7, MSRN, SPC})->
     msc_2nd_sup:result_SRI({6, 7, MSRN, SPC}).
 
-send_IAM({5, 1, Ano, MSRN},Another_MSC)->
-    msc_2nd_sup:send_IAM({5, 1, Ano, MSRN},Another_MSC).
+send_IAM({5, 1, Ano, MSRN},SPC,GT)->
+    msc_2nd_sup:send_IAM({5, 1, Ano, MSRN},SPC,GT).
+
+receiving_alert({1,5,IMSI,LAI}) ->
+    msc_2nd_sup:receive_alert({1, 5, IMSI, LAI}).
+
+send_ACM({5,2,Ano,SPC})->
+    msc_2nd_sup:send_ACM({5,2,Ano,SPC}).
+
+receive_connect({1,6,IMSI,LAI})->
+    msc_2nd_sup:receive_connect({1,6,IMSI,LAI}).
+ 
+send_ANM({5,3,Ano,SPC})->
+    msc_2nd_sup:receive_ANM({5,3,Ano,SPC}).

@@ -41,7 +41,8 @@
 -export([code_change/3]).
 
 %%% External exports
--export([location_update_request/2, insert_subscriber_data/3, check_msc_spc/3, call_setup/2, receive_PRN/1, send_IAM/2, result_SRI/1]).
+-export([location_update_request/2, insert_subscriber_data/3, check_msc_spc/3, call_setup/2, receive_PRN/1, send_IAM/3, result_SRI/1,
+	receive_alert/2, receive_connect/2, receive_ANM/1, receive_ACM/1]).
 
 -compile([export_all]).
 %%% Macros
@@ -146,10 +147,21 @@ receive_PRN({6, 5, IMSI, MSC})->
 result_SRI({6, 7, MSRN, MSC})->
     gen_server:cast(MSC, {6,7,MSRN,MSC}).
 
-send_IAM({5, 1, Ano, MSRN}, MSC)->
-    gen_server:cast(MSC, {5, 1, Ano, MSRN, MSC}).
+send_IAM({5, 1, Ano, MSRN}, MSC,GT)->
+    gen_server:cast(MSC, {5, 1, Ano, MSRN, MSC,GT}).
  
   
+receive_alert({1, 5, IMSI}, MSC)->
+    gen_server:cast(MSC, {1, 5, IMSI, MSC}).
+
+receive_ACM({5,2,Ano,MSC})->
+    gen_server:cast(MSC, {5, 2, Ano, MSC}).
+
+receive_connect({1, 6, IMSI}, MSC)->
+    gen_server:cast(MSC, {1, 6,IMSI, MSC}).
+
+receive_ANM({5,3,Ano,MSC})->
+      gen_server:cast(MSC, {5,3,Ano,MSC}).
 
 %% @spec insert_subscriber_data(IMSI, INFO, SPC) -> Result
 %% Result = ok
@@ -321,19 +333,31 @@ handle_cast({3, 1, IMSI, Bno, MSC}, List) ->
     {noreply, List};	 
 
 handle_cast({6,7,MSRN,MSC}, List) ->
- Another_MSC = msc_db:get_msc_name({MSRN, msrn}),
 
+    %SUBMSRN = string:substr(atom_to_list(MSRN),1, 6),
+    %SPC2 = msc_db:get_MSRN_SPC(MSRN),
+    %io:format("SUBMSRN===== ~P ~n~n",[SUBMSRN]),
+
+    SPC2 = spc2,
+    
     Mscname = string:concat("MSC ",atom_to_list(MSC)),        
-    Msg1= string:concat(Mscname,": send to another MSC which name is "),
-    Msg2 = string:concat(Msg1,atom_to_list(Another_MSC)),    
+    Msg1= string:concat(Mscname,": send to another MSC which SPC is "),
+    Msg2 = string:concat(Msg1,atom_to_list(SPC2)),    
     io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
     request_handler:erlang_send(list_to_atom(Msg2)),
 
     [{_, Ano}] = ets:lookup(my_imsi, val), 
-    msc_app:send_IAM({5, 1, Ano, MSRN},Another_MSC),
+    GT = msc_db:get_GT_MSC(MSC),
+
+    msc_app:send_IAM({5, 1, Ano, MSRN},SPC2,GT),
     {noreply, List};
 
-handle_cast({5, 1, Ano, MSRN, MSC}, List) ->
+handle_cast({5, 1, Ano, MSRN, MSC,GT}, List) ->
+
+    ets:new(my_gt, [named_table, protected, set, {keypos, 1}]),
+    ets:insert(my_gt, {val, GT}),
+
+
     Mscname = string:concat("MSC ",atom_to_list(MSC)),        
     Msg1= string:concat(Mscname,": send to MS Ano is "),
     Msg2 = string:concat(Msg1,atom_to_list(Ano)),    
@@ -342,8 +366,50 @@ handle_cast({5, 1, Ano, MSRN, MSC}, List) ->
 
     IMSI = msc_db:get_IMSI_MSRN(MSRN),
     io:format("IMSI of MSRN ~p~n", [IMSI]),
+    %New_Ano = list_to_atom(Ano),
     ms_app:receiving_setup(IMSI, Ano),
-    {noreply, List}.    
+    {noreply, List};
+
+handle_cast({1, 5, IMSI, MSC}, List) ->
+   
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": update status to be active of IMSI "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    _R = msc_db:update_status(IMSI),
+    
+    [{_, GT}] = ets:lookup(my_gt, val), 
+    SPC = msc_db:get_SPC_GT(GT),
+    
+
+    [{_, Ano}] = ets:lookup(my_imsi, val),
+
+    msc_app:send_ACM({5,2,Ano,SPC}),
+
+    {noreply, List}; 
+   
+handle_cast({5, 2, Ano, _MSC},List) ->
+    
+    IMSI = msc_db:get_IMSI_from_no(Ano),
+     ms_app:receiving_alert(IMSI),
+    
+    {noreply, List}; 
+
+handle_cast({1, 6, _IMSI, _MSC},List) ->
+    
+    [{_, GT}] = ets:lookup(my_gt, val), 
+    SPC = msc_db:get_SPC_GT(GT),
+    [{_, Ano}] = ets:lookup(my_imsi, val),
+    msc_app:send_ANM({5,3,Ano,SPC}),
+    {noreply, List};
+   
+handle_cast({5,3,Ano, _MSC},List) ->
+    IMSI = msc_db:get_IMSI_from_no(Ano),
+     ms_app:receiving_answer(IMSI),   
+    _R = msc_db:update_status(IMSI),
+
+    {noreply, List}.
 
 %% @private
 %% @spec handle_info(Info, St) -> Result

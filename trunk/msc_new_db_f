@@ -1,0 +1,347 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: a; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE a (
+    imsi character varying(50) NOT NULL,
+    vlradd character varying(50),
+    subinfo character varying(80)
+);
+
+
+ALTER TABLE public.a OWNER TO postgres;
+
+--
+-- Name: gt_translation; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE gt_translation (
+    number_series character varying(20),
+    spc character varying(20),
+    msc_name character varying(10),
+    vlr_add character varying(20)
+);
+
+
+ALTER TABLE public.gt_translation OWNER TO postgres;
+
+--
+-- Name: imsi_analysis; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE imsi_analysis (
+    imsi character varying(10),
+    mgt character varying(10)
+);
+
+
+ALTER TABLE public.imsi_analysis OWNER TO postgres;
+
+--
+-- Name: msc; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msc (
+    gt character varying(10) NOT NULL,
+    nispc character varying(10)
+);
+
+
+ALTER TABLE public.msc OWNER TO postgres;
+
+--
+-- Name: msc_data; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msc_data (
+    name character varying(10) NOT NULL,
+    vlr_add character varying(20) NOT NULL,
+    ni_spc character varying(20),
+    gt character varying(20)
+);
+
+
+ALTER TABLE public.msc_data OWNER TO postgres;
+
+--
+-- Name: msc_lai; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msc_lai (
+    msc_name character varying(10),
+    vlr_add character varying(20),
+    lai character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.msc_lai OWNER TO postgres;
+
+--
+-- Name: msrn; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msrn (
+    msrn_no character varying(20) NOT NULL,
+    state character varying(20) DEFAULT 'free'::character varying,
+    msc_name character varying(20)
+);
+
+
+ALTER TABLE public.msrn OWNER TO postgres;
+
+--
+-- Name: sub_info; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE sub_info (
+    msc_name character varying(10),
+    vlr_add character varying(20),
+    status character varying(40),
+    imsi character varying(20) NOT NULL,
+    lai character varying(20),
+    info character varying(20),
+    msrn character varying(20)
+);
+
+
+ALTER TABLE public.sub_info OWNER TO postgres;
+
+--
+-- Data for Name: a; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY a (imsi, vlradd, subinfo) FROM stdin;
+0000000001	\N	info
+\.
+
+
+--
+-- Data for Name: gt_translation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY gt_translation (number_series, spc, msc_name, vlr_add) FROM stdin;
+20100	3-100	msc1	vlr1
+20100	3-100	msc2	vlr2
+0100	3-100	msc1	vlr1
+20101	3-100	msc1	vlr1
+\.
+
+
+--
+-- Data for Name: imsi_analysis; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY imsi_analysis (imsi, mgt) FROM stdin;
+\.
+
+
+--
+-- Data for Name: msc; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msc (gt, nispc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: msc_data; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msc_data (name, vlr_add, ni_spc, gt) FROM stdin;
+msc1	vlr1	spc1	gt1
+msc2	vlr2	spc2	gt2
+\.
+
+
+--
+-- Data for Name: msc_lai; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msc_lai (msc_name, vlr_add, lai) FROM stdin;
+msc1	vlr1	lai1
+msc1	vlr1	lai5
+msc2	vlr2	lai2
+msc2	vlr2	lai3
+\.
+
+
+--
+-- Data for Name: msrn; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msrn (msrn_no, state, msc_name) FROM stdin;
+8	free	msc2
+2	free	msc2
+3	free	msc2
+4	free	msc2
+5	free	msc2
+1	used	msc2
+\.
+
+
+--
+-- Data for Name: sub_info; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sub_info (msc_name, vlr_add, status, imsi, lai, info, msrn) FROM stdin;
+msc1	vlr1	idle	602020000000011	lai1	01001234567890	\N
+msc2	vlr2	idle	60202124555567	lai2	010001233333	1
+\.
+
+
+--
+-- Name: a_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY a
+    ADD CONSTRAINT a_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: msc_data_gt_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc_data
+    ADD CONSTRAINT msc_data_gt_key UNIQUE (gt);
+
+
+--
+-- Name: msc_data_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc_data
+    ADD CONSTRAINT msc_data_name_key UNIQUE (name);
+
+
+--
+-- Name: msc_data_ni_spc_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc_data
+    ADD CONSTRAINT msc_data_ni_spc_key UNIQUE (ni_spc);
+
+
+--
+-- Name: msc_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc_data
+    ADD CONSTRAINT msc_data_pkey PRIMARY KEY (name, vlr_add);
+
+
+--
+-- Name: msc_data_vlr_add_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc_data
+    ADD CONSTRAINT msc_data_vlr_add_key UNIQUE (vlr_add);
+
+
+--
+-- Name: msc_lai_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc_lai
+    ADD CONSTRAINT msc_lai_pkey PRIMARY KEY (lai);
+
+
+--
+-- Name: msc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msc
+    ADD CONSTRAINT msc_pkey PRIMARY KEY (gt);
+
+
+--
+-- Name: msrn_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msrn
+    ADD CONSTRAINT msrn_pkey PRIMARY KEY (msrn_no);
+
+
+--
+-- Name: sub_info_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY sub_info
+    ADD CONSTRAINT sub_info_pkey PRIMARY KEY (imsi);
+
+
+--
+-- Name: gt_translation_msc_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY gt_translation
+    ADD CONSTRAINT gt_translation_msc_name_fkey FOREIGN KEY (msc_name, vlr_add) REFERENCES msc_data(name, vlr_add);
+
+
+--
+-- Name: msc_lai_msc_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY msc_lai
+    ADD CONSTRAINT msc_lai_msc_name_fkey FOREIGN KEY (msc_name, vlr_add) REFERENCES msc_data(name, vlr_add);
+
+
+--
+-- Name: msrn_msc_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY msrn
+    ADD CONSTRAINT msrn_msc_name_fkey FOREIGN KEY (msc_name) REFERENCES msc_data(name);
+
+
+--
+-- Name: sub_info_msc_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY sub_info
+    ADD CONSTRAINT sub_info_msc_name_fkey FOREIGN KEY (msc_name, vlr_add) REFERENCES msc_data(name, vlr_add);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

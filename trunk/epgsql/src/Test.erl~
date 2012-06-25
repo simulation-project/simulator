@@ -1,0 +1,9 @@
+-module(Test).
+-export([start/0]).
+
+start()->
+	{ok, C} = pgsql:connect("localhost", "test", [], _Opts).
+
+%close()->
+ 	%ok = pgsql:close(C).
+

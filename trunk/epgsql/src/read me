@@ -1,0 +1,6 @@
+1- create erl file
+2- run make on pgsql dir
+3- erlc -I ebin -o src/test.erl
+4- erl -pz ebin/ 
+5- test:start().
+

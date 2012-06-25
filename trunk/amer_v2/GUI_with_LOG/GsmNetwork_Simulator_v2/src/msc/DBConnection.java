@@ -30,8 +30,7 @@ public class DBConnection {
             connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/msc","postgres","iti");
             System.out.println("inside connection");
         } catch (SQLException e) {
-            System.out.println("not connected");
-            e.printStackTrace();
+            
         }
         return connection;
     }
@@ -40,7 +39,7 @@ public class DBConnection {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            
         }
     }
 }

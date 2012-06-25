@@ -23,6 +23,7 @@ public class sendtoerl {
     OtpErlangPid pd = null;
     OtpErlangObject[] erlobjs = new OtpErlangObject[2];
     OtpErlangObject[] erlobjs_ms = new OtpErlangObject[2];
+    OtpErlangObject[] erlobjs_call = new OtpErlangObject[3];
     // OtpErlangAtom atom;
 
     public sendtoerl(){}
@@ -104,4 +105,47 @@ public class sendtoerl {
   /*  public static void main(String[] args) throws OtpErlangExit, OtpErlangDecodeException {
         //new sendtoerl2(, );
     }*/
+
+     public void sendcallrequest(String imsi, String lai,String Bno) throws OtpErlangExit, OtpErlangDecodeException, Exception {
+        
+         OtpErlangAtom atom1 = new OtpErlangAtom(imsi);
+        erlobjs_call[0] = atom1;
+        OtpErlangAtom atom2 = new OtpErlangAtom(lai);
+        erlobjs_call[1] = atom2;
+        OtpErlangAtom atom3 = new OtpErlangAtom(Bno);
+        erlobjs_call[2] = atom3;
+        OtpErlangTuple t2 = new OtpErlangTuple(erlobjs_call);
+        OtpErlangObject[] ob = new OtpErlangObject[1];
+        ob[0] = t2;
+        try {
+            com.iti.telecom.main.GraphEditor.sender.sendtoerl("call_request", ob);
+        } catch (Exception ex) {
+            Logger.getLogger(sendtoerl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+   
+
+     
+      public void sendacceptcall(String imsi, String lai) throws OtpErlangExit, OtpErlangDecodeException, Exception {
+        
+         OtpErlangAtom atom1 = new OtpErlangAtom(imsi);
+        erlobjs[0] = atom1;
+        OtpErlangAtom atom2 = new OtpErlangAtom(lai);
+        erlobjs[1] = atom2;
+        //OtpErlangAtom atom3 = new OtpErlangAtom(Bno);
+        //erlobjs_call[2] = atom3;
+        OtpErlangTuple t2 = new OtpErlangTuple(erlobjs);
+        OtpErlangObject[] ob = new OtpErlangObject[1];
+        ob[0] = t2;
+        try {
+            com.iti.telecom.main.GraphEditor.sender.sendtoerl("accept_call", ob);
+        } catch (Exception ex) {
+            Logger.getLogger(sendtoerl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+   
+
+
+
+
 }

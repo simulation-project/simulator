@@ -61,6 +61,7 @@ get_msc_name({MSRN,msrn}) ->
     MSC;    
 
 
+
 get_msc_name({LAI,lai})->    
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _C, Rows} = pgsql:equery(C, "select msc_name from msc_lai where lai=$1", [LAI]),
@@ -88,11 +89,22 @@ get_msc_name({SPC,GT}) ->
 %%    MGT = atom()  
 %%% @doc This function returns the SPC for a given MGT .
 %% @end
-get_SPC(MGT)->
+get_SPC(MGT, MSC)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1", [MGT]),
+    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1 and msc_name=$2", [MGT, MSC]),
     SPC = show(Rows),
     SPC.
+
+
+get_MSRN_SPC(MSRN)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1", [MSRN]),
+    SPC = show(Rows),
+    SPC.
+
+
+
+
 
 %% @spec get_GT(VLR) -> Result
 %%    Result = atom()
@@ -104,6 +116,12 @@ get_GT(VLR)->
     {ok, _C, Rows} = pgsql:equery(C, "select gt from msc_data where vlr_add=$1", [VLR]),
     GT = show(Rows),
     GT.
+
+get_SPC_GT(GT)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select ni_spc from msc_data where gt=$1", [GT]),
+    SPC = show(Rows),
+    SPC.
 
 get_GT_MSC(MSC)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
@@ -122,6 +140,13 @@ get_IMSI(IMSI)->
     I = show(Rows),
     I.
 
+get_IMSI_from_no(No)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where info = $1", [No]),
+    IMSI = show(Rows),
+    IMSI.
+
+
 
 get_MSRN(MSC)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
@@ -132,6 +157,13 @@ update_MSRN(MSRN)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _} = pgsql:equery(C, "update msrn set state='used' where msrn_no=$1", [MSRN]),
     io:format("msc_db:update MSRN: done  ~n").
+
+update_status(IMSI)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info set status='active' where imsi=$1", [IMSI]),
+    io:format("msc_db:update status to active: done  ~n").
+
+
 
 
 update_MSRN_sub(MSRN, IMSI)->
@@ -231,6 +263,14 @@ get_IMSI_MSRN(MSRN)->
     {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where msrn = $1", [MSRN]),
     I = show(Rows),
     I.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% check state
+%check_state(IMSI,MSC)->
+%{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+%{ok, _C, Rows} = pgsql:equery(C, "select status from sub_info where msc_name = $1 and imsi=$2", [MSC, IMSI]),
+%R = show(Rows),
+%R.
 
 
 %% @spec check_periodic_lai(IMSI, LAI) -> Result

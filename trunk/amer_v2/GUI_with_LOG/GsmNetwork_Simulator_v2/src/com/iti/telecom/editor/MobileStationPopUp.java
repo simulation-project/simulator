@@ -52,5 +52,10 @@ public class MobileStationPopUp extends JPopupMenu
 		
                 add(editor.bind(mxResources.get("Call"),
                         new EditorActions.MakeCall(),"/com/iti/telecom/images/call.png")).setEnabled(msObject.isCall());
-	}
+                addSeparator();
+		
+               // add(editor.bind(mxResources.get("add"),
+                 //       new EditorActions.AddFriends(),"/com/iti/telecom/images/call.png")).setEnabled(msObject.isSwitchedOn());
+        
+        }
 }

@@ -2349,4 +2349,35 @@ public class EditorActions
        }
      }
     }
+
+    
+
+    public static  class AddFriends extends AbstractAction {
+
+   public void actionPerformed(ActionEvent e)
+     {
+       BasicGraphEditor editor = EditorActions.getEditor(e);
+         System.out.println("Execute Action !!");
+       if ((editor != null) &&
+         ((e.getSource() instanceof mxGraphComponent)))
+       {
+         mxGraphComponent graphComponent = (mxGraphComponent)e.getSource();
+         mxGraph graph = graphComponent.getGraph();
+         mxIGraphModel model = graph.getModel();
+         Object cell = graph.getSelectionCell();
+
+         mxCell cellGraph = (mxCell)cell;
+         Object resultmol = model.getValue(cell);
+         CellPropertise PropertiesWindow = new CellPropertise(resultmol, editor.getGraphComponent().getGraph(),
+                 cellGraph,editor,
+                 BasicGraphEditor.mainFrame
+                 );
+         PropertiesWindow.AddFriend();
+       }
+     }
+    }
+
+
+
+
 }

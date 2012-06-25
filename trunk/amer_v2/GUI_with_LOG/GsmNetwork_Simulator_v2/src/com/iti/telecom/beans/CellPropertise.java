@@ -72,6 +72,17 @@ public class CellPropertise {
 
     public void MakeCall() {
         JOptionPane.showMessageDialog(parent, "Calling");
-      new ms_app.MsStatusForm().setVisible(true);
+      String[] str = new String[1];
+      str[0] = "hello";
+        //ms_app.MsStatusForm.main(str);
+      if (this.cellBean instanceof MS){
+          MS mobileStation = (MS) cellBean;
+       
+      com.iti.telecom.main.GraphEditor.mobile.get(mobileStation.getSimsi1()).ms_call.setVisible(true);
+              }
+    }
+
+    public void AddFriend() {
+        JOptionPane.showMessageDialog(parent, "ADD Friends");
     }
 }

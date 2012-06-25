@@ -1,0 +1,84 @@
+Overview page
+
+@copyright 2012 Ericsson Egypt Ltd.
+@author Ahmed Samy <ahm.sam@live.com>
+        [http://www.iti.gov.eg]
+
+@doc Application Name
+
+<p>Long description.</p>
+
+=== Contents ===
+
+<ol>
+  <li>{@section Introduction}</li>
+  <li>{@section Motivation}</li>
+  <li>{@section Architecture}</li>
+  <li>{@section Usage}
+    <ol>
+      <li>{@section Configuration}</li>
+    </ol>
+  </li>
+  <li>{@section Installation}</li>
+  <li>{@section Known issues}
+    <ol>
+      <li>{@section Performance constraints}</li>
+    </ol>
+  </li>
+  <li>{@section Contributors}</li>
+</ol>
+
+=== Introduction ===
+
+<p>This is the section related to our MSC application and configutration</p>
+
+=== Motivation ===
+
+<p></p>
+
+=== Usage ===
+
+<p>The application is mainly for the eductional usage...
+we hope it will help other trainees to understand the concept and the flow os every scenario happens in the GSM network</p>
+
+== Configuration ==
+
+<p>The configuration parameters are defined in the <b>.config</b> file. A
+sample configuration file is shown below:</p>
+
+<pre>
+[{appname, [{param, value}, {opt_param, opt_value}]}].
+</pre>
+
+=== Mandatory parameters ===
+
+<dl>
+  <dt>param: </dt><dd>Explain configuration parameter.</dd>
+</dl>
+
+=== Optional parameters ===
+
+<dl>
+  <dt>opt_param: </dt><dd>Explain configuration parameter.</dd>
+</dl>
+
+=== Architecture ===
+
+<p></p>
+
+<img src="MSC.png" alt="Architecture"/>
+
+<p></p>
+
+=== Installation ===
+
+<p>
+
+</p>
+
+=== Contributors ===
+
+<ul>
+  <li>Information Technology Institute</li>
+  <li>Ericsson</li>
+</ul>

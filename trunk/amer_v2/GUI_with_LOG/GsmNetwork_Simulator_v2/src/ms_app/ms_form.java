@@ -23,27 +23,23 @@ import javax.swing.*;
  */
 public class ms_form extends JDialog {
 
-    sendtoerl serl;
+    public static sendtoerl serl;
     String imsi;
     boolean mson = false;
-    
     private MS mobileStation;   //  This is Mobile Station Object
-    
     private JFrame parent = null;
     private mxGraph graph;
     private mxCell cell;
     private BasicGraphEditor editor;
+    public MsStatusForm ms_call;
+    public ReceivingCall ms_receive_call;
     // String[] lais;
     static public Vector<String> lai_vect = new Vector<String>();
-    static public Vector<String> used_imsi_vect = new Vector<String>();
+    //static public Vector<String> used_imsi_vect = new Vector<String>();
     static public Vector<String> imsi_vect = new Vector<String>();
-
-    
     /**
      * Creates new form ms_form
      */
-    
-    
     public ms_form(JFrame parent, BasicGraphEditor editor, Object cell, mxGraph graph, mxCell agentsCell) {
         super(parent);
 
@@ -53,9 +49,16 @@ public class ms_form extends JDialog {
         imsi_vect.clear();
         imsi_vect = DatabaseHandler.getimsis();
 
+      
+        
         initComponents();
         //jComboBox1.setToolTipText(" ");
 
+        for (int i = 0; i < com.iti.telecom.main.GraphEditor.used_imsi_vect.size(); i++) {
+            imsicombo.removeItem(com.iti.telecom.main.GraphEditor.used_imsi_vect.get(i));
+        }
+        
+        
         setVerifiers();
 
 
@@ -86,11 +89,6 @@ public class ms_form extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        mcc = new javax.swing.JTextField();
-        mnc = new javax.swing.JTextField();
-        msin = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -99,6 +97,7 @@ public class ms_form extends JDialog {
         jLabel17 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox(lai_vect);
         jLabel15 = new javax.swing.JLabel();
+        imsicombo = new javax.swing.JComboBox(imsi_vect);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MS Form");
@@ -119,38 +118,6 @@ public class ms_form extends JDialog {
             }
         });
 
-        mcc.setText("MCC");
-        mcc.setRequestFocusEnabled(false);
-        mcc.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                mccFocusGained(evt);
-            }
-        });
-
-        mnc.setText("MNC");
-        mnc.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                mncFocusGained(evt);
-            }
-        });
-
-        msin.setText("                    MSIN");
-        msin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                msinActionPerformed(evt);
-            }
-        });
-        msin.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                msinFocusGained(evt);
-            }
-        });
-
-        jLabel6.setText("-");
-
-        jLabel7.setText("-");
-
-        jComboBox1.setEditable(true);
         jComboBox1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -181,28 +148,20 @@ public class ms_form extends JDialog {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBox1, 0, 272, Short.MAX_VALUE)
+                    .addComponent(imsicombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel10)
+                        .addGap(71, 71, 71)
+                        .addComponent(jButton1)
+                        .addGap(482, 482, 482))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(209, 209, 209)
-                                .addComponent(jLabel10))
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(178, 178, 178)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(mcc, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mnc, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(msin, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(375, 375, 375)
+                        .addGap(104, 104, 104)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(375, 375, 375)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -226,19 +185,13 @@ public class ms_form extends JDialog {
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
+                        .addGap(10, 10, 10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(mnc)
-                                .addComponent(mcc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
+                                .addComponent(jLabel2)
+                                .addComponent(imsicombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(msin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -280,7 +233,9 @@ public class ms_form extends JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -289,7 +244,7 @@ public class ms_form extends JDialog {
     public  void switchOn()
     {
         try {
-            String imsi1 = mobileStation.getSimsi1() + mobileStation.getSimsi2() + mobileStation.getSimsi3();
+            String imsi1 = mobileStation.getSimsi1(); //+ mobileStation.getSimsi2() + mobileStation.getSimsi3();
             serl.sendimsiattach(imsi1, "turn_on_idle");
             
        mobileStation.setnormallu(true);
@@ -302,7 +257,7 @@ public class ms_form extends JDialog {
     public  void switchOff()
     {
         try {
-            String imsi1 = mobileStation.getSimsi1() + mobileStation.getSimsi2() + mobileStation.getSimsi3();
+            String imsi1 = mobileStation.getSimsi1(); //+ mobileStation.getSimsi2() + mobileStation.getSimsi3();
             System.out.println(imsi1);
             serl.sendimsideattach(imsi1, "turn_off");
             
@@ -319,40 +274,30 @@ public class ms_form extends JDialog {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        //     String ms_name = jTextField10.getText();
-        //  mobileStation.setMsNumber(ms_name);
-        /**
-         * ****IMSI String******
-         */
         
-        mobileStation.setSimsi1(mcc.getText());
-        mobileStation.setSimsi2(mnc.getText());
-        mobileStation.setSimsi3(msin.getText());
-        imsi = mobileStation.getSimsi1() + mobileStation.getSimsi2() + mobileStation.getSimsi3();
-
-        /**
-         * ****MSISDN String******
-         */
-//        mobileStation.setSmsisdn1(cc.getText());
-//        mobileStation.setSmsisdn2(ndc.getText());
-//        mobileStation.setSmsisdn3(sn.getText());
-        //String msisdn = mobileStation.getSmsisdn1() + mobileStation.getSmsisdn2() + mobileStation.getSmsisdn3();
-        //BasicGraphEditor.logMsg("MSISDN="+msisdn);
-        /**
-         * ****Location Area String******
-         */
-        //      mobileStation.setSlai1(LAmcc.getText());
-        //    mobileStation.setSlai2(LAmnc.getText());
-        //    mobileStation.setSlai3(lac.getText());
+        
+      
+      //  mobileStation.setSimsi2(mnc.getText());
+      //  mobileStation.setSimsi3(msin.getText());
+        imsi = imsicombo.getSelectedItem().toString();// + mobileStation.getSimsi2() + mobileStation.getSimsi3();
+        System.out.println("marwaaaaaaaa"+imsi+"\n");
         String lai = (String) jComboBox1.getSelectedItem();
         mobileStation.setSlai1(lai);
         if(lai != null && imsi !=null){
-            if(checkimsi(imsi)){
-                if(checkusedimsi(imsi)){
+            //if(checkimsi(imsi)){
+              //  if(checkusedimsi(imsi)){
+                      mobileStation.setSimsi1(imsicombo.getSelectedItem().toString());
+                      
+                      
+                      com.iti.telecom.main.GraphEditor.mobile.put(imsicombo.getSelectedItem().toString(),this);
+                      
+                      
+                      
         try {
             serl.sendnewms("ms_name", imsi, lai);
              lai_vect.add(lai); 
-             used_imsi_vect.add(imsi);
+             com.iti.telecom.main.GraphEditor.used_imsi_vect.add(imsi);
+             imsi_vect.remove(imsi);
         } catch (Exception ex) {
             
             String message = ex.getMessage();
@@ -363,14 +308,18 @@ public class ms_form extends JDialog {
         mobileStation.setFormObject(this);
         mobileStation.setSwitchedOn(true);
         mobileStation.setMsNumber(imsi);
+ 
+        ms_call = new MsStatusForm(imsi,lai);
+        ms_receive_call = new ReceivingCall(imsi,lai);
+        
         dispose();
-                }
-                else
-                    JOptionPane.showMessageDialog(this, "This IMSI is used, Try another one");
-        }
-            else
+               // }
+                //else
+                 //   JOptionPane.showMessageDialog(this, "This IMSI is used, Try another one");
+      //  }
+        //    else
                // jLabel15.setText("IMSI doesn't exist in any HLR");
-                JOptionPane.showMessageDialog(this, "This IMSI doesn't exist in any HLR, Please enter any of these IMSIs:\n"+getAllIMSI(imsi_vect));
+          //      JOptionPane.showMessageDialog(this, "This IMSI doesn't exist in any HLR, Please enter any of these IMSIs:\n"+imsi_vect);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -411,8 +360,9 @@ public class ms_form extends JDialog {
             String mslai;
             mslai = (String) jComboBox1.getSelectedItem();
             mobileStation.setSlai1(mslai);
+            MsStatusForm.lai = mslai;
             try {
-          String imsi2 = mobileStation.getSimsi1() + mobileStation.getSimsi2() + mobileStation.getSimsi3();
+          String imsi2 = mobileStation.getSimsi1();
 
                 serl.sendnormallu(imsi2,mslai);
             } catch (Exception ex) {
@@ -422,31 +372,8 @@ public class ms_form extends JDialog {
         }}        // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1PopupMenuWillBecomeInvisible
 
-    private void msinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_msinFocusGained
-        // TODO add your handling code here:
-        if (mobileStation.getaftersubmit()) {
-            msin.setText("");
-        }
-    }//GEN-LAST:event_msinFocusGained
-
-    private void msinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msinActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_msinActionPerformed
-
-    private void mncFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_mncFocusGained
-        // TODO add your handling code here:
-        if (mobileStation.getaftersubmit()) {
-            mnc.setText("");
-        }
-    }//GEN-LAST:event_mncFocusGained
-
-    private void mccFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_mccFocusGained
-        // TODO add your handling code here:
-        //     if (mobileStation.getaftersubmit())
-        //     mcc.setText("");
-    }//GEN-LAST:event_mccFocusGained
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox imsicombo;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel10;
@@ -458,13 +385,8 @@ public class ms_form extends JDialog {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField mcc;
-    private javax.swing.JTextField mnc;
-    private javax.swing.JTextField msin;
     // End of variables declaration//GEN-END:variables
 
     public static boolean isNumeric(String aStringValue) {
@@ -474,13 +396,13 @@ public class ms_form extends JDialog {
     }
 
     private void setVerifiers() {
-        mcc.setInputVerifier(new mccverifier());
+//        mcc.setInputVerifier(new mccverifier());
 //        cc.setInputVerifier(new ccverifier());
         //   LAmcc.setInputVerifier(new LAmccverifier());
-        mnc.setInputVerifier(new mncverifier());
+  //      mnc.setInputVerifier(new mncverifier());
 //        ndc.setInputVerifier(new ndcverifier());
         //    LAmnc.setInputVerifier(new LAmncverifier());
-        msin.setInputVerifier(new msinverifier());
+    //    msin.setInputVerifier(new msinverifier());
 //        sn.setInputVerifier(new snverifier());
         //    lac.setInputVerifier(new lacverifier());
     }
@@ -491,9 +413,9 @@ public class ms_form extends JDialog {
         /**
          * ****IMSI String******
          */
-        mcc.setText(mobileStation.getSimsi1());
-        mnc.setText(mobileStation.getSimsi2());
-        msin.setText(mobileStation.getSimsi3());
+        imsicombo.setSelectedItem(mobileStation.getSimsi1());
+ //       mnc.setText(mobileStation.getSimsi2());
+ //       msin.setText(mobileStation.getSimsi3());
         /**
          * ****MSISDN String******
          */
@@ -508,9 +430,7 @@ public class ms_form extends JDialog {
         //     lac.setText(mobileStation.getSlai3());
 
 
-        mcc.setEnabled(mobileStation.getaftersubmit());
-        mnc.setEnabled(mobileStation.getaftersubmit());
-        msin.setEnabled(mobileStation.getaftersubmit());
+        imsicombo.setEnabled(mobileStation.getaftersubmit());
         jButton1.setEnabled(mobileStation.getaftersubmit());
 
     }
@@ -709,10 +629,10 @@ public class ms_form extends JDialog {
     public static boolean checkusedimsi(String imsi)
     {
         //Vector<String> imsi_Vector = DatabaseHandler.getimsis();
-        for (String str : used_imsi_vect)
+        for (String str : com.iti.telecom.main.GraphEditor.used_imsi_vect)
         {
             if(imsi.equals(str))
-                imsi_vect.remove(str);
+               imsi_vect.remove(str);
                 return false;
         }
         return true;

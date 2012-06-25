@@ -126,6 +126,7 @@ public class Msc_Screen extends JDialog {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        msrn_comm = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -156,6 +157,11 @@ public class Msc_Screen extends JDialog {
         gt1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 gt1FocusGained(evt);
+            }
+        });
+        gt1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                gt1KeyReleased(evt);
             }
         });
 
@@ -259,6 +265,11 @@ public class Msc_Screen extends JDialog {
                 gt2FocusGained(evt);
             }
         });
+        gt2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                gt2KeyReleased(evt);
+            }
+        });
 
         jLabel13.setText("-");
 
@@ -271,6 +282,11 @@ public class Msc_Screen extends JDialog {
         gt3.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 gt3FocusGained(evt);
+            }
+        });
+        gt3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                gt3KeyReleased(evt);
             }
         });
 
@@ -308,6 +324,15 @@ public class Msc_Screen extends JDialog {
 
         jLabel20.setText("SN");
 
+        msrn_comm.setFont(new java.awt.Font("Cantarell", 1, 15)); // NOI18N
+        msrn_comm.setText("MSRN Range");
+        msrn_comm.setEnabled(false);
+        msrn_comm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                msrn_commActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -322,11 +347,11 @@ public class Msc_Screen extends JDialog {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 67, Short.MAX_VALUE)
+                        .addGap(0, 45, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel11)
-                        .addGap(254, 254, 254))
+                        .addGap(276, 276, 276))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,7 +416,6 @@ public class Msc_Screen extends JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(VLR_add3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(vlr_lbl)
                                     .addComponent(gt_lbl)
@@ -399,18 +423,17 @@ public class Msc_Screen extends JDialog {
                                     .addComponent(name_lbl)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)
-                                .addComponent(jButton1)))
-                        .addContainerGap())))
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Submit_comm, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(30, 30, 30)
+                                .addComponent(msrn_comm)))
+                        .addContainerGap(101, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(232, 232, 232)
-                        .addComponent(Submit_comm, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(jLabel1)))
-                .addContainerGap())
+                .addGap(207, 207, 207)
+                .addComponent(jLabel1)
+                .addContainerGap(386, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -471,6 +494,7 @@ public class Msc_Screen extends JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
+                            .addComponent(msrn_comm)
                             .addComponent(jButton1))))
                 .addGap(34, 34, 34)
                 .addComponent(Submit_comm)
@@ -510,7 +534,7 @@ public class Msc_Screen extends JDialog {
                 dbh.insert_msc_info(msc_name.getText(), NI_num.getText(), SPC_num.getText(), GT, VLR);
                 msc.setVisited(1);
 
-                OtpErlangAtom atom2 = new OtpErlangAtom(msc.getMscName());
+                OtpErlangAtom atom2 = new OtpErlangAtom(msc_name.getText());
 
                 OtpErlangObject[] ob = new OtpErlangObject[1];
                 ob[0] = atom2;
@@ -521,6 +545,7 @@ public class Msc_Screen extends JDialog {
 
                     jButton2.setEnabled(true);
                     jButton1.setEnabled(true);
+                    msrn_comm.setEnabled(true);
                     msc.setlai_enabel(true);
 
                 } catch (Exception ex) {
@@ -677,6 +702,25 @@ snf2f=true;
     private void VLR_add2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VLR_add2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_VLR_add2ActionPerformed
+
+    private void msrn_commActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msrn_commActionPerformed
+
+        msrn_range msrn_forum = new msrn_range(msc.getMscName());
+        msrn_forum.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_msrn_commActionPerformed
+
+    private void gt1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gt1KeyReleased
+VLR_add1.setText(gt1.getText());        // TODO add your handling code here:
+    }//GEN-LAST:event_gt1KeyReleased
+
+    private void gt2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gt2KeyReleased
+VLR_add2.setText(gt2.getText());        // TODO add your handling code here:
+    }//GEN-LAST:event_gt2KeyReleased
+
+    private void gt3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gt3KeyReleased
+VLR_add3.setText(gt3.getText());        // TODO add your handling code here:
+    }//GEN-LAST:event_gt3KeyReleased
     /**
      * @param args the command line arguments
      */
@@ -725,6 +769,7 @@ snf2f=true;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField msc_name;
+    private javax.swing.JButton msrn_comm;
     private javax.swing.JLabel name_lbl;
     private javax.swing.JLabel ni_lbl;
     private javax.swing.JLabel vlr_lbl;
@@ -746,6 +791,7 @@ snf2f=true;
 
         jButton2.setEnabled(msc.getlai_enabel());
         jButton1.setEnabled(msc.getlai_enabel());
+         msrn_comm.setEnabled(msc.getlai_enabel());
         //Submit_comm.setEnabled(!msc.getlai_enabel());
 
 
@@ -763,9 +809,9 @@ snf2f=true;
         //{
             System.out.println("AAAAAAAAAAAAAAAAAAAT ");
             msc_name.setEnabled(!msc.getlai_enabel());
-            VLR_add1.setEnabled(!msc.getlai_enabel());
-            VLR_add2.setEnabled(!msc.getlai_enabel());
-            VLR_add3.setEnabled(!msc.getlai_enabel());
+            VLR_add1.setEnabled(false);
+            VLR_add2.setEnabled(false);
+            VLR_add3.setEnabled(false);
         //}
     }
     // End of variables declaration

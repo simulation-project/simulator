@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Module msc_2nd_sup</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module msc_2nd_sup</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+   This supervisor is responsible of starting any MSC
+   dynamically.
+<p>Copyright © 2012 ITI Egypt.</p>
+
+<p><b>Behaviours:</b> <a href="supervisor.html"><tt>supervisor</tt></a>.</p>
+<p><b>Authors:</b> Esraa Adel (<a href="mailto:esraa.elmelegy@hotmail.com"><tt>esraa.elmelegy@hotmail.com</tt></a>), Sherif Ashraf (<a href="mailto:sherif_ashraf89@hotmail.com"><tt>sherif_ashraf89@hotmail.com</tt></a>) [<em>web site:</em> <tt><a href="http://www.iti.gov.eg/" target="_top">http://www.iti.gov.eg/</a></tt>].</p>
+
+<h2><a name="description">Description</a></h2>
+   This supervisor is responsible of starting any MSC
+   dynamically.
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#check_msc_spc-2">check_msc_spc/2</a></td><td>This function is called to check that both the SPC and GT
+  belong to a configured MSC.</td></tr>
+<tr><td valign="top"><a href="#insert_subscriber_data-3">insert_subscriber_data/3</a></td><td>This function is called when the HLR sends the ISD message
+  to the MSC to insert the subsceiber data in the VLR.</td></tr>
+<tr><td valign="top"><a href="#location_update_request-1">location_update_request/1</a></td><td>This function is called when the mobile station is turned on or moves to a new
+  location area or make periodic update to update it's location and state in the VLR and HLR.</td></tr>
+<tr><td valign="top"><a href="#start_link-0">start_link/0</a></td><td>Starts the supervisor.</td></tr>
+<tr><td valign="top"><a href="#start_msc-1">start_msc/1</a></td><td>This function is called to build a msc with the given Name
+  this name is then used to call the module of that msc.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="check_msc_spc-2">check_msc_spc/2</a></h3>
+<div class="spec">
+<p><tt>check_msc_spc(SPC, GT) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = not_found | MSC</tt></li><li><tt>MSC = atom()</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li></ul></p>
+</div><p>This function is called to check that both the SPC and GT
+  belong to a configured MSC.</p>
+
+<h3 class="function"><a name="insert_subscriber_data-3">insert_subscriber_data/3</a></h3>
+<div class="spec">
+<p><tt>insert_subscriber_data(IMSI, INFO, SPC) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>SPC = atom()</tt></li><li><tt>INFO = atom()</tt></li></ul></p>
+</div><p>This function is called when the HLR sends the ISD message
+  to the MSC to insert the subsceiber data in the VLR.</p>
+
+<h3 class="function"><a name="location_update_request-1">location_update_request/1</a></h3>
+<div class="spec">
+<p><tt>location_update_request(X1::Parameter) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {2, 1, IMSI, LAI} | {2, 2, IMSI, LAI} | {2, 3, IMSI, LAI}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li></ul></p>
+</div><p>This function is called when the mobile station is turned on or moves to a new
+  location area or make periodic update to update it's location and state in the VLR and HLR.</p>
+
+<h3 class="function"><a name="start_link-0">start_link/0</a></h3>
+<div class="spec">
+<p><tt>start_link() -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = {ok, Pid} | ignore | {error, Error}</tt></li><li><tt>Pid = pid()</tt></li><li><tt>Error = {already_started, Pid} | shutdown | term()</tt></li></ul></p>
+</div><p>Starts the supervisor.</p>
+
+<h3 class="function"><a name="start_msc-1">start_msc/1</a></h3>
+<div class="spec">
+<p><tt>start_msc(Name) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = {ok, Pid}</tt></li><li><tt>Pid = pid()</tt></li><li><tt>Name = atom()</tt></li></ul></p>
+</div><p>This function is called to build a msc with the given Name
+  this name is then used to call the module of that msc.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jun 21 2012, 09:56:13.</i></p>
+</body>
+</html>

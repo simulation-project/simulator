@@ -217,5 +217,99 @@ public class DatabaseHandler {
         }
         return check;
     }
+
+    public Hashtable get_gt_translation(String name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select number_series, spc from gt_translation where msc_name= '"+name+"' " );
+            while(rs.next())
+            {
+                String num = rs.getString("number_series");
+                String spc = rs.getString("spc");
+
+                gt_trans.put(num, spc);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return gt_trans;
+    }
+
+
+    public boolean check_msc_msrn(String msrn)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        boolean check = false;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select msrn_no from msrn where msrn_no ='"+msrn+"'" );
+            while(rs.next())
+            {
+                check = true;
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return check;
+    }
+
+    public String get_msrn_no(){
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        String number = null;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select max(msrn_no) from msrn ");
+            while(rs.next())
+            {
+                number = rs.getString(1);
+            }
+        }
+         catch (SQLException ex) {
+          // System.out.println("exception update availability");
+        
+         return "901000000000";
+         }
+        return number;
+    }
+
+    public boolean insert_msrn(int msrn,int range,String msc)
+    {
+        //int msrn_no = Integer.parseInt(msrn);
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        boolean check = false;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            for (int i=0 ; i<range ; i++)
+            {
+                System.out.println("inside msrn_forrrrrrrrr");
+                st.executeUpdate("insert into msrn (msrn_no,msc_name) values('2010"+(msrn+i)+"','"+msc+"')");
+            }
+//            while(rs.next())
+//            {
+//                check = true;
+//            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return check;
+    }
 }
 

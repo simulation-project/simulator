@@ -31,7 +31,7 @@
 -export([start_link/1]).
 
 %%% External exports
--export([send_event/1,change_loc_area/2,call_setup/1,send_alert/2,receiving_alert/1,connect_msg/2, reply_msg/2]).
+-export([send_event/1,change_loc_area/2,call_setup/1,send_alert/2,receiving_alert/1,connect_msg/2, reply_msg/2,receiving_answer/1]).
 
 %%% States exports
 -export([turn_off/2,turn_on_idle/2,turn_on_active/2]).
@@ -104,7 +104,7 @@ turn_off(turn_on_idle, Std) ->
     io:format("turn_on_idle ~n"),
     T_ref = erlang:send_after(30000,self(),{idle,3}),
     loc_update(T_ref,{2,1,Std#st.imsi,Std#st.lai}),%% imsi_attach
-    P_ref = erlang:send_after(120000,self(),repeat),
+    P_ref = erlang:send_after(12000000,self(),repeat),
     {next_state, turn_on_idle, Std#st{timer = P_ref}};
 turn_off(turn_on_active, Std) ->
      io:format("~p~n",[Std]),
@@ -271,14 +271,25 @@ state_name(_Event, _From, Std) ->
 %%
 %% @doc Handles events received by <u>gen_fsm:send_all_state_event/2</u>.
 %% @end
-handle_event(send_alert, turn_on_idle,Std) ->
+handle_event({send_alert,Ano}, turn_on_idle,Std) ->
 	io:format("send_alert ~n~n"),
     msc_app:receiving_alert({1,5,Std#st.imsi,Std#st.lai}),
+	IMSI = atom_to_list(Std#st.imsi),
+	Msg1 = string:concat("receiving_call,",IMSI),
+	Ano_str = atom_to_list(Ano),
+	Msg2 = string:concat(Msg1,","),
+	Msg3 = string:concat(Msg2,Ano_str),
+	MSG = list_to_atom(Msg3),
+	request_handler:erlang_send2(MSG),%%Ringing
     reply_msg(Std#st.imsi,' : Sending Alert message to MSC'),
     {next_state,turn_on_idle, Std};
 handle_event(receive_alert, turn_on_idle,Std) ->
 	io:format("receive_alert ~n~n"),
     %%msc_app:receiving_alert({1,5,Std#st.imsi,Std#st.lai}),
+	IMSI = atom_to_list(Std#st.imsi),
+	Msg = string:concat("alert_msg,",IMSI),
+	MSG = list_to_atom(Msg),
+	request_handler:erlang_send2(MSG),%%Alert
     reply_msg(Std#st.imsi,' : Sending Alert message to MSC'),
     {next_state,turn_on_idle, Std};
 handle_event(Event, turn_on_idle, Std) ->
@@ -308,7 +319,7 @@ handle_info(repeat, Stn, Std) ->
     %%loc_update(T_ref,{2,3,Std#st.imsi,Std#st.lai}),
     periodic_loc_update(Std#st.imsi,Std#st.lai),
     reply_msg(Std#st.imsi,' : periodic location update is sent'),
-    P_ref = erlang:send_after(30000,self(),repeat),
+    P_ref = erlang:send_after(3000000,self(),repeat),
     {next_state, Stn, Std#st{timer = P_ref}};
 
 handle_info({idle,0},Stn,Std) ->
@@ -469,7 +480,7 @@ call_setup({2,1,IMSI,LAI,Bno})->
 
 send_alert(IMSI,Ano)->
     io:format("send_alert to ~p~n",[Ano]),
-    gen_fsm:send_all_state_event(IMSI,send_alert).
+    gen_fsm:send_all_state_event(IMSI,{send_alert,Ano}).
 
 receiving_alert(IMSI)->
     gen_fsm:send_all_state_event(IMSI,receive_alert).
@@ -477,3 +488,9 @@ receiving_alert(IMSI)->
 connect_msg(IMSI,LAI)->
     msc_app:receive_connect({1,6,IMSI,LAI}),
     ms_fsm:send_event({IMSI,turn_on_active}).
+
+receiving_answer(IMSI)->
+	Msg = string:concat("connected,",atom_to_list(IMSI)),
+	MSG = list_to_atom(Msg),
+   request_handler:erlang_send2(MSG),
+   ms_fsm:send_event({IMSI,turn_on_active}).

@@ -73,7 +73,7 @@ start_link(Conf) ->
     A = list_to_atom(Name),
     {ok, PID} = gen_server:start_link({local, A}, ?MODULE, [], []),
     %%io:format("hlr : ~p starts with configuration :  ~p~n", [A, Conf]),
-    NEWL=[{pid,PID}|Conf],
+   NEWL=[{pid,PID}|Conf],
     gen_server:call(A,  {addConf,  NEWL}, 1000),
     %%PID ! {addConf,  NEWL},
     {ok, PID}.
@@ -159,7 +159,9 @@ handle_call({insert,IMSI,ISD}, _From, St) ->
 handle_call(getSpc, _From, St) ->
     {reply,  getSpc(St), St};
 handle_call(getGt, _From, St) ->
-     {reply,  getGt(St), St}.
+     {reply,  getGt(St), St};
+handle_call({sendroutinginfo,BNO,MSC1GT,HLRName}, _From, St) ->
+       {reply,  sri(BNO,MSC1GT,HLRName), St}.
 
 
 %% @private
@@ -327,3 +329,52 @@ getSpc(St)->
 getGt(St)->
     {st,M} = St,
     _GT= proplists:get_value(gt,M).
+
+
+
+
+%%------------------------------------------------------------------------------
+ sri(BNO,MSC1GT,HLRName)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "hlr"}]),
+
+    DB = atom_to_list(HLRName),
+    Query = "select imsi from " ++ DB ++ "  where isd=$1 ",
+    {ok, _, BIMSI} = pgsql:equery(C, Query, [BNO]),
+
+
+    DB2 = "node_" ++ atom_to_list(HLRName),
+    Query2 = "select nispc from " ++ DB2 ++ "  where gt=$1 ",
+    {ok, _, MSC1SPC} = pgsql:equery(C, Query2, [MSC1GT]),
+    
+
+  Query3 = "select vlr from " ++ DB ++ "  where isd=$1 ",
+    {ok, _, MSC2GT} = pgsql:equery(C, Query3, [BNO]),
+
+   
+    [{A}] = BIMSI,
+    [{B}] =  MSC1SPC,
+    [{C1}] =  MSC2GT,
+    NBIMSI = binary_to_list(A),
+    NMSC1SPC = binary_to_list(B),
+    NMSC2GT = binary_to_list(C1),
+
+io:format("DBBB>>>> ~p ~n~n~n~n~n",[NMSC2GT]),
+
+
+
+   Query4 = "select nispc from " ++ DB2 ++ "  where gt=$1 ",
+    {ok, _, MSC2SPC} = pgsql:equery(C, Query4, [NMSC2GT]),
+
+
+io:format("DBBB>>>> ~p   ~p  ~n~n~n~n~n",[NBIMSI,MSC2SPC]),
+
+
+    [{D}] =  MSC2SPC,
+    NMSC2SPC = binary_to_list(D),
+    ok = pgsql:close(C),
+ 
+    MSRN = msc_app:receive_PRN({6,5,list_to_atom(NBIMSI),list_to_atom(NMSC2SPC)}),
+    io:format(" MSRN ....................... : ~p~n",[MSRN]),
+
+    msc_app:result_SRI({6,7,MSRN, NMSC1SPC}).
+    

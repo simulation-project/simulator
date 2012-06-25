@@ -38,12 +38,15 @@ public class sendtoerl2 {
     }
 
     static public void send(OtpErlangObject[] Ls) throws IOException, OtpAuthException {
-
+        System.out.println(",,,,,"+Ls[0]+"  "+Ls[1]);
+        
         connection.sendRPC("request_handler", "erlang_receive", Ls);
     }
 
     public void sendtoerl(String filter, OtpErlangObject[] Obj) throws OtpErlangExit, OtpErlangDecodeException, IOException, OtpAuthException {
 
+        System.out.println(",,,----,,,"+Obj[0]);
+        
         OtpErlangObject[] Obj1 = new OtpErlangObject[2];
         Obj1[0] = new OtpErlangAtom(filter);
         Obj1[1] = Obj[0];

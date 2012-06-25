@@ -75,7 +75,7 @@ receiving_setup(IMSI,Ano)->
 %% @doc Sends a call setup request to MSC.
 %% @end
 
-call_setup({2,1,IMSI,LAI,Bno})->
+call_setup({IMSI,LAI,Bno})->
     io:format("callsetup ~n"),
     msc_app:call_setup({2,1,IMSI,LAI,Bno}),
     reply_msg(IMSI ,' : call request sent to MSC to ',Bno).
@@ -94,7 +94,7 @@ connect_msg(IMSI,LAI)->
 
 receiving_answer(IMSI)->
     io:format("receiving_answer"),
-    ms_fsm:send_event(IMSI,turn_on_active).
+    ms_fsm:receive_answer(IMSI).
 
 %% @private
 %% @spec reply_msg(MSG1, MSG2, MSG3) -> Result

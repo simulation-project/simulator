@@ -1,0 +1,163 @@
+--- Test run on 2012/06/18 14:40:56 ---
+
+
+
+Common Test v1.5.5 starting (cwd is /home/sony/GP/Alaa/simulator/trunk/msc)
+
+
+Common Test: Running make in test directories...
+
+CWD set to: "/home/sony/GP/Alaa/simulator/trunk/msc/logs/ct_run.test@ubuntu.ubuntu-domain.2012-06-18_14.40.56"
+
+TEST INFO: 1 test(s), 1 case(s) in 1 suite(s)
+
+Testing trunk.msc: Starting test, 1 test cases
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.89.0>},
+                       {name,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.90.0>},
+                       {name,overload},
+                       {mfargs,{overload,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.88.0>},
+                       {name,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.91.0>},
+                       {name,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+         application: sasl
+          started_at: 'test@ubuntu.ubuntu-domain'
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,crypto_sup}
+             started: [{pid,<0.97.0>},
+                       {name,crypto_server},
+                       {mfargs,{crypto_server,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+         application: crypto
+          started_at: 'test@ubuntu.ubuntu-domain'
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+         application: public_key
+          started_at: 'test@ubuntu.ubuntu-domain'
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,ssl_sup}
+             started: [{pid,<0.103.0>},
+                       {name,ssl_broker_sup},
+                       {mfargs,{ssl_broker_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,ssl_sup}
+             started: [{pid,<0.104.0>},
+                       {name,ssl_manager},
+                       {mfargs,{ssl_manager,start_link,[[]]}},
+                       {restart_type,permanent},
+                       {shutdown,4000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,ssl_sup}
+             started: [{pid,<0.105.0>},
+                       {name,ssl_connection},
+                       {mfargs,{ssl_connection_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,4000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+         application: ssl
+          started_at: 'test@ubuntu.ubuntu-domain'
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+         application: epgsql
+          started_at: 'test@ubuntu.ubuntu-domain'
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+          supervisor: {local,msc_1st_sup}
+             started: [{pid,<0.111.0>},
+                       {name,msc_2nd_sup},
+                       {mfargs,{msc_2nd_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 18-Jun-2012::14:40:56 ===
+         application: msc
+          started_at: 'test@ubuntu.ubuntu-domain'
+
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+msc_app_SUITE:my_test_case failed on line 157
+Reason: undef
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Testing trunk.msc: *** FAILED *** test case 1 of 1
+
+=INFO REPORT==== 18-Jun-2012::14:40:56 ===
+    application: sasl
+    exited: stopped
+    type: temporary
+
+=INFO REPORT==== 18-Jun-2012::14:40:56 ===
+    application: crypto
+    exited: stopped
+    type: temporary
+
+=INFO REPORT==== 18-Jun-2012::14:40:56 ===
+    application: public_key
+    exited: stopped
+    type: temporary
+
+=INFO REPORT==== 18-Jun-2012::14:40:56 ===
+    application: ssl
+    exited: stopped
+    type: temporary
+
+=INFO REPORT==== 18-Jun-2012::14:40:56 ===
+    application: epgsql
+    exited: stopped
+    type: temporary
+
+=INFO REPORT==== 18-Jun-2012::14:40:56 ===
+    application: msc
+    exited: stopped
+    type: temporary
+Testing trunk.msc: TEST COMPLETE, 0 ok, 1 failed of 1 test cases
+
+Updating /home/sony/GP/Alaa/simulator/trunk/msc/logs/index.html... done
+Updating /home/sony/GP/Alaa/simulator/trunk/msc/logs/all_runs.html... done
+

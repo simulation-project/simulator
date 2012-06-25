@@ -82,7 +82,8 @@ start_gen(Conf)->
     SPC =  proplists:get_value(spc, Conf),
     Name = proplists:get_value(hlr_name,Conf),
     Return = checkNameExist(Name),
-    start(Return, Name, SPC, Conf).
+    NewSpc = list_to_atom(SPC),
+    start(Return, Name, NewSpc, Conf).
 %-----
 start(no, Name, SPC, Conf)->
     {ok,PID} = hlr_server:start_link(Conf),
@@ -209,7 +210,7 @@ handle_call(printAll,  _From, St) ->
     %%io:format("manager : servers are  ~p~n", [M]),
     {reply, printAll(M), St };
 handle_call({getName, SPC},  _From, St) ->
-   %% io:format("manager : get Name of SPC ~p~n", [SPC]),
+    io:format("manager : get Name of SPC ~p~n", [SPC]),
     {st,L}=St,
     {reply, getName({SPC,L}), St }.
 

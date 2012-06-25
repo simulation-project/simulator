@@ -66,7 +66,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
 public class BasicGraphEditor extends JPanel {
 
@@ -128,6 +131,8 @@ public class BasicGraphEditor extends JPanel {
         //logedArea.setLineWrap(true);
         logedArea.setForeground(Color.GRAY);
         logedArea.setFont(new Font("TimesRoman",Font.BOLD,14));
+        DefaultCaret caret = (DefaultCaret)logedArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         // Stores a reference to the graph and creates the command history
         graphComponent = component;
         /**
@@ -573,13 +578,36 @@ public class BasicGraphEditor extends JPanel {
         JFrame frame = new JFrame();
         frame.getContentPane().add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JMenu menu = new JMenu("Themes");
+        JMenuItem graphite = new JMenuItem("Graphite");
+        JMenuItem aero = new JMenuItem("Aero");
+        JMenuItem mac = new JMenuItem("Mac");
+        menu.add(mac);
+        menu.add(aero);
+        menu.add(graphite);
+        menuBar.add(menu);
         frame.setJMenuBar(menuBar);
+        aero.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              AeroactionPerformed(e);
+            }
+        });
+        mac.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              MacactionPerformed(e);
+            }
+        });
+        graphite.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              GraphiteactionPerformed(e);
+            }
+        });
         frame.setSize(870, 640);
         frame.addWindowListener(new WindowAdapter(){
          public void windowClosing(WindowEvent we){
              System.out.println("Deleting DB");
-              ms_app.DatabaseHandler.deleteDB_HLR();
-              ms_app.DatabaseHandler.deleteDB_MSC();
+             // ms_app.DatabaseHandler.deleteDB_HLR();
+              //ms_app.DatabaseHandler.deleteDB_MSC();
             }
          });
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -730,4 +758,65 @@ public class BasicGraphEditor extends JPanel {
               (graph.getGraphBounds().getCenterY()
              -(graph.getGraphBounds().getHeight()/2))/scale);
     }
+
+    
+    	public void AeroactionPerformed(ActionEvent ae)
+		{
+            try {
+                //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
+                UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+                SwingUtilities.updateComponentTreeUI(this);
+	}
+
+
+                public void MacactionPerformed(ActionEvent ae)
+		{
+            try {
+                //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
+                UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+                SwingUtilities.updateComponentTreeUI(this);
+	}
+
+
+                public void GraphiteactionPerformed(ActionEvent ae)
+		{
+            try {
+                //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
+                UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+                SwingUtilities.updateComponentTreeUI(this);
+	}
+
+
+
+
 }

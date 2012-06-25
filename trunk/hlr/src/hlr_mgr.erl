@@ -29,7 +29,7 @@
 -export([start_link/0]).
 
 %%% External exports
--export([start_gen/1, printRegServers/0, imsiExist/2, getNameBySpc/1,update_location/2]).
+-export([start_gen/1, printRegServers/0, imsiExist/2, getNameBySpc/1,update_location/2,send_routing_info/3]).
 %%export([printHlrData/1,printHlrSpc/1,printHlrGt/1]).
 %%% Init/Terminate exports
 -export([init/1, terminate/2]).
@@ -121,6 +121,21 @@ check([])->
     false;
 check(_R) ->
     ok.
+
+
+  
+%%%----------------------------------------------------------------------------- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%%% Mobile Orginating
+%%%-----------------------------------------------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+send_routing_info(BNO, SPC, MSC1GT)->
+    HLRName = getNameBySpc(SPC),
+    
+%io:format(">>>>>>>>> ~p  ~p  ~p  ~n ~n~n",BNO,SPC,MSC1GT),
+
+    gen_server:call(list_to_atom(HLRName),{sendroutinginfo,BNO,MSC1GT,list_to_atom(HLRName)},infinity).
+
+
+
 %%%----------------------------------------------------------------------
 update_location(L,SPC)->
     Name = getNameBySpc(SPC),

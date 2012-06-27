@@ -5,6 +5,7 @@
 package msc;
 
 import java.util.*;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,6 +15,8 @@ public class GT_translation extends javax.swing.JFrame {
 
     String msc_name;
     String vlr;
+
+    int count = 0;
     /**
      * Creates new form GT_translation
      */
@@ -21,6 +24,30 @@ public class GT_translation extends javax.swing.JFrame {
         initComponents();
         this.msc_name = msc_name;
         this.vlr = vlr;
+
+        DatabaseHandler conn = new DatabaseHandler();
+
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        gt_trans = conn.get_gt_translation(msc_name);
+
+        Enumeration keys = gt_trans.keys();
+        //int i=0;
+        while (keys.hasMoreElements())
+        {
+            String key = (String) keys.nextElement();
+            String value = (String) gt_trans.get(key);
+
+            //jTable1.setEnabled(false);
+
+            jTable1.setValueAt(key, count, 0);
+            jTable1.setValueAt(value, count, 1);
+            jTable1.isCellEditable(count, 0);
+            jTable1.isCellEditable(count, 1);
+            
+            count++;
+
+        }
+
     }
 
 
@@ -107,12 +134,22 @@ public class GT_translation extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        
         Hashtable<String, String> gt_trans = new Hashtable<String, String>();      
-        int i = 0, j = 0;
-        while(jTable1.getValueAt(i, 0) != null)
+        int j = 0;
+        int temp = count;
+        while(jTable1.getValueAt(count, 0) != null)
         {
-            gt_trans.put(jTable1.getValueAt(i, j).toString(), jTable1.getValueAt(i, j+1).toString());
-            i++;
+            //if(jTable1.getValueAt(count, 1) == null)
+            //{
+                //JOptionPane.showMessageDialog(this, "Please complete your data");
+              //  count = temp;
+            //}
+            //else
+            {
+            gt_trans.put(jTable1.getValueAt(count, j).toString(), jTable1.getValueAt(count, j+1).toString());
+            count++;
+            }   
         }
         
         DatabaseHandler conn = new DatabaseHandler();

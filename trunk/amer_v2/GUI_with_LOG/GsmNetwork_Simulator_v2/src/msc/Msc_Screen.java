@@ -126,11 +126,12 @@ public class Msc_Screen extends JDialog {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        msrn_comm = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        Submit_comm.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        Submit_comm.setFont(new java.awt.Font("Ubuntu", 1, 15));
         Submit_comm.setText("Submit");
         Submit_comm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,7 +139,7 @@ public class Msc_Screen extends JDialog {
             }
         });
 
-        NI_num.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        NI_num.setFont(new java.awt.Font("Ubuntu", 0, 12));
         NI_num.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NI_numActionPerformed(evt);
@@ -152,14 +153,14 @@ public class Msc_Screen extends JDialog {
 
         jLabel7.setText("-");
 
-        gt1.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        gt1.setFont(new java.awt.Font("Ubuntu", 0, 12));
         gt1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 gt1FocusGained(evt);
             }
         });
 
-        SPC_num.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        SPC_num.setFont(new java.awt.Font("Ubuntu", 0, 12));
         SPC_num.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SPC_numActionPerformed(evt);
@@ -171,24 +172,24 @@ public class Msc_Screen extends JDialog {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 15));
         jLabel2.setText("VLR:");
 
         jLabel1.setBackground(new java.awt.Color(250, 254, 254));
-        jLabel1.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Cantarell", 1, 18));
         jLabel1.setForeground(new java.awt.Color(19, 7, 101));
         jLabel1.setText("MSC Configuration");
 
-        jLabel6.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Ubuntu", 1, 15));
         jLabel6.setText("GT:");
 
-        jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 15));
         jLabel5.setText("NI-SPC:");
 
-        jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 15));
         jLabel3.setText("Name:");
 
-        VLR_add1.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        VLR_add1.setFont(new java.awt.Font("Ubuntu", 0, 12));
         VLR_add1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VLR_add1ActionPerformed(evt);
@@ -225,7 +226,7 @@ public class Msc_Screen extends JDialog {
         name_lbl.setForeground(new java.awt.Color(24, 25, 61));
         name_lbl.setText("1 - 7 digits");
 
-        VLR_add2.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        VLR_add2.setFont(new java.awt.Font("Ubuntu", 0, 12));
         VLR_add2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VLR_add2ActionPerformed(evt);
@@ -239,7 +240,7 @@ public class Msc_Screen extends JDialog {
 
         jLabel10.setText("-");
 
-        VLR_add3.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        VLR_add3.setFont(new java.awt.Font("Ubuntu", 0, 12));
         VLR_add3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VLR_add3ActionPerformed(evt);
@@ -253,7 +254,7 @@ public class Msc_Screen extends JDialog {
 
         jLabel12.setText("-");
 
-        gt2.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        gt2.setFont(new java.awt.Font("Ubuntu", 0, 12));
         gt2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 gt2FocusGained(evt);
@@ -262,7 +263,7 @@ public class Msc_Screen extends JDialog {
 
         jLabel13.setText("-");
 
-        gt3.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        gt3.setFont(new java.awt.Font("Ubuntu", 0, 12));
         gt3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gt3ActionPerformed(evt);
@@ -284,7 +285,7 @@ public class Msc_Screen extends JDialog {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Ubuntu", 1, 15));
         jButton2.setText("new LAI");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -308,6 +309,15 @@ public class Msc_Screen extends JDialog {
 
         jLabel20.setText("SN");
 
+        msrn_comm.setFont(new java.awt.Font("Cantarell", 1, 15)); // NOI18N
+        msrn_comm.setText("MSRN Range");
+        msrn_comm.setEnabled(false);
+        msrn_comm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                msrn_commActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -322,11 +332,11 @@ public class Msc_Screen extends JDialog {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 67, Short.MAX_VALUE)
+                        .addGap(0, 45, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel11)
-                        .addGap(254, 254, 254))
+                        .addGap(276, 276, 276))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,7 +401,6 @@ public class Msc_Screen extends JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(VLR_add3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(vlr_lbl)
                                     .addComponent(gt_lbl)
@@ -399,18 +408,17 @@ public class Msc_Screen extends JDialog {
                                     .addComponent(name_lbl)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)
-                                .addComponent(jButton1)))
-                        .addContainerGap())))
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Submit_comm, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(30, 30, 30)
+                                .addComponent(msrn_comm)))
+                        .addContainerGap(101, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(232, 232, 232)
-                        .addComponent(Submit_comm, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(jLabel1)))
-                .addContainerGap())
+                .addGap(207, 207, 207)
+                .addComponent(jLabel1)
+                .addContainerGap(386, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -471,6 +479,7 @@ public class Msc_Screen extends JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
+                            .addComponent(msrn_comm)
                             .addComponent(jButton1))))
                 .addGap(34, 34, 34)
                 .addComponent(Submit_comm)
@@ -521,6 +530,7 @@ public class Msc_Screen extends JDialog {
 
                     jButton2.setEnabled(true);
                     jButton1.setEnabled(true);
+                    msrn_comm.setEnabled(true);
                     msc.setlai_enabel(true);
 
                 } catch (Exception ex) {
@@ -667,7 +677,7 @@ snf2f=true;
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         String vlradd = msc.getVlrAdd1() + msc.getVlrAdd2() + msc.getVlrAdd3();
-        lai_conf lai_forum = new lai_conf(msc.getMscName(), vlradd);
+        Bno_analysis lai_forum = new Bno_analysis(msc.getMscName(), vlradd);
 
         lai_forum.setVisible(true);
 
@@ -677,6 +687,13 @@ snf2f=true;
     private void VLR_add2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VLR_add2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_VLR_add2ActionPerformed
+
+    private void msrn_commActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msrn_commActionPerformed
+
+        msrn_range msrn_forum = new msrn_range(msc.getMscName());
+        msrn_forum.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_msrn_commActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -725,6 +742,7 @@ snf2f=true;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField msc_name;
+    private javax.swing.JButton msrn_comm;
     private javax.swing.JLabel name_lbl;
     private javax.swing.JLabel ni_lbl;
     private javax.swing.JLabel vlr_lbl;

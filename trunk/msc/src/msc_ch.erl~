@@ -41,9 +41,10 @@
 -export([code_change/3]).
 
 %%% External exports
--export([location_update_request/2, insert_subscriber_data/3, check_msc_spc/3, call_setup/2, receive_PRN/1, send_IAM/2, result_SRI/1]).
+-export([location_update_request/2, insert_subscriber_data/3, check_msc_spc/3, call_setup/2, receive_PRN/1, send_IAM/3, result_SRI/1,
+	receive_alert/2, receive_connect/2, receive_ANM/1, receive_ACM/1, receive_disconnect/2, isup_rel/1, isup_rlc/1,
+        release_complete/2, release_msg/2]).
 
--compile([export_all]).
 %%% Macros
 
 %%% Data types
@@ -108,12 +109,13 @@ terminate(_Reason, _St) ->
 %%    Result = ok   
 %%    Parameter = {2, 1, IMSI, LAI} |
 %%                {2, 2, IMSI, LAI} |
-%%                {2, 3, IMSI, LAI}
+%%                {2, 3, IMSI, LAI} |
+%%                {2, 4, IMSI, LAI}
 %%    IMSI = atom()
 %%    LAI = atom() 
 %%    MSC = atom()
-%% @doc This function is called when the mobile station is turned on or moves to a new
-%% location area or make periodic update to update it's location and state in the VLR and HLR.
+%% @doc This function is called when the mobile station is turned on, moves to a new
+%% location area, make periodic update or turned off, to update it's location and state in the VLR and HLR.
 %% @end
 location_update_request({2, 1, IMSI, LAI}, MSC)->
     io:format("~n~n at LUR in child ~p  ~p ~n~n", [IMSI, MSC]),
@@ -136,20 +138,108 @@ location_update_request({2, 4, IMSI}, MSC) ->
     %imsi_detach({2, 4, IMSI, MSC}),
     ok.
 
+%% @spec call_setup(Parameter, MSC) -> Result
+%%    Result = ok   
+%%    Parameter = {2, 1, IMSI, Bno}
+%%    IMSI = atom()
+%%    Bno = atom()
+%% @doc This function is called when the MS make a call to another MS in MSC.
+%% @end
 call_setup({2, 1, IMSI, Bno}, MSC)->
     gen_server:cast(MSC, {3, 1, IMSI, Bno, MSC}),
     ok.
       
+%% @spec receive_PRN(Parameter) -> Result
+%%    Result = ok   
+%%    Parameter = {6, 5, IMSI, MSC}
+%%    IMSI = atom()
+%%    MSC = atom()
+%% @doc This function is called 
+%% @end
 receive_PRN({6, 5, IMSI, MSC})->
     gen_server:call(MSC, {IMSI, MSC}).
-    
+
+%% @spec result_SRI(Parameter) -> Result
+%%    Result = ok   
+%%    Parameter = {6, 7, MSRN, MSC}
+%%    MSRN = atom()
+%%    MSC = atom()
+%% @doc This function is called 
+%% @end    
 result_SRI({6, 7, MSRN, MSC})->
     gen_server:cast(MSC, {6,7,MSRN,MSC}).
 
-send_IAM({5, 1, Ano, MSRN}, MSC)->
-    gen_server:cast(MSC, {5, 1, Ano, MSRN, MSC}).
+%% @spec send_IAM(Parameter, MSC, GT) -> Result
+%%    Result = ok   
+%%    Parameter = {5, 1, Ano, MSRN}
+%%    MSRN = atom()
+%%    Ano = atom()
+%%    MSC = atom()
+%%    GT = atom()
+%% @doc This function is called 
+%% @end   
+send_IAM({5, 1, Ano, MSRN}, MSC, GT)->
+    gen_server:cast(MSC, {5, 1, Ano, MSRN, MSC,GT}).
  
-  
+%% @spec receive_alert(Parameter, MSC) -> Result
+%%    Result = ok   
+%%    Parameter = {1, 5, IMSI}
+%%    IMSI = atom()
+%%    MSC = atom()
+%% @doc This function is called 
+%% @end
+receive_alert({1, 5, IMSI}, MSC)->
+    gen_server:cast(MSC, {1, 5, IMSI, MSC}).
+
+
+%% @spec receive_ACM(Parameter) -> Result
+%%    Result = ok   
+%%    Parameter = {5, 2, Ano, MSC}
+%%    Ano = atom()
+%%    MSC = atom()
+%% @doc This function is called 
+%% @end
+receive_ACM({5,2,Ano,MSC})->
+    gen_server:cast(MSC, {5, 2, Ano, MSC}).
+
+%% @spec receive_connect(Parameter, MSC) -> Result
+%%    Result = ok   
+%%    Parameter = {1, 6, IMSI}
+%%    IMSI = atom()
+%%    MSC = atom()
+%% @doc This function is called 
+%% @end
+receive_connect({1, 6, IMSI}, MSC)->
+    gen_server:cast(MSC, {1, 6,IMSI, MSC}).
+
+
+%% **********************************************************************
+receive_disconnect({1, 7, IMSI}, MSC)->
+    gen_server:cast(MSC, {1, 7,IMSI, MSC}).
+
+isup_rel({5, 4, MSC})->
+	gen_server:cast(MSC, {5, 4, MSC}).
+
+isup_rlc({5, 5, MSC})->
+	gen_server:cast(MSC, {5, 5, MSC}).
+
+release_complete({5, 6, IMSI, LAI}, MSC)->
+	gen_server:cast(MSC, {5, 6, IMSI, LAI, MSC}).
+
+release_msg({5, 7, IMSI, LAI}, MSC)->
+	gen_server:cast(MSC, {5, 7, IMSI, LAI, MSC}).
+
+%% **********************************************************************
+
+%% @spec receive_ANM(Parameter) -> Result
+%%    Result = ok   
+%%    Parameter = {5, 3, Ano, MSC}MSC1 sends an "ISUP: REL" message to MSC2
+%%    Ano = atom()
+%%    MSC = atom()
+%% @doc This function is called 
+%% @end
+receive_ANM({5, 3, Ano, MSC})->
+      gen_server:cast(MSC, {5, 3, Ano, MSC}).
 
 %% @spec insert_subscriber_data(IMSI, INFO, SPC) -> Result
 %% Result = ok
@@ -184,7 +274,7 @@ check_msc_spc(_MSC, SPC, GT)->
 %%%-----------------------------------------------------------------------------
 %% @private
 %% @spec handle_call(Req, From, St) -> Result
-%%    Req = term()
+%%    Req = {IMSI, MSC}       
 %%    From = {pid(), Tag}
 %%    St = term()
 %%    Result = {reply, Reply, NewSt} |
@@ -193,6 +283,8 @@ check_msc_spc(_MSC, SPC, GT)->
 %%             {noreply, NewSt, Timeout} |
 %%             {stop, Reason, Reply, NewSt} |
 %%             {stop, Reason, NewSt}
+%%    IMSI = atom()
+%%    MSC = atom()
 %%    Reply = term()
 %%    NewSt = term()
 %%    Timeout = int() | infinity
@@ -211,6 +303,10 @@ check_msc_spc(_MSC, SPC, GT)->
 %% @end
 handle_call({IMSI, MSC}, _From, St) ->
 
+%% ************ save IMSI of Bno ***************************
+	ets:new(imsi_bno, [named_table, protected, set, {keypos, 1}]),
+    ets:insert(imsi_bno, {val, IMSI}),
+%% *******************************
     MSRN = msc_db:get_MSRN(MSC),
 
     Mscname = string:concat("MSC ",atom_to_list(MSC)),        
@@ -232,9 +328,28 @@ handle_call({IMSI, MSC}, _From, St) ->
 
 %% @private
 %% @spec handle_cast(Req, List) -> Result
-%%    Req = term()
+%%    Req = {2, 1, IMSI, LAI, MSC} |
+%%          {2, 2, IMSI, LAI, MSC} |
+%%          {2, 3, IMSI, LAI} |
+%%          {2, 4, IMSI, MSC} |
+%%          {6, 2, IMSI, INFO, MSC} |
+%%          {3, 1, IMSI, Bno, MSC} |
+%%          {6, 7, MSRN, MSC} |
+%%          {5, 1, Ano, MSRN, MSC, GT} |
+%%          {1, 5, IMSI, MSC} | 
+%%          {5, 2, Ano, MSC} |
+%%          {1, 6, IMSI, MSC} |
+%%          {5, 3, Ano, MSC}
 %%    Result = {noreply, NewSt} |
 %%             {stop, Reason, NewSt}
+%%    IMSI = atom()
+%%    LAI = atom()
+%%    MSC = atom()
+%%    INFO = atom()
+%%    Bno = atom()
+%%    MSRN = atom()
+%%    Ano = atom()
+%%    GT = atom()
 %%    NewSt = term()
 %%    Timeout = int() | infinity
 %%    Reason = normal | term()
@@ -249,29 +364,6 @@ handle_call({IMSI, MSC}, _From, St) ->
 %% @see terminate/2
 %% @end
 
-%% @private
-%% @spec handle_cast(Req, List) -> Result
-%%    Req = {2, 1, IMSI, LAI, MSC} |
-%%          {2, 2, IMSI, LAI, MSC} |
-%%          {6, 2, IMSI, idle}
-%%    IMSI = atom()
-%%    LAI = atom()
-%%    MSC = atom()
-%%    Result = {noreply, NewSt} |
-%%             {stop, Reason, NewSt}
-%%    NewSt = term()
-%%    Timeout = int() | infinity
-%%    Reason = normal | term()
-%%
-%% @doc Handling cast messages.
-%%
-%% <ul>
-%%   <li>On <u>{stop, Reason, NewSt}</u> {@link terminate/2} is
-%%   called.</li>
-%% </ul>
-%%
-%% @see terminate/2
-%% @end
 handle_cast({2, 1, IMSI, LAI, MSC}, List) ->
     VLR=msc_db:get_VLR(MSC),
     create_record(IMSI,LAI,MSC,VLR),
@@ -325,6 +417,13 @@ handle_cast({6, 2, IMSI, INFO, MSC}, List) ->
     {noreply, List};
 
 handle_cast({3, 1, IMSI, Bno, MSC}, List) ->
+
+%% ********************* update MS-A to be active ****************************
+    msc_db:update_status(IMSI),
+    ets:new(bno, [named_table, protected, set, {keypos, 1}]),
+    ets:insert(bno, {val, Bno}),
+%% ***************************************************************************
+
     MSISDN = msc_db:get_MSISDN(IMSI),
     Sub_MSISDN = string:substr(atom_to_list(MSISDN),1, 4),
     io:format("~n~n IMSI of A no is ~p~n",[IMSI]), 
@@ -343,20 +442,37 @@ handle_cast({3, 1, IMSI, Bno, MSC}, List) ->
     hlr:send_routing_info(Bno, SPC, GT),
     {noreply, List};	 
 
-handle_cast({6,7,MSRN,MSC}, List) ->
- Another_MSC = msc_db:get_msc_name({MSRN, msrn}),
+handle_cast({6, 7, MSRN, MSC}, List) ->
+
+    %SUBMSRN = string:substr(atom_to_list(MSRN),1, 6),
+    %SPC2 = msc_db:get_MSRN_SPC(MSRN),
+    %io:format("SUBMSRN===== ~P ~n~n",[SUBMSRN]),
+
+    SPC2 = spc2,
+    
+%%*************************
+    ets:new(msc_2, [named_table, protected, set, {keypos, 1}]),
+    ets:insert(msc_2, {val, SPC2}),
+%%*************************
 
     Mscname = string:concat("MSC ",atom_to_list(MSC)),        
-    Msg1= string:concat(Mscname,": send to another MSC which name is "),
-    Msg2 = string:concat(Msg1,atom_to_list(Another_MSC)),    
+    Msg1= string:concat(Mscname,": send to another MSC which SPC is "),
+    Msg2 = string:concat(Msg1,atom_to_list(SPC2)),    
     io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
     request_handler:erlang_send(list_to_atom(Msg2)),
 
     [{_, Ano}] = ets:lookup(my_imsi, val), 
-    msc_app:send_IAM({5, 1, Ano, MSRN},Another_MSC),
+    GT = msc_db:get_GT_MSC(MSC),
+
+    msc_app:send_IAM({5, 1, Ano, MSRN},SPC2,GT),
     {noreply, List};
 
-handle_cast({5, 1, Ano, MSRN, MSC}, List) ->
+handle_cast({5, 1, Ano, MSRN, MSC, GT}, List) ->
+
+    ets:new(my_gt, [named_table, protected, set, {keypos, 1}]),
+    ets:insert(my_gt, {val, GT}), % this GT for msc1 ?
+    io:format("~n~nGT in hadle cast ~p~n~n", [GT]),
+
     Mscname = string:concat("MSC ",atom_to_list(MSC)),        
     Msg1= string:concat(Mscname,": send to MS Ano is "),
     Msg2 = string:concat(Msg1,atom_to_list(Ano)),    
@@ -366,8 +482,104 @@ handle_cast({5, 1, Ano, MSRN, MSC}, List) ->
     IMSI = msc_db:get_IMSI_MSRN(MSRN),
     io:format("IMSI of MSRN ~p~n", [IMSI]),
     ms_app:receiving_setup(IMSI, Ano),
-    {noreply, List}.    
+    {noreply, List};
 
+handle_cast({1, 5, IMSI, MSC}, List) ->
+   
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": update status to be active of IMSI "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    _R = msc_db:update_status(IMSI),
+    
+    [{_, GT}] = ets:lookup(my_gt, val), 
+    SPC = msc_db:get_SPC_GT(GT),
+    
+    [{_, Ano}] = ets:lookup(my_imsi, val),
+
+    msc_app:send_ACM({5,2,Ano,SPC}),
+
+    {noreply, List}; 
+   
+handle_cast({5, 2, Ano, _MSC},List) ->
+    
+    IMSI = msc_db:get_IMSI_from_no(Ano),
+     ms_app:receiving_alert(IMSI),
+    
+    {noreply, List}; 
+
+handle_cast({1, 6, _IMSI, _MSC},List) ->
+    
+    [{_, GT}] = ets:lookup(my_gt, val), 
+    SPC = msc_db:get_SPC_GT(GT),
+    [{_, Ano}] = ets:lookup(my_imsi, val),
+    msc_app:send_ANM({5,3,Ano,SPC}),
+    {noreply, List};
+   
+handle_cast({5, 3, Ano, _MSC},List) ->
+    IMSI = msc_db:get_IMSI_from_no(Ano),
+     ms_app:receiving_answer(IMSI),   
+    _R = msc_db:update_status(IMSI),
+
+    {noreply, List};
+
+%% *************************** End Call **********************
+handle_cast({1, 7, _IMSI, _MSC}, List) ->
+
+    [{_, SPC2}] = ets:lookup(msc_2, val), 
+
+    msc_app:isup_rel({5, 4, SPC2}), % msc1 send ISUP REL msg to msc2
+
+    {noreply, List};
+
+handle_cast({5, 4, _MSC}, List) -> % at msc2 (msc sned ISUP RLC to msc1)
+    
+    [{_, GT}] = ets:lookup(my_gt, val), 
+    SPC = msc_db:get_SPC_GT(GT), %SPC for msc1
+    msc_app:isup_rlc({5, 5, SPC}),	
+
+%% ************ ask if it allowed to send Bno only to ms_app
+	[{_, Bno}] = ets:lookup(bno, val),	
+	%ms_app:send_disconnect(Bno),
+
+
+    {noreply, List};
+
+handle_cast({5, 5, _MSC}, List) ->
+    [{_, Ano}] = ets:lookup(my_imsi, val),
+    _IMSI = msc_db:get_IMSI_from_no(Ano),
+    
+    %ms_app:release_msg(IMSI), % send to Ano 
+    
+{noreply, List};
+
+handle_cast({5, 6, IMSI, _LAI, MSC}, List) ->
+
+    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": update status to be idle of Ano with IMSI "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+    
+    msc_db:update_subscriber_info(IMSI, update_idle), % set status to MS 1 to be idle
+    {noreply, List};
+
+handle_cast({5, 7, IMSI, _LAI, MSC}, List) ->% to msc2
+
+Mscname = string:concat("MSC ",atom_to_list(MSC)),        
+    Msg1= string:concat(Mscname,": update status to be idle of Bno with IMSI "),
+    Msg2 = string:concat(Msg1,atom_to_list(IMSI)),    
+    io:format("MSg ~p~n ",[list_to_atom(Msg2)]),
+    request_handler:erlang_send(list_to_atom(Msg2)),
+	msc_db:update_subscriber_info(IMSI, update_idle), % set status to MS 2 to be idle
+MSRN = msc_db:get_MSRN_IMSI(IMSI),
+msc_db:release_MSRN(IMSI),
+msc_db:reset_MSRN(MSRN),
+	%ms_app:release_complete(IMSI),
+    {noreply, List}.
+
+%% ***********************************************************
 %% @private
 %% @spec handle_info(Info, St) -> Result
 %%    Info = timeout | term()
@@ -504,17 +716,3 @@ gt_translation(Sub_MGT_DB, MSC)->
     request_handler:erlang_send(list_to_atom(Msg200)),
     io:format("at gt translation ~p~n", [SPC]),
     SPC.
-
-
-insert_sub({6,2, IMSI, INFO, MSC})->
-    io:format("~n vvvvvvvv"),
-    msc_db:update_subscriber_info({IMSI, INFO}, idle),
-
-    Mscname = string:concat("MSC ",atom_to_list(MSC)),        
-    Msg1= string:concat(Mscname,": Received subsceiber info from HLR and update its state to idle "),
-    io:format("MSg ~p~n ",[list_to_atom(Msg1)]),
-    request_handler:erlang_send(list_to_atom(Msg1)),
-    ok.
-
-
-    

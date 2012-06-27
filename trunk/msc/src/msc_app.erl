@@ -16,7 +16,7 @@
 %%% AB. All Rights Reserved.
 
 %%% @doc 
-%%% This application has all the APIs to communicate with the %%% MSC. 
+%%% This application has all the APIs to communicate with the MSC. 
 %%% @copyright 2012 ITI Egypt.
 %%% @author Esraa Adel <esraa.elmelegy@hotmail.com>
 %%% @author Sherif Ashraf <sherif_ashraf89@hotmail.com>
@@ -32,7 +32,8 @@
 -export([start/2, stop/1]).
 
 %%% External exports
--export([ start_msc/1, location_update_request/1, insert_subscriber_data/3, check_msc_spc/2, call_setup/1]).
+-export([ start_msc/1, location_update_request/1, insert_subscriber_data/3, check_msc_spc/2, call_setup/1,
+          receive_disconnect/1, isup_rel/1, isup_rlc/1, release_complete/1, release_msg/1]).
 
 -compile([export_all]).
 %%% Macros
@@ -154,11 +155,28 @@ send_IAM({5, 1, Ano, MSRN},SPC,GT)->
 receiving_alert({1,5,IMSI,LAI}) ->
     msc_2nd_sup:receive_alert({1, 5, IMSI, LAI}).
 
-send_ACM({5,2,Ano,SPC})->
+send_ACM({5, 2, Ano, SPC})->
     msc_2nd_sup:send_ACM({5,2,Ano,SPC}).
 
-receive_connect({1,6,IMSI,LAI})->
+receive_connect({1, 6, IMSI, LAI})->
     msc_2nd_sup:receive_connect({1,6,IMSI,LAI}).
  
-send_ANM({5,3,Ano,SPC})->
+send_ANM({5, 3, Ano, SPC})->
     msc_2nd_sup:receive_ANM({5,3,Ano,SPC}).
+
+%%--------------- End Call Scenario -----------------------------------------
+receive_disconnect({1, 7, IMSI, LAI})->
+    msc_2nd_sup:receive_disconnect({1, 7, IMSI, LAI}).
+
+isup_rel({5, 4, SPC})->
+	msc_2nd_sup:isup_rel({5, 4, SPC}).
+
+isup_rlc({5, 5, SPC})-> % spc of msc 1
+	msc_2nd_sup:isup_rlc({5, 5, SPC}).
+
+release_complete({5, 6, IMSI, LAI})-> %at msc1
+	msc_2nd_sup:release_complete({5, 6, IMSI, LAI}).
+
+release_msg({5, 7, IMSI, LAI})-> % to msc2
+	msc_2nd_sup:release_msg({5, 7, IMSI, LAI}).
+	

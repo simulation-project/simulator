@@ -12,5 +12,11 @@ ms_app:change_state({'602020000000011',turn_on_idle}).
 ms_app:call_setup({2,1,'602020000000011', lai1,'010001233333'}).
 
 
+msc_app:receive_disconnect({1, 7, '602020000000011', lai1}).
+
+msc_app:release_complete({5, 6, '602020000000011', lai1}).
+
+msc_app:release_msg({5, 7, '60202124555567',lai2}).
+
 don't forget MSRN number in hlr.erl --> set to first free number in database
 

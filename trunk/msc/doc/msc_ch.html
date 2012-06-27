@@ -19,18 +19,31 @@
 <h2><a name="description">Description</a></h2>This is gen_server module that responsible for handling MSCs operations.
   
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#check_msc_spc-3">check_msc_spc/3</a></td><td>This function is called to check that both the SPC and GT
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#call_setup-2">call_setup/2</a></td><td>This function is called when the MS make a call to another MS in MSC.</td></tr>
+<tr><td valign="top"><a href="#check_msc_spc-3">check_msc_spc/3</a></td><td>This function is called to check that both the SPC and GT
   belong to a configured MSC.</td></tr>
-<tr><td valign="top"><a href="#imsi_attach-1">imsi_attach/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#insert_subscriber_data-3">insert_subscriber_data/3</a></td><td>This function is called when the HLR sends the ISD message
   to the MSC to insert the subsceiber data in the VLR.</td></tr>
-<tr><td valign="top"><a href="#location_update_request-2">location_update_request/2</a></td><td>This function is called when the mobile station is turned on or moves to a new
-  location area or make periodic update to update it's location and state in the VLR and HLR.</td></tr>
+<tr><td valign="top"><a href="#location_update_request-2">location_update_request/2</a></td><td>This function is called when the mobile station is turned on, moves to a new
+  location area, make periodic update or turned off, to update it's location and state in the VLR and HLR.</td></tr>
+<tr><td valign="top"><a href="#receive_ACM-1">receive_ACM/1</a></td><td>This function is called.</td></tr>
+<tr><td valign="top"><a href="#receive_ANM-1">receive_ANM/1</a></td><td>This function is called.</td></tr>
+<tr><td valign="top"><a href="#receive_PRN-1">receive_PRN/1</a></td><td>This function is called.</td></tr>
+<tr><td valign="top"><a href="#receive_alert-2">receive_alert/2</a></td><td>This function is called.</td></tr>
+<tr><td valign="top"><a href="#receive_connect-2">receive_connect/2</a></td><td>This function is called.</td></tr>
+<tr><td valign="top"><a href="#result_SRI-1">result_SRI/1</a></td><td>This function is called.</td></tr>
+<tr><td valign="top"><a href="#send_IAM-3">send_IAM/3</a></td><td>This function is called.</td></tr>
 <tr><td valign="top"><a href="#start_link-1">start_link/1</a></td><td>Starts new MSC server.</td></tr>
 <tr><td valign="top"><a href="#stop-1">stop/1</a></td><td>Stops the application.</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="call_setup-2">call_setup/2</a></h3>
+<div class="spec">
+<p><tt>call_setup(X1::Parameter, MSC) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {2, 1, IMSI, Bno}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>Bno = atom()</tt></li></ul></p>
+</div><p>This function is called when the MS make a call to another MS in MSC.</p>
 
 <h3 class="function"><a name="check_msc_spc-3">check_msc_spc/3</a></h3>
 <div class="spec">
@@ -39,14 +52,9 @@
 </div><p>This function is called to check that both the SPC and GT
   belong to a configured MSC.</p>
 
-<h3 class="function"><a name="imsi_attach-1">imsi_attach/1</a></h3>
-<div class="spec">
-<p><tt>imsi_attach(X1) -&gt; any()</tt></p>
-</div>
-
 <h3 class="function"><a name="insert_subscriber_data-3">insert_subscriber_data/3</a></h3>
 <div class="spec">
-<p><tt>insert_subscriber_data(MSC::IMSI, IMSI::INFO, X3::SPC) -&gt; Result</tt>
+<p><tt>insert_subscriber_data(MSC::IMSI, IMSI::INFO, INFO::SPC) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>SPC = atom()</tt></li><li><tt>INFO = atom()</tt></li></ul></p>
 </div><p>This function is called when the HLR sends the ISD message
   to the MSC to insert the subsceiber data in the VLR.</p>
@@ -54,9 +62,51 @@
 <h3 class="function"><a name="location_update_request-2">location_update_request/2</a></h3>
 <div class="spec">
 <p><tt>location_update_request(X1::Parameter, MSC) -&gt; Result</tt>
-<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {2, 1, IMSI, LAI} | {2, 2, IMSI, LAI} | {2, 3, IMSI, LAI}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
-</div><p>This function is called when the mobile station is turned on or moves to a new
-  location area or make periodic update to update it's location and state in the VLR and HLR.</p>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {2, 1, IMSI, LAI} | {2, 2, IMSI, LAI} | {2, 3, IMSI, LAI} | {2, 4, IMSI, LAI}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called when the mobile station is turned on, moves to a new
+  location area, make periodic update or turned off, to update it's location and state in the VLR and HLR.</p>
+
+<h3 class="function"><a name="receive_ACM-1">receive_ACM/1</a></h3>
+<div class="spec">
+<p><tt>receive_ACM(X1::Parameter) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {5, 2, Ano, MSC}</tt></li><li><tt>Ano = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
+
+<h3 class="function"><a name="receive_ANM-1">receive_ANM/1</a></h3>
+<div class="spec">
+<p><tt>receive_ANM(X1::Parameter) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {5, 3, Ano, MSC}</tt></li><li><tt>Ano = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
+
+<h3 class="function"><a name="receive_PRN-1">receive_PRN/1</a></h3>
+<div class="spec">
+<p><tt>receive_PRN(X1::Parameter) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {6, 5, IMSI, MSC}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
+
+<h3 class="function"><a name="receive_alert-2">receive_alert/2</a></h3>
+<div class="spec">
+<p><tt>receive_alert(X1::Parameter, MSC) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {1, 5, IMSI}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
+
+<h3 class="function"><a name="receive_connect-2">receive_connect/2</a></h3>
+<div class="spec">
+<p><tt>receive_connect(X1::Parameter, MSC) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {1, 6, IMSI}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
+
+<h3 class="function"><a name="result_SRI-1">result_SRI/1</a></h3>
+<div class="spec">
+<p><tt>result_SRI(X1::Parameter) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {6, 7, MSRN, MSC}</tt></li><li><tt>MSRN = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
+
+<h3 class="function"><a name="send_IAM-3">send_IAM/3</a></h3>
+<div class="spec">
+<p><tt>send_IAM(X1::Parameter, MSC, GT) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = ok</tt></li><li><tt>Parameter = {5, 1, Ano, MSRN}</tt></li><li><tt>MSRN = atom()</tt></li><li><tt>Ano = atom()</tt></li><li><tt>MSC = atom()</tt></li><li><tt>GT = atom()</tt></li></ul></p>
+</div><p>This function is called</p>
 
 <h3 class="function"><a name="start_link-1">start_link/1</a></h3>
 <div class="spec">
@@ -74,6 +124,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jun 21 2012, 09:56:13.</i></p>
+<p><i>Generated by EDoc, Jun 25 2012, 20:46:08.</i></p>
 </body>
 </html>

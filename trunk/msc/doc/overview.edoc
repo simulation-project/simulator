@@ -1,7 +1,7 @@
 Overview page
 
 @copyright 2012 Ericsson Egypt Ltd.
-@author Ahmed Samy <ahm.sam@live.com>
+@author Ahmed Samy <ahm.sam@live.com> Esraa Adel <esraa.elmelegy@hotmail.com> Sherif Ashraf <sherif_ashraf89@hotmail.com>
         [http://www.iti.gov.eg]
 
 @doc Application Name
@@ -12,7 +12,6 @@ Overview page
 
 <ol>
   <li>{@section Introduction}</li>
-  <li>{@section Motivation}</li>
   <li>{@section Architecture}</li>
   <li>{@section Usage}
     <ol>
@@ -26,15 +25,13 @@ Overview page
     </ol>
   </li>
   <li>{@section Contributors}</li>
+
 </ol>
 
 === Introduction ===
 
 <p>This is the section related to our MSC application and configutration</p>
 
-=== Motivation ===
-
-<p></p>
 
 === Usage ===
 
@@ -79,6 +76,7 @@ sample configuration file is shown below:</p>
 === Contributors ===
 
 <ul>
-  <li>Information Technology Institute</li>
-  <li>Ericsson</li>
+  <li>Esraa Adel Mohamed</li>
+  <li>Sherif Ashraf</li>
+  <li>Ahmed Samy</li>
 </ul>

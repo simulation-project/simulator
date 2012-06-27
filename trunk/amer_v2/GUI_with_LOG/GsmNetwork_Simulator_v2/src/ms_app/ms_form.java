@@ -26,9 +26,7 @@ public class ms_form extends JDialog {
     sendtoerl serl;
     String imsi;
     boolean mson = false;
-    
     private MS mobileStation;   //  This is Mobile Station Object
-    
     private JFrame parent = null;
     private mxGraph graph;
     private mxCell cell;
@@ -37,13 +35,9 @@ public class ms_form extends JDialog {
     static public Vector<String> lai_vect = new Vector<String>();
     static public Vector<String> used_imsi_vect = new Vector<String>();
     static public Vector<String> imsi_vect = new Vector<String>();
-
-    
     /**
      * Creates new form ms_form
      */
-    
-    
     public ms_form(JFrame parent, BasicGraphEditor editor, Object cell, mxGraph graph, mxCell agentsCell) {
         super(parent);
 

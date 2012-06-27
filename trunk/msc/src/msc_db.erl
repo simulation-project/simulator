@@ -163,7 +163,23 @@ update_status(IMSI)->
     {ok, _} = pgsql:equery(C, "update sub_info set status='active' where imsi=$1", [IMSI]),
     io:format("msc_db:update status to active: done  ~n").
 
+%% *******************************
+get_MSRN_IMSI(IMSI)->
+	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select msrn from sub_info where imsi=$1 ", [IMSI]),
+    I = show(Rows),
+    I.
 
+release_MSRN(IMSI)->
+	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info set msrn='' where imsi=$1", [IMSI]),
+    io:format("msc_db:reset MSRN to empty to a certain subscriber: done  ~n").
+
+reset_MSRN(MSRN)->
+	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update msrn set state='free' where msrn_no=$1", [MSRN]),
+    io:format("msc_db:reset MSRN to be free: done  ~n").
+%% *******************************
 
 
 update_MSRN_sub(MSRN, IMSI)->

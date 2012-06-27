@@ -217,5 +217,170 @@ public class DatabaseHandler {
         }
         return check;
     }
+    
+    public boolean insert_Bno_analysis(Hashtable gt_trans, String msc_name, String vlr)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        boolean check = false;
+        java.sql.Statement s = null;
+        try {
+            s = con.createStatement();
+            Enumeration keys = gt_trans.keys();
+            while (keys.hasMoreElements()) 
+            {
+                String key = (String) keys.nextElement();
+                String value = (String) gt_trans.get(key);
+                int v = s.executeUpdate("INSERT INTO bno_analysis VALUES ('"+key+"','"+value+"', '"+msc_name+"', '"+vlr+"')");
+            }
+
+        check = true;
+        } catch (SQLException ex) {
+            System.out.println("not inserted");
+            ex.printStackTrace();
+        }
+        return check;
+    }
+    
+    public Hashtable get_Bno_analysis(String name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select number_series, spc from bno_analysis where msc_name= '"+name+"' " );
+            while(rs.next())
+            {
+                String num = rs.getString("number_series");
+                String spc = rs.getString("spc");
+
+                gt_trans.put(num, spc);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return gt_trans;
+    }
+
+    public Hashtable get_gt_translation(String name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select number_series, spc from gt_translation where msc_name= '"+name+"' " );
+            while(rs.next())
+            {
+                String num = rs.getString("number_series");
+                String spc = rs.getString("spc");
+
+                gt_trans.put(num, spc);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return gt_trans;
+    }
+
+
+    public Hashtable get_lai(String name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select msc_name, lai from msc_lai where msc_name= '"+name+"' " );
+            while(rs.next())
+            {
+                String num = rs.getString("msc_name");
+                String spc = rs.getString("lai");
+
+                gt_trans.put(num, spc);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return gt_trans;
+    }
+
+    
+    public boolean check_msc_msrn(String msrn)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        boolean check = false;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select msrn_no from msrn where msrn_no ='"+msrn+"'" );
+            while(rs.next())
+            {
+                check = true;
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return check;
+    }
+
+    public String get_msrn_no(){
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        String number = null;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select max(msrn_no) from msrn ");
+            while(rs.next())
+            {
+                number = rs.getString(1);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return number;
+    }
+
+    public boolean insert_msrn(int msrn,int range,String msc)
+    {
+        //int msrn_no = Integer.parseInt(msrn);
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        boolean check = false;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            for (int i=0 ; i<range ; i++)
+            {
+                System.out.println("inside msrn_forrrrrrrrr");
+                st.executeUpdate("insert into msrn (msrn_no,msc_name) values('2010"+(msrn+i)+"','"+msc+"')");
+            }
+//            while(rs.next())
+//            {
+//                check = true;
+//            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return check;
+    }
 }
 

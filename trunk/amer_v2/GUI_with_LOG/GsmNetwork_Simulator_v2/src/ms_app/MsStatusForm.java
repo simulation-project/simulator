@@ -34,13 +34,14 @@ public class MsStatusForm extends javax.swing.JFrame {
     /** Creates new form MsStatusForm */
     boolean bool = false;
     sendtoerl serl;
-    public static String imsi,lai;
+    public String imsi,lai;
     
     public MsStatusForm(String imsiString ,String laiString) {
         initComponents();
         jTextField1.setInputVerifier(new TextFieldVerifier());
         imsi = imsiString;
         lai = laiString;
+        this.setTitle(imsi);
     }
 
     /** This method is called from within the constructor to
@@ -399,7 +400,7 @@ public class MsStatusForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    public static javax.swing.JLabel jLabel3;
+    public javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables

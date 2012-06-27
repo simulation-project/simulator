@@ -17,10 +17,10 @@ public class HLR implements Serializable {
 
     private static final long serialVersionUID = 1111111111747448484L;
     private String hlrName ="HLR1";
-    private String niSpc;
-    private String Gt;
-    private long startRange=0;
-    private long endRange=0;
+    private String niSpc="";
+    private String Gt="";
+    private String startRange="0";
+    private String endRange="0";
     private String Action = null;
     private String propertyOne;
     private Object mscEdge;
@@ -49,6 +49,7 @@ public class HLR implements Serializable {
 
     public void setHlrName(String hlrName) {
         this.hlrName = hlrName;
+        System.out.println("hlr class "+hlrName);
     }
 
     public void setNiSpc(String n)
@@ -71,22 +72,22 @@ public class HLR implements Serializable {
         return  this.Gt;
     }
 
-    public void setStartRange(long s)
+    public void setStartRange(String s)
     {
         this.startRange=s;
     }
 
-    public long getStartRange()
+    public String getStartRange()
     {
         return  this.startRange;
     }
 
-    public void setendRange(long e)
+    public void setendRange(String e)
     {
         this.endRange=e;
     }
 
-    public long getendRange()
+    public String getendRange()
     {
         return  this.endRange;
     }

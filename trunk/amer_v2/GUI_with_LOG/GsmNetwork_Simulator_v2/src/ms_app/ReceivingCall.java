@@ -15,8 +15,8 @@ public class ReceivingCall extends javax.swing.JFrame {
     /**
      * Creates new form ReceivingCall
      */
-    public static String imsi;
-    public static String lai;
+    public  String imsi;
+    public  String lai;
     public ReceivingCall(String imsisString, String laiString) {
         initComponents();
         imsi = imsisString;
@@ -143,6 +143,6 @@ public class ReceivingCall extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    public static javax.swing.JLabel jLabel2;
+    public javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

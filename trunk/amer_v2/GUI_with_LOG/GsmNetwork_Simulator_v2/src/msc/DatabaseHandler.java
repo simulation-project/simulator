@@ -194,6 +194,44 @@ public class DatabaseHandler {
         return check;
     }
     
+    public boolean delete_gt_translation(String msc_name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        boolean check = false;
+        java.sql.Statement s = null;
+        try {
+            s = con.createStatement();
+            int v = s.executeUpdate("delete from gt_translation where msc_name = '"+msc_name+"'");
+            
+
+        check = true;
+        } catch (SQLException ex) {
+            System.out.println("not deleted");
+            ex.printStackTrace();
+        }
+        return check;
+    }
+    
+    public boolean delete_Bno_analysis(String msc_name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        boolean check = false;
+        java.sql.Statement s = null;
+        try {
+            s = con.createStatement();
+            int v = s.executeUpdate("delete from bno_analysis where msc_name = '"+msc_name+"'");
+            
+
+        check = true;
+        } catch (SQLException ex) {
+            System.out.println("not deleted");
+            ex.printStackTrace();
+        }
+        return check;
+    }
+    
     public boolean insert_gt_translation(Hashtable gt_trans, String msc_name, String vlr)
     {
         Connection con = null;
@@ -217,6 +255,80 @@ public class DatabaseHandler {
         }
         return check;
     }
+    
+    public boolean insert_Bno_analysis(Hashtable gt_trans, String msc_name, String vlr)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        boolean check = false;
+        java.sql.Statement s = null;
+        try {
+            s = con.createStatement();
+            Enumeration keys = gt_trans.keys();
+            while (keys.hasMoreElements()) 
+            {
+                String key = (String) keys.nextElement();
+                String value = (String) gt_trans.get(key);
+                int v = s.executeUpdate("INSERT INTO bno_analysis VALUES ('"+key+"','"+value+"', '"+msc_name+"', '"+vlr+"')");
+            }
+
+        check = true;
+        } catch (SQLException ex) {
+            System.out.println("not inserted");
+            ex.printStackTrace();
+        }
+        return check;
+    }
+    
+    public Hashtable get_Bno_analysis(String name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select number_series, spc from bno_analysis where msc_name= '"+name+"' " );
+            while(rs.next())
+            {
+                String num = rs.getString("number_series");
+                String spc = rs.getString("spc");
+
+                gt_trans.put(num, spc);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return gt_trans;
+    }
+
+    public Hashtable get_lai(String name)
+    {
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        Hashtable <String, String> gt_trans = new Hashtable<String, String>();
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery("select msc_name, lai from msc_lai where msc_name= '"+name+"' " );
+            while(rs.next())
+            {
+                String msc_name = rs.getString("msc_name");
+                String lai = rs.getString("lai");
+
+                gt_trans.put(lai, msc_name);
+            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        System.out.println("Size of table "+gt_trans.size());
+        return gt_trans;
+    }
+
 
     public Hashtable get_gt_translation(String name)
     {
@@ -279,14 +391,12 @@ public class DatabaseHandler {
             }
         }
          catch (SQLException ex) {
-          // System.out.println("exception update availability");
-        
-         return "901000000000";
-         }
+           System.out.println("exception update availability");
+        }
         return number;
     }
 
-    public boolean insert_msrn(int msrn,int range,String msc)
+    public boolean insert_msrn(long msrn,int range,String msc)
     {
         //int msrn_no = Integer.parseInt(msrn);
         Connection con = null;
@@ -296,10 +406,11 @@ public class DatabaseHandler {
         ResultSet rs = null;
         try {
             st = con.createStatement();
-            for (int i=0 ; i<range ; i++)
+            for (int i=1 ; i<=range ; i++)
             {
                 System.out.println("inside msrn_forrrrrrrrr");
-                st.executeUpdate("insert into msrn (msrn_no,msc_name) values('2010"+(msrn+i)+"','"+msc+"')");
+                st.executeUpdate("insert into msrn (msrn_no,msc_name) values('"+(msrn+i)+"','"+msc+"')");
+                check = true;
             }
 //            while(rs.next())
 //            {
@@ -311,5 +422,30 @@ public class DatabaseHandler {
         }
         return check;
     }
-}
 
+    public boolean insert_first_msrn(String msc)
+    {
+        //int msrn_no = Integer.parseInt(msrn);
+        Connection con = null;
+        con = DBConnection.getConnection();
+        java.sql.Statement st = null;
+        boolean check = false;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            
+                //System.out.println("inside msrn_forrrrrrrrr");
+                st.executeUpdate("insert into msrn (msrn_no,msc_name) values('201000000000','"+msc+"')");
+                check = true;
+//            while(rs.next())
+//            {
+//                check = true;
+//            }
+        }
+         catch (SQLException ex) {
+           System.out.println("exception update availability");
+        }
+        return check;
+    }
+
+}

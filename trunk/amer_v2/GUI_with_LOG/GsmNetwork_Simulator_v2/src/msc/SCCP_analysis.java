@@ -5,21 +5,22 @@
 package msc;
 
 import java.util.*;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author sony
  */
-public class GT_translation extends javax.swing.JFrame {
+public class SCCP_analysis extends javax.swing.JFrame {
 
     String msc_name;
     String vlr;
 
     int count = 0;
     /**
-     * Creates new form GT_translation
+     * Creates new form SCCP_analysis
      */
-    public GT_translation(String msc_name, String vlr) {
+    public SCCP_analysis(String msc_name, String vlr) {
         initComponents();
         this.msc_name = msc_name;
         this.vlr = vlr;
@@ -133,15 +134,26 @@ public class GT_translation extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Hashtable<String, String> gt_trans = new Hashtable<String, String>();      
-        int j = 0;
-        while(jTable1.getValueAt(count, 0) != null)
-        {
-            gt_trans.put(jTable1.getValueAt(count, j).toString(), jTable1.getValueAt(count, j+1).toString());
-            count++;
-        }
         
         DatabaseHandler conn = new DatabaseHandler();
+        conn.delete_gt_translation(msc_name);
+        
+        Hashtable<String, String> gt_trans = new Hashtable<String, String>();      
+        int j = 0;
+        int i = 0;
+        while(jTable1.getValueAt(i, 0) != null)
+        {
+            try{
+            gt_trans.put(jTable1.getValueAt(i, j).toString(), jTable1.getValueAt(i, j+1).toString());
+            i++;
+            }
+            catch (Exception e ){
+                JOptionPane.showMessageDialog(this, "Please press tab ");
+                return;
+            }
+        }
+        
+        //DatabaseHandler conn = new DatabaseHandler();
         boolean check = conn.insert_gt_translation(gt_trans, msc_name, vlr);
         System.out.println(check+msc_name+vlr);
         
@@ -176,13 +188,13 @@ public class GT_translation extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GT_translation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SCCP_analysis.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GT_translation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SCCP_analysis.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GT_translation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SCCP_analysis.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GT_translation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SCCP_analysis.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -192,7 +204,7 @@ public class GT_translation extends javax.swing.JFrame {
         /*java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                //new GT_translation().setVisible(true);
+                //new SCCP_analysis().setVisible(true);
             }
         });
     }*/

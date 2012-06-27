@@ -26,10 +26,8 @@ public class MobileStationPopUp extends JPopupMenu
 				"/com/iti/telecom/images/undo.gif"));
 		addSeparator();
 
-		add(editor.bind(mxResources.get("cut"), TransferHandler
-						.getCutAction(),
-						"/com/iti/telecom/images/cut.gif"))
-				.setEnabled(selected);
+		    add(editor.bind(mxResources.get("delete"), new EditorActions.DeleteAction(),
+                       "/com/iti/telecom/images/cut.gif")).setEnabled(selected);
 		add(editor.bind(mxResources.get("copy"), TransferHandler
 						.getCopyAction(),
 						"/com/iti/telecom/images/copy.gif"))

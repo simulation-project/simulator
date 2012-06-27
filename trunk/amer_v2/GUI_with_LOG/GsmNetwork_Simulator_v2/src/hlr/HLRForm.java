@@ -28,16 +28,19 @@ public class HLRForm extends javax.swing.JFrame {
     private IMSIForm iForm;
     private long imsiRangeE,imsiRangeS;
     private String hlrName,Nispc,Gt;
+    com.iti.telecom.beans.HLR hlr;
     
-    public HLRForm() {
+    public HLRForm(com.iti.telecom.beans.HLR h) {
         
         iForm=new IMSIForm();
         initComponents();
+        hlr=h;
        // setVerifiers();
         
         
         db=new DBhandler();
         db.startConnection();
+        getHlrValues();
         System.out.println("end hlr form constructor ");
     }
 
@@ -53,7 +56,6 @@ public class HLRForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         nameTf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         NiTf = new javax.swing.JTextField();
         SpcTf = new javax.swing.JTextField();
@@ -76,16 +78,39 @@ public class HLRForm extends javax.swing.JFrame {
                 nameTfActionPerformed(evt);
             }
         });
+        nameTf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                nameTfFocusLost(evt);
+            }
+        });
 
         jLabel2.setText("NI-Spc");
-
-        jLabel3.setText("SPC:");
 
         jLabel4.setText("GT:");
 
         NiTf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NiTfActionPerformed(evt);
+            }
+        });
+        NiTf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                NiTfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                NiTfFocusLost(evt);
+            }
+        });
+
+        SpcTf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SpcTfFocusLost(evt);
+            }
+        });
+
+        GtTf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                GtTfFocusLost(evt);
             }
         });
 
@@ -100,6 +125,18 @@ public class HLRForm extends javax.swing.JFrame {
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
+            }
+        });
+
+        GtTf1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                GtTf1FocusLost(evt);
+            }
+        });
+
+        GtTf2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                GtTf2FocusLost(evt);
             }
         });
 
@@ -131,25 +168,22 @@ public class HLRForm extends javax.swing.JFrame {
                                 .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(1, 1, 1)
+                                .addGap(7, 7, 7)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(GtTf1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(GtTf2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jLabel3)
                     .addComponent(jLabel4))
                 .addGap(20, 20, 20))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(SubmitBtn)
-                .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(SubmitBtn)
+                .addGap(70, 70, 70))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,9 +198,7 @@ public class HLRForm extends javax.swing.JFrame {
                     .addComponent(NiTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SpcTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(GtTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -175,10 +207,10 @@ public class HLRForm extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(46, 46, 46)
-                .addComponent(SubmitBtn)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(SubmitBtn))
+                .addGap(88, 88, 88))
         );
 
         pack();
@@ -209,7 +241,7 @@ public class HLRForm extends javax.swing.JFrame {
                 try {
                     hlrName=nameTf.getText();
                     StartFrame.setHlrName(hlrName);
-                    createDB(hlrName);
+                    createDB(hlrName,Nispc,Gt);
                 } catch (SQLException ex) {
                     Logger.getLogger(HLRForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -240,10 +272,53 @@ public class HLRForm extends javax.swing.JFrame {
         iForm.setVisible(true);
         iForm.setSize(300,300);
     }//GEN-LAST:event_jButton1MouseClicked
-    private void createDB(String name) throws SQLException
+
+    private void nameTfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameTfFocusLost
+        // TODO add your handling code here:
+        if(!nameTf.getText().matches("[A-Z|a-z]([A-za-z0-9])*"))
+            JOptionPane.showMessageDialog(this, "hlr name format is not correct");
+    }//GEN-LAST:event_nameTfFocusLost
+
+    private void NiTfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NiTfFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NiTfFocusGained
+
+    private void NiTfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NiTfFocusLost
+        // TODO add your handling code here:
+        if(!NiTf.getText().matches("[0|2|3]"))
+            JOptionPane.showMessageDialog(this, "ni should be 0,2, or 3");
+    }//GEN-LAST:event_NiTfFocusLost
+
+    private void SpcTfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SpcTfFocusLost
+        // TODO add your handling code here:
+        if(Long.parseLong(SpcTf.getText())<0||Long.parseLong(SpcTf.getText())>16383)
+            JOptionPane.showMessageDialog(this, "spc should be from 0 to 16383");
+    }//GEN-LAST:event_SpcTfFocusLost
+
+    private void GtTfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_GtTfFocusLost
+        // TODO add your handling code here:
+        if(!GtTf.getText().matches("[0-9]{2}"))
+            JOptionPane.showMessageDialog(this, "first field of GT should be 2 digits");
+            
+        
+    }//GEN-LAST:event_GtTfFocusLost
+
+    private void GtTf1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_GtTf1FocusLost
+        // TODO add your handling code here:
+        if(!GtTf1.getText().matches("[0-9]{2}"))
+            JOptionPane.showMessageDialog(this, "second field of GT should be 2 digits");
+    }//GEN-LAST:event_GtTf1FocusLost
+
+    private void GtTf2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_GtTf2FocusLost
+        // TODO add your handling code here:
+        if(!GtTf2.getText().matches("[0-9]{10}"))
+            JOptionPane.showMessageDialog(this, "third field of GT should be 10 digits");
+    }//GEN-LAST:event_GtTf2FocusLost
+    private void createDB(String name,String n,String g) throws SQLException
     {
         System.out.println("range "+iForm.getStart()+"  "+iForm.getEnd());
-        db.createDB(name,iForm.getStart(),iForm.getEnd());
+        db.createDB(name,iForm.getStartStr(),iForm.getEndStr(),n,g);
+        submitData(name,iForm.getStartStr(),iForm.getEndStr(),n,g);
     }
     private void sendToErlang() throws SQLException
     {
@@ -286,38 +361,6 @@ try{
 
     
     }
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(HLRForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(HLRForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(HLRForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(HLRForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /*
-//         * Create and display the form
-//         */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//
-//            public void run() {
-//                new HLRForm().setVisible(true);
-//            }
-//        });
-//    }
 
     public String getHlrName()
     {
@@ -341,7 +384,6 @@ try{
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -349,24 +391,35 @@ try{
     private javax.swing.JTextField nameTf;
     // End of variables declaration//GEN-END:variables
 
-    void setGtTf(String gt) {
-        GtTf.setText(gt);
+    void setGtTf(String gt) {System.out.println("set gttf hlr form "+gt);
+        if(gt.length()>7){
+            GtTf.setText(gt.substring(0,2));
+            GtTf1.setText(gt.substring(2,4));
+            GtTf2.setText(gt.substring(4));
+        }
+        else
+            GtTf.setText(gt);
+        
     }
 
-    void setNispcTf(String niSpc) {
-        NiTf.setText(niSpc);
-        SpcTf.setText(niSpc);
+    void setNispcTf(String niSpc) {System.out.println("set nispctf hlr form "+niSpc);
+        if(niSpc.length()>2){
+            NiTf.setText(niSpc.substring(0,1));
+            SpcTf.setText(niSpc.substring(1));
+        }
+        else
+            NiTf.setText(niSpc);
     }
 
     void setHlrNameTf(String hlrName) {
         nameTf.setText(hlrName);
     }
 
-    void setStartRangeTf(long startRange) {
+    void setStartRangeTf(String startRange) {
         iForm.setStartTf(startRange);
     }
 
-    void setEndRangeTf(long ENDRange) {
+    void setEndRangeTf(String ENDRange) {
         iForm.setEndTf(ENDRange);
     }
 
@@ -397,6 +450,22 @@ try{
             }
         
         return true;
+    }
+
+    private void getHlrValues() {
+        nameTf.setText(hlr.getHlrName());
+        System.out.println("get hlr values gt:"+hlr.getGt());
+        System.out.println("nispc:"+hlr.getNiSpc());
+        //iForm.setEndTf(hlr.getendRange());
+        //iForm.setStartTf(hlr.getStartRange());
+    }
+
+    private void submitData(String name, String startStr, String endStr, String n, String g) {
+        hlr.setHlrName(name);
+        hlr.setStartRange(startStr);
+        hlr.setendRange(endStr);
+        hlr.setNiSpc(n);
+        hlr.setGt(g);
     }
 
     

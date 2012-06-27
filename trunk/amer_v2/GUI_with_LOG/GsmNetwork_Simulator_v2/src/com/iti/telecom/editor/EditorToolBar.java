@@ -22,12 +22,14 @@ import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
 
+/**
+ * 
+ * @author amer
+ */
 public class EditorToolBar extends JToolBar
 {
 
-	/**
-	 * 
-	 */
+	 
 	private static final long serialVersionUID = -8015443128436394471L;
 
 	/**
@@ -43,6 +45,7 @@ public class EditorToolBar extends JToolBar
 	public EditorToolBar(final BasicGraphEditor editor, int orientation)
 	{
 		super(orientation);
+ 
 		setBorder(BorderFactory.createCompoundBorder(BorderFactory
 				.createEmptyBorder(3, 3, 3, 3), getBorder()));
 		setFloatable(false);
@@ -106,6 +109,7 @@ public class EditorToolBar extends JToolBar
 
 		final mxGraphView view = editor.getGraphComponent().getGraph()
 				.getView();
+                
 		final JComboBox zoomCombo = new JComboBox(new Object[] { "400%",
 				"200%", "150%", "100%", "75%", "50%", mxResources.get("page"),
 				mxResources.get("width"), mxResources.get("actualSize") });
@@ -139,13 +143,19 @@ public class EditorToolBar extends JToolBar
 			}
 		};
 
-		// Installs the scale tracker to update the value in the combo box
-		// if the zoom is changed from outside the combo box
+		/**
+                 * 
+                 * Installs the scale tracker to update the value in the combo box
+                 * if the zoom is changed from outside the combo box
+                 * 
+                 */
 		view.getGraph().getView().addListener(mxEvent.SCALE, scaleTracker);
 		view.getGraph().getView().addListener(mxEvent.SCALE_AND_TRANSLATE,
 				scaleTracker);
 
-		// Invokes once to sync with the actual zoom value
+		/**
+                 * Invokes once to sync with the actual zoom value
+                 */
 		scaleTracker.invoke(null, null);
 
 		zoomCombo.addActionListener(new ActionListener()

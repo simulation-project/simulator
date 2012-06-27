@@ -68,19 +68,38 @@ public class EditorMenuBar extends JMenuBar {
         JMenu submenu = null;
 
         // Creates the file menu
-        
-        menu = add(new JMenu(mxResources.get("cell")));
-        populateCellMenu(menu, editor);
-        menu.addSeparator();
 
-        
-  
+       // menu = add(new JMenu(mxResources.get("cell")));
+      //  populateCellMenu(menu, editor);
+       // menu.addSeparator();
+        submenu = add(new JMenu(mxResources.get("zoom")));
+
+        submenu.add(editor.bind("400%", new EditorActions.ScaleAction(4.0D)));
+        submenu.add(editor.bind("200%", new EditorActions.ScaleAction(2.0D)));
+        submenu.add(editor.bind("150%", new EditorActions.ScaleAction(1.5D)));
+        submenu.add(editor.bind("100%", new EditorActions.ScaleAction(1.0D)));
+        submenu.add(editor.bind("75%", new EditorActions.ScaleAction(0.75D)));
+        submenu.add(editor.bind("50%", new EditorActions.ScaleAction(0.5D)));
+
+        submenu.addSeparator();
+     JMenu  submenu2 =  add(new JMenu(mxResources.get("gridtype")));
+
+    submenu2.add(editor.bind(mxResources.get("dashed"), new EditorActions.GridStyleAction(3)));
+
+    submenu2.add(editor.bind(mxResources.get("dot"), new EditorActions.GridStyleAction(0)));
+
+     submenu2.add(editor.bind(mxResources.get("line"), new EditorActions.GridStyleAction(2)));
+
+     submenu2.add(editor.bind(mxResources.get("cross"), new EditorActions.GridStyleAction(1)));
+
+
+
 
     }
 
     /**
-     * Adds menu items to the given shape menu. This is factored out because
-     * the shape menu appears in the menubar and also in the popupmenu.
+     * Adds menu items to the given shape menu. This is factored out because the
+     * shape menu appears in the menubar and also in the popupmenu.
      */
     public static void populateShapeMenu(JMenu menu, BasicGraphEditor editor) {
         menu.add(editor.bind(mxResources.get("home"), mxGraphActions.getHomeAction(),
@@ -433,5 +452,6 @@ public class EditorMenuBar extends JMenuBar {
     public static void populateCellMenu(JMenu menu, BasicGraphEditor editor) {
 
         menu.add(editor.bind(mxResources.get("properties"), new EditorActions.PropertiesAction()));
+        
     }
 }

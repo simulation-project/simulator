@@ -39,7 +39,7 @@ public class StartFrame extends javax.swing.JFrame {
         this.cell = agentsCell;
         System.out.println("before hlr asigning");
         this.hlr = (com.iti.telecom.beans.HLR) cell;
-        hf=new HLRForm();
+        hf=new HLRForm(hlr);
         getCellProperties();
         System.out.println("after hlr assigning");
     }
@@ -56,8 +56,6 @@ public class StartFrame extends javax.swing.JFrame {
         confBtn = new javax.swing.JButton();
         subBtn = new javax.swing.JButton();
         addMscBtn = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         confBtn.setText("edit Configuration ");
         confBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -109,7 +107,7 @@ public class StartFrame extends javax.swing.JFrame {
 
     private void confBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confBtnMouseClicked
             // TODO add your handling code here:
-//        hf=new HLRForm();
+        //hf=new HLRForm(hlr);
         hf.setVisible(true);
         hf.setSize(600,300);
     }//GEN-LAST:event_confBtnMouseClicked
@@ -121,7 +119,7 @@ public class StartFrame extends javax.swing.JFrame {
             SubscriberForm sf=new SubscriberForm();
             sf.setSize(600,300);
             sf.setVisible(true);
-            sf.setInfo(hlrName,startRange,endRane);
+            sf.setInfo(hlr.getHlrName(),hlr.getStartRange(),hlr.getendRange());
         }
         else
             JOptionPane.showMessageDialog(this, "set hlr configuration first");
@@ -163,17 +161,13 @@ screen.setVisible(true);
         hlrName=hf.getHlrName();
     }
     public void getCellProperties() {
-        System.out.println("get cell properties");
         hf.setGtTf(hlr.getGt());
         hf.setNispcTf(hlr.getNiSpc());
-        //hf.stNispcTf(hlr.getNiSpc());
+        //hf.setNispcTf(hlr.getNiSpc());
         hf.setHlrNameTf(hlr.getHlrName());
         StartFrame.setHlrName(hlr.getHlrName());
-        System.out.println("get cell properties 2");
         hf.setStartRangeTf(hlr.getStartRange());
         hf.setEndRangeTf(hlr.getendRange());
-        System.out.println("get cell properties end");
-
     }
     static public void setHlrName(String n)
     {

@@ -5,6 +5,9 @@
 package com.iti.telecom.editor;
 
 import com.iti.telecom.beans.CellPropertise;
+import com.iti.telecom.beans.HLR;
+import com.iti.telecom.beans.MS;
+import com.iti.telecom.beans.MSC;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
@@ -37,8 +40,6 @@ import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
@@ -59,7 +60,6 @@ import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.shape.mxStencilShape;
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxConnectionHandler;
 import com.mxgraph.swing.util.mxGraphActions;
 import com.mxgraph.swing.view.mxCellEditor;
@@ -74,7 +74,6 @@ import com.mxgraph.util.png.mxPngEncodeParam;
 import com.mxgraph.util.png.mxPngImageEncoder;
 import com.mxgraph.util.png.mxPngTextDecoder;
 import com.mxgraph.view.mxGraph;
-import javax.swing.*;
 
 /**
  *
@@ -444,6 +443,7 @@ public class EditorActions
 				if (scale > 0)
 				{
 					graphComponent.zoomTo(scale, graphComponent.isCenterZoom());
+                                   // graphComponent.setSize(800,300);
 				}
 			}
 		}
@@ -471,6 +471,7 @@ public class EditorActions
 				if (format != null)
 				{
 					graphComponent.setPageFormat(format);
+                                       // graphComponent.setSize(500,500);
 					graphComponent.zoomAndCenter();
 				}
 			}
@@ -2377,7 +2378,60 @@ public class EditorActions
      }
     }
 
-
-
-
+ public static class DeleteAction extends AbstractAction
+   {
+     public void actionPerformed(ActionEvent e)
+     {
+       BasicGraphEditor editor = EditorActions.getEditor(e);
+       if (editor != null)
+       {
+         mxGraphComponent graphComponent = editor.getGraphComponent();
+         mxGraph graph = graphComponent.getGraph();
+         mxIGraphModel model = graph.getModel();
+         Object cell = graph.getSelectionCell();
+         Object[] outgoingEdges = graph.getOutgoingEdges(cell);
+         Object resultmol = model.getValue(cell);
+ 
+         if (graph != null) {
+           mxCell comp = (mxCell)graph.getSelectionCell();
+           if (comp != null)
+             if (!comp.isEdge()) {
+              
+                 if(resultmol instanceof  MS)
+                 {
+                     JOptionPane.showMessageDialog(graphComponent, "Delete MS");
+                     MS obj = (MS) resultmol ;
+                     //String name = MS.class.getName();
+                      graph.removeCells(null, false);
+                      if (outgoingEdges != null)
+                      graph.removeCells(outgoingEdges);
+              }
+                  //   graph.removeSelectionCell(comp);
+                     
+                else if(resultmol instanceof  MSC)
+                 {
+                     JOptionPane.showMessageDialog(graphComponent, "MSC");
+                      graph.removeCells(null, false);
+                      if (outgoingEdges != null)
+                      graph.removeCells(outgoingEdges);
+                 }
+                else  if(resultmol instanceof  HLR)
+                 {
+                     JOptionPane.showMessageDialog(graphComponent, "HLR");
+                      graph.removeCells(null, false);
+                      if (outgoingEdges != null)
+                      graph.removeCells(outgoingEdges);
+                 }
+                 else
+                 {
+                 graph.removeCells(null, false);
+                 if (outgoingEdges != null)
+                   graph.removeCells(outgoingEdges);
+                 }
+             }
+         }
+       
+     }
+   }
+ }
 }

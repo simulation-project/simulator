@@ -227,12 +227,16 @@ public class DatabaseHandler {
         try {
             s = con.createStatement();
             
+            s.executeUpdate("delete from msrn ;");
                 s.executeUpdate("delete from sub_info ;");
+                s.executeUpdate("delete from bno_analysis ;");
                 s.executeUpdate("delete from gt_translation ;");
-                s.executeUpdate("delete from imsi_analysis ;");
+//                s.executeUpdate("delete from imsi_analysis ;");
                 s.executeUpdate("delete from msc;");
                 s.executeUpdate("delete from msc_lai;");
                 s.executeUpdate("delete from msc_data;");
+               // s.executeUpdate("delete from msrn;");
+                
                 
                 //s.executeUpdate("delete from msc_data;");
             

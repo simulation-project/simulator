@@ -360,7 +360,7 @@ public class ms_form extends JDialog {
             String mslai;
             mslai = (String) jComboBox1.getSelectedItem();
             mobileStation.setSlai1(mslai);
-            MsStatusForm.lai = mslai;
+         //  MsStatusForm.lai = mslai;
             try {
           String imsi2 = mobileStation.getSimsi1();
 

@@ -25,10 +25,10 @@ public class EditorPopupMenu extends JPopupMenu
 				"/com/iti/telecom/images/undo.gif"));
 		addSeparator();
 
-		add(editor.bind(mxResources.get("cut"), TransferHandler
-						.getCutAction(),
-						"/com/iti/telecom/images/cut.gif"))
-				.setEnabled(selected);
+//		add(editor.bind(mxResources.get("cut"), TransferHandler
+//						.getCutAction(),
+//						"/com/iti/telecom/images/cut.gif"))
+//				.setEnabled(selected);
 		add(editor.bind(mxResources.get("copy"), TransferHandler
 						.getCopyAction(),
 						"/com/iti/telecom/images/copy.gif"))
@@ -37,6 +37,8 @@ public class EditorPopupMenu extends JPopupMenu
 				.getPasteAction(),
 				"/com/iti/telecom/images/paste.gif"));
                 addSeparator();
+               add(editor.bind(mxResources.get("delete"), new EditorActions.DeleteAction(),
+                       "/com/iti/telecom/images/cut.gif")).setEnabled(selected);
 //               add(editor.bind(mxResources.get("switchedOn"), new EditorActions.SwitchON(),
 //				"/com/iti/telecom/images/paste.gif")).setEnabled(selected);
 //

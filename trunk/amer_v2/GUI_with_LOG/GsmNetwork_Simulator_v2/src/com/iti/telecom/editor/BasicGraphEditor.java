@@ -1,5 +1,6 @@
 package com.iti.telecom.editor;
 
+import cmd.CommandParser;
 import com.iti.telecom.beans.HLR;
 import com.iti.telecom.beans.MS;
 import com.iti.telecom.beans.MSC;
@@ -21,13 +22,11 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -36,6 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.mxgraph.layout.mxCircleLayout;
+
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.layout.mxEdgeLabelLayout;
 import com.mxgraph.layout.mxIGraphLayout;
@@ -62,17 +62,31 @@ import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
 import com.mxgraph.view.mxGraph;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 
-public class BasicGraphEditor extends JPanel {
+/**
+ *
+ * @author amer
+ */
+public class BasicGraphEditor extends JPanel{
 
+    
+    /*command part*/
+        cmd.CommandParser parser;
+        int cmdStart, cmdEnd, promptCount, commandCount = 0, count = 0;
+        Vector commands;
+        String prompt, line;
+        /*command part*/
+        
+        
+        
     static {
         try {
             mxResources.add("com/iti/telecom/resources/editor");
@@ -83,30 +97,51 @@ public class BasicGraphEditor extends JPanel {
 
     public static void logMsg(String msg) {
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd   kk-mm-ss");
-        logedArea.append(" >> "+msg +"\n" );
+        logedArea.append(" >> " + msg + "\n");
     }
     /**
-     * extends JScrollPane implements Printable
-     * graphComponent.getViewport().setOpaque(true);
-     * graphComponent.getViewport().setBackground(newColor);
+     * Main GUI Component
      */
     protected mxGraphComponent graphComponent;
-    public static   JTextArea logedArea ;
+    /**
+     * Used For Logging New Actions.
+     */
+    public static JTextArea logedArea;
+    public static JTextArea commandTextArea;
+    /**
+     * left Upperd Tabbed pane Contain Components that draged
+     */
     protected JTabbedPane libraryPane;
+    protected JTabbedPane loggingTabedPane;
+    /**
+     * Manage Undo Actions [ctrl+z]
+     */
     protected mxUndoManager undoManager;
     protected String appTitle;
     protected JLabel statusBar;
     protected File currentFile;
     protected boolean modified = false;
     protected mxRubberband rubberband;
+    /**
+     * Handle all KeyBoard Actions like ("control S"), "save"); ("control shift
+     * S"), saveAs ("control N"), "new" ("control O"), "open" ("control Z"),
+     * "undo" ("control Y"), "redo" ("control shift V"),"selectVertices"
+     * ("control shift E"), "selectEdges"
+     */
     protected mxKeyboardHandler keyboardHandler;
     public static JFrame mainFrame = null;
+    /**
+     * Undo Event Listener
+     */
     protected mxIEventListener undoHandler = new mxIEventListener() {
 
         public void invoke(Object source, mxEventObject evt) {
             undoManager.undoableEditHappened((mxUndoableEdit) evt.getProperty("edit"));
         }
     };
+    /**
+     * used to flagged that change happened
+     */
     protected mxIEventListener changeTracker = new mxIEventListener() {
 
         public void invoke(Object source, mxEventObject evt) {
@@ -122,100 +157,147 @@ public class BasicGraphEditor extends JPanel {
         this.logedArea = logedArea;
     }
 
-    
+    /**
+     * Setting Objects , MainFrame Size and titles
+     *
+     * @param appTitle
+     * @param component
+     */
     public BasicGraphEditor(String appTitle, mxGraphComponent component) {
-        // Stores and updates the frame title
-        this.appTitle = appTitle;
-        logedArea = new JTextArea(30, 40);
-        logedArea.setEditable(false);
-        //logedArea.setLineWrap(true);
-        logedArea.setForeground(Color.GRAY);
-        logedArea.setFont(new Font("TimesRoman",Font.BOLD,14));
-        DefaultCaret caret = (DefaultCaret)logedArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        // Stores a reference to the graph and creates the command history
-        graphComponent = component;
-        /**
-         * Implements a graph object that allows to create diagrams from a graph
-         * model and stylesheet.
-         */
-        final mxGraph graph = graphComponent.getGraph();
-        undoManager = createUndoManager();
+        try {
+            // Stores and updates the frame title
+            this.appTitle = appTitle;
+            logedArea = new JTextArea(30, 40);
+            logedArea.setEditable(false);
+            //logedArea.setLineWrap(true);
+            logedArea.setForeground(Color.GRAY);
+            logedArea.setFont(new Font("TimesRoman", Font.BOLD, 14));
+            //********************************************************//
+            commandTextArea = new JTextArea(30, 40);
+            commandTextArea.setEditable(true);
+            //logedArea.setLineWrap(true);
+            commandTextArea.setForeground(Color.GRAY);
+            commandTextArea.setFont(new Font("TimesRoman", Font.BOLD, 14));
 
-        // Do not change the scale and translation after files have been loaded
-        // reset Edges On Resize.
-        graph.setResetViewOnRootChange(false);
 
-        // Updates the modified flag if the graph model changes
-        graph.getModel().addListener(mxEvent.CHANGE, changeTracker);
+            DefaultCaret caret = (DefaultCaret) logedArea.getCaret();
+            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+            graphComponent = component;
 
-        // Adds the command history to the model and view
-        graph.getModel().addListener(mxEvent.UNDO, undoHandler);
-        graph.getView().addListener(mxEvent.UNDO, undoHandler);
+            final mxGraph graph = graphComponent.getGraph();
+            undoManager = createUndoManager();
 
-        // Keeps the selection in sync with the command history
-        mxIEventListener undoHandler = new mxIEventListener() {
+            graph.setResetViewOnRootChange(false);
 
-            public void invoke(Object source, mxEventObject evt) {
-                List<mxUndoableChange> changes = ((mxUndoableEdit) evt.getProperty("edit")).getChanges();
-                graph.setSelectionCells(graph.getSelectionCellsForChanges(changes));
-            }
-        };
+            /**
+             * Record that change Happened
+             */
+            graph.getModel().addListener(mxEvent.CHANGE, changeTracker);
+            /**
+             * add Undo Handler to model and View
+             */
+            graph.getModel().addListener(mxEvent.UNDO, undoHandler);
+            graph.getView().addListener(mxEvent.UNDO, undoHandler);
 
-        undoManager.addListener(mxEvent.UNDO, undoHandler);
-        undoManager.addListener(mxEvent.REDO, undoHandler);
+            
+            
+            
+            // Keeps the selection in sync with the command history
+            mxIEventListener undoHandler = new mxIEventListener() {
 
+                public void invoke(Object source, mxEventObject evt) {
+                    List<mxUndoableChange> changes = ((mxUndoableEdit) evt.getProperty("edit")).getChanges();
+                    graph.setSelectionCells(graph.getSelectionCellsForChanges(changes));
+                }
+            };
+            /**
+             * Enable Undo , Redo to Undo Manager
+             */
+            undoManager.addListener(mxEvent.UNDO, undoHandler);
+            undoManager.addListener(mxEvent.REDO, undoHandler);
+
+
+
+            /**
+             * Creates the library pane that contains the tabs with the palettes
+             */
+            libraryPane = new JTabbedPane();
+            loggingTabedPane = new JTabbedPane();
+
+            loggingTabedPane.addTab("Logging", new JScrollPane(logedArea));
+            loggingTabedPane.addTab("Command", new JScrollPane(commandTextArea));
+            /**
+             * Split Frame between palette and Logging area
+             */
+            JSplitPane inner = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                    libraryPane, loggingTabedPane);
+
+
+            inner.setDividerLocation(140);
+            inner.setResizeWeight(1);
+            inner.setDividerSize(6);
+            inner.setBorder(null);
+
+            /**
+             * Creates the outer split pane that contains the inner split pane and
+             * the graph component on the right side of the window
+             */
+            JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner,
+                    graphComponent);
+            outer.setOneTouchExpandable(true);
+            outer.setDividerLocation(500);
+            outer.setDividerSize(6);
+            outer.setBorder(null);
+
+
+            statusBar = createStatusBar();
+
+
+            // Puts everything together
+            setLayout(new BorderLayout());
+            add(outer, BorderLayout.CENTER);
+            installToolBar();
+            // zoom(graph ,1);
+            // Installs rubberband selection and handling for some special
+            // keystrokes such as F2, Control-C, -V, X, A etc.
+            installHandlers();
+            installListeners();
+            updateTitle();
+            
+            /*command line part*/
+            
+            parser=new CommandParser(this);
+            
+                prompt = "Simulator>";
+                commandTextArea.setText(prompt);
+                promptCount = prompt.length();
+                commands = new Vector();
+                //active();
+                cmdStart = commandTextArea.getLineStartOffset(commandTextArea.getLineCount() - 1) + promptCount;
+                cmdEnd = commandTextArea.getLineEndOffset(commandTextArea.getLineCount() - 1);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-
-        // Creates the library pane that contains the tabs with the palettes
-        libraryPane = new JTabbedPane();
-        JSplitPane inner = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                libraryPane, new JScrollPane(logedArea));
-        inner.setDividerLocation(140);
-        inner.setResizeWeight(1);
-        inner.setDividerSize(6);
-        inner.setBorder(null);
-
-        // Creates the outer split pane that contains the inner split pane and
-        // the graph component on the right side of the window
-        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner,
-                graphComponent);
-        outer.setOneTouchExpandable(true);
-        outer.setDividerLocation(500);
-        outer.setDividerSize(6);
-        outer.setBorder(null);
-
-        // Creates the status bar
-        /**
-         * @author ahmed amer status bar is label.
-         */
-        statusBar = createStatusBar();
-
-        // Display some useful information about repaint events
-        installRepaintListener();
-
-        // Puts everything together
-        setLayout(new BorderLayout());
-        add(outer, BorderLayout.CENTER);
-        add(statusBar, BorderLayout.SOUTH);
-        installToolBar();
-       // zoom(graph ,1);
-        // Installs rubberband selection and handling for some special
-        // keystrokes such as F2, Control-C, -V, X, A etc.
-        installHandlers();
-        installListeners();
-        updateTitle();  
+        commandTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextArea1KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextArea1KeyReleased(evt);
+            }
+        });
     }
 
     /**
-     *
+     * create undo manager
      */
     protected mxUndoManager createUndoManager() {
         return new mxUndoManager();
     }
 
     /**
-     *
+     * install Handlers
      */
     protected void installHandlers() {
         rubberband = new mxRubberband(graphComponent);
@@ -223,10 +305,10 @@ public class BasicGraphEditor extends JPanel {
     }
 
     /**
-     *
+     * add tool bar
      */
     protected void installToolBar() {
-        add(new EditorToolBar(this, JToolBar.HORIZONTAL), BorderLayout.NORTH);
+      //  add(new EditorToolBar(this, JToolBar.HORIZONTAL), BorderLayout.NORTH);
     }
 
     /**
@@ -234,36 +316,8 @@ public class BasicGraphEditor extends JPanel {
      */
     protected JLabel createStatusBar() {
         JLabel statusBar = new JLabel(mxResources.get("ready"));
-        /**
-         * put border to label to make him seems as status bar .
-         */
         statusBar.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-
         return statusBar;
-    }
-
-    /**
-     * author AHmed amer
-     */
-    protected void installRepaintListener() {
-        graphComponent.getGraph().addListener(mxEvent.REPAINT,
-                new mxIEventListener() {
-
-                    public void invoke(Object source, mxEventObject evt) {
-                        // Buffered Image  [ data Of Image ] as buffer.
-                        String buffer = (graphComponent.getTripleBuffer() != null) ? ""
-                                : " (unbuffered)";
-                        mxRectangle dirty = (mxRectangle) evt.getProperty("region");
-                        if (dirty == null) {
-                            status("Repaint all" + buffer);
-                        } else {
-                            status("Repaint: x=" + (int) (dirty.getX()) + " y="
-                                    + (int) (dirty.getY()) + " w="
-                                    + (int) (dirty.getWidth()) + " h="
-                                    + (int) (dirty.getHeight()) + buffer);
-                        }
-                    }
-                });
     }
 
     /**
@@ -276,7 +330,7 @@ public class BasicGraphEditor extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         libraryPane.add(title, scrollPane);
 
-        
+
         // Updates the widths of the palettes if the container size changes
         libraryPane.addComponentListener(new ComponentAdapter() {
 
@@ -302,9 +356,7 @@ public class BasicGraphEditor extends JPanel {
         } else {
             graphComponent.zoomOut();
         }
-    }    
-
-
+    }
 
     /**
      *
@@ -319,7 +371,7 @@ public class BasicGraphEditor extends JPanel {
         mxCell cellGraph = (mxCell) cell;
         Object resultmol = model.getValue(cell);
         if (resultmol instanceof MS) {
-            MobileStationPopUp menu = new MobileStationPopUp(BasicGraphEditor.this ,(MS)resultmol);
+            MobileStationPopUp menu = new MobileStationPopUp(BasicGraphEditor.this, (MS) resultmol);
             menu.show(graphComponent, pt.x, pt.y);
         } else {
             EditorPopupMenu menu = new EditorPopupMenu(BasicGraphEditor.this);
@@ -344,9 +396,6 @@ public class BasicGraphEditor extends JPanel {
         // Installs mouse wheel listener for zooming
         MouseWheelListener wheelTracker = new MouseWheelListener() {
 
-            /**
-             *
-             */
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (e.getSource() instanceof mxGraphOutline
                         || e.isControlDown()) {
@@ -355,7 +404,7 @@ public class BasicGraphEditor extends JPanel {
             }
         };
 
-        
+
         // Installs the popup menu in the graph component
         graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
 
@@ -386,23 +435,23 @@ public class BasicGraphEditor extends JPanel {
                         mouseDragged(e);
                     }
                 });
+        graphComponent.getGraphHandler().setRemoveCellsFromParent(false);
+        
     }
+    
 
     public void selectEdges(mxGraph graph, Object cell, mxIGraphModel model) {
         Object resultmol = model.getValue(cell);
-
         if (cell != null) {
             mxCell comp = (mxCell) cell;
             if ((!comp.isEdge()) || resultmol instanceof MSC || resultmol instanceof HLR) {
                 System.out.println(resultmol instanceof MSC ? "MSC " : resultmol instanceof HLR ? "HLR" : "Not any HLR MSC");
                 Object[] outgoingEdges = graph.getOutgoingEdges(cell);
                 Collection cells = new ArrayList();
-
                 cells.add(cell);
                 for (int i = 0; i < outgoingEdges.length; i++) {
                     cells.add(outgoingEdges[i]);
                 }
-
                 graph.setSelectionCells(cells.toArray());
             }
         }
@@ -459,7 +508,6 @@ public class BasicGraphEditor extends JPanel {
         return graphComponent;
     }
 
-   
     /**
      *
      */
@@ -544,7 +592,7 @@ public class BasicGraphEditor extends JPanel {
      */
     public void exit() {
         JFrame frame = (JFrame) SwingUtilities.windowForComponent(this);
-       // JOptionPane.showMessageDialog(this, "closinngggggg");
+        // JOptionPane.showMessageDialog(this, "closinngggggg");
         if (frame != null) {
             //JOptionPane.showMessageDialog(this, "closinngggggg");
             //System.out.println("closinngggg");
@@ -588,28 +636,32 @@ public class BasicGraphEditor extends JPanel {
         menuBar.add(menu);
         frame.setJMenuBar(menuBar);
         aero.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-              AeroactionPerformed(e);
+                AeroactionPerformed(e);
             }
         });
         mac.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-              MacactionPerformed(e);
+                MacactionPerformed(e);
             }
         });
         graphite.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-              GraphiteactionPerformed(e);
+                GraphiteactionPerformed(e);
             }
         });
         frame.setSize(870, 640);
-        frame.addWindowListener(new WindowAdapter(){
-         public void windowClosing(WindowEvent we){
-             System.out.println("Deleting DB");
-             // ms_app.DatabaseHandler.deleteDB_HLR();
-              //ms_app.DatabaseHandler.deleteDB_MSC();
+        frame.addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent we) {
+                System.out.println("Deleting DB");
+                 ms_app.DatabaseHandler.deleteDB_HLR();
+                ms_app.DatabaseHandler.deleteDB_MSC();
             }
-         });
+        });
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Rectangle maximumWindowBounds = ge.getMaximumWindowBounds();
         frame.setSize(maximumWindowBounds.getSize());
@@ -680,7 +732,7 @@ public class BasicGraphEditor extends JPanel {
      */
     protected mxIGraphLayout createLayout(String ident, boolean animate) {
         mxIGraphLayout layout = null;
-        
+
         if (ident != null) {
             mxGraph graph = graphComponent.getGraph();
 
@@ -751,72 +803,154 @@ public class BasicGraphEditor extends JPanel {
         return layout;
     }
 
-    private void zoom(mxGraph graph , double scale) {
-         graphComponent.getGraph().getView().scaleAndTranslate(scale,
-              (graph.getGraphBounds().getCenterX()
-              -(graph.getGraphBounds().getWidth()/2))/scale,
-              (graph.getGraphBounds().getCenterY()
-             -(graph.getGraphBounds().getHeight()/2))/scale);
+    private void zoom(mxGraph graph, double scale) {
+        graphComponent.getGraph().getView().scaleAndTranslate(scale,
+                (graph.getGraphBounds().getCenterX()
+                - (graph.getGraphBounds().getWidth() / 2)) / scale,
+                (graph.getGraphBounds().getCenterY()
+                - (graph.getGraphBounds().getHeight() / 2)) / scale);
     }
 
+    public void AeroactionPerformed(ActionEvent ae) {
+        try {
+            //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
+            UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    public void MacactionPerformed(ActionEvent ae) {
+        try {
+            //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
+            UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    public void GraphiteactionPerformed(ActionEvent ae) {
+        try {
+            //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
+            UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void keyPressed(KeyEvent e) {
+         char i = e.getKeyChar();
+        String str = Character.toString(i);
+        System.out.println("---> Str " + str);
+    }
+
+    public void keyReleased(KeyEvent e) {
+    }
     
-    	public void AeroactionPerformed(ActionEvent ae)
-		{
+    
+    private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {                                      
+
+		if(commandTextArea.getCaretPosition()<cmdStart)
+			commandTextArea.setEditable(false);
+	else
+	{
             try {
-                //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
-                UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
+                commandTextArea.setEditable(true);
+                if (evt.getKeyCode() == 38) {
+                    commandTextArea.setSelectionStart(cmdStart);
+                    commandTextArea.setSelectionEnd(cmdEnd + 1);
+                    if (commandCount > 0) {
+                        String newCommand = (String) commands.get(commandCount - 1);
+                        commandTextArea.replaceSelection(newCommand);
+                        commandCount--;
+                   }
+                } else if (evt.getKeyCode() == 40) {
+                    commandTextArea.setSelectionStart(cmdStart);
+                    commandTextArea.setSelectionEnd(cmdEnd + 1);
+                    if (commandCount + 1 < commands.size()) {
+
+                        String newCommand = (String) commands.get(commandCount + 1);
+                        commandTextArea.replaceSelection(newCommand);
+                        commandCount++;
+                                            }
+                    else if(commandCount + 1 == commands.size())
+                    {commandTextArea.replaceSelection("");
+                    commandCount++;
+                    }
+                    else
+                    commandTextArea.replaceSelection("");       
+                } else if (evt.getKeyCode() == 8) //backspace
+                {
+                    count -= 2;
+                    if (cmdEnd <= cmdStart + 1) {
+                        commandTextArea.setEditable(false);
+
+                    }
+
+                } else if (evt.getKeyCode() == 10) {
+                    commandTextArea.select(cmdStart, cmdEnd + 1);
+                    String cmd = commandTextArea.getSelectedText();
+                    commands.add(cmd);
+                    parser.executeCommand(cmd);
+                    String g = commandTextArea.getText();
+                    commandTextArea.setCaretPosition(g.length());
+                    commandTextArea.append("\n" + prompt);
+
+                    commandCount = commands.size();
+                }
+
+                cmdStart = commandTextArea.getLineStartOffset(commandTextArea.getLineCount() - 1) + promptCount;
+                cmdEnd = commandTextArea.getLineEndOffset(commandTextArea.getLineCount() - 1);
+            } catch (BadLocationException ex) {
                 Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-                SwingUtilities.updateComponentTreeUI(this);
+    
 	}
+    }                                     
 
+    private void jTextArea1KeyReleased(java.awt.event.KeyEvent evt) {                                       
+        if (evt.getKeyCode() == 10) {
+            String s = commandTextArea.getText().trim();
+            commandTextArea.setText(s);
+        } else if (evt.getKeyCode() == 38) {
+            commandTextArea.setCaretPosition(cmdEnd);
+        }
+    }
+        public void appendResult(String str)
+    {
+        commandTextArea.append("\n"+str);
+        int i=commandTextArea.getRows()+5;
+        commandTextArea.setRows(i);
+    }
 
-                public void MacactionPerformed(ActionEvent ae)
-		{
-            try {
-                //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
-                UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-                SwingUtilities.updateComponentTreeUI(this);
-	}
-
-
-                public void GraphiteactionPerformed(ActionEvent ae)
-		{
-            try {
-                //com.iti.telecom.main.GraphEditor.theme="com.jtattoo.plaf.aero.AeroLookAndFeel";
-                UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(BasicGraphEditor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-                SwingUtilities.updateComponentTreeUI(this);
-	}
-
-
-
-
+    public void clearTextArea() {
+        commandTextArea.setText("");
+    }
 }

@@ -87,8 +87,9 @@ public class Java_Receiver extends Thread {
                 if (msg1[0].equals("receiving_call")) { // B numb
                     System.out.println("marwaaaa");
 
-
+                    com.iti.telecom.main.GraphEditor.mobile.get(msg1[1]).ms_receive_call.setTitle(msg1[1]);
                     com.iti.telecom.main.GraphEditor.mobile.get(msg1[1]).ms_receive_call.setVisible(true);
+                    
 
                     /*
                      * if(ms_form.ms_receive_call.imsi.equals(msg1[1])) {
@@ -101,7 +102,7 @@ public class Java_Receiver extends Thread {
 
                 if (msg1[0].equals("alert_msg")) {   // A numb
                     System.out.println("marwaaaa");
-                    com.iti.telecom.main.GraphEditor.mobile.get(msg1[1]).ms_call.setVisible(true);
+                    com.iti.telecom.main.GraphEditor.mobile.get(msg1[1]).ms_call.jLabel3.setText("Alert Msg");
 
                     /*
                      * if(ms_form.ms_call.imsi.equals(msg1[1])) {

@@ -35,19 +35,35 @@ public class msrn_range extends javax.swing.JFrame {
     /** Creates new form msrn_range */
     public msrn_range(String msc_name) {
         initComponents();
+        try{
         dbh = new DatabaseHandler();
         MSCName=msc_name;
-        MSRNNumber=dbh.get_msrn_no();
-        CC = MSRNNumber.substring(0, 2);
-        NDC = MSRNNumber.substring(2, 4);
-        SN = Integer.toString(Integer.parseInt(MSRNNumber.substring(4, 12))+1);
-        cc1.setText(CC);
-        ndc1.setText(NDC);
-        sn1.setText(SN);
-        MSRN = CC+NDC+SN;
+   //     MSRNNumber=dbh.get_msrn_no();
+   //     CC = MSRNNumber.substring(0, 2);
+   //     NDC = MSRNNumber.substring(2, 4);
+   //     SN = Integer.toString(Integer.parseInt(MSRNNumber.substring(4, 12))+1);
+   //     cc1.setText(CC);
+   //     ndc1.setText(NDC);
+   //     sn1.setText(SN);
+    //    MSRN = CC+NDC+SN;
         range.setInputVerifier(new RangeVerifier());
         //msrn_no = Integer.getInteger(sn1.getText());
         //System.out.println(MSRNNumber);
+        }catch (Exception ex){
+            //System.out.println("errorrrrrr");
+   //         dbh.insert_first_msrn(MSCName);
+        }finally{
+  //          MSRNNumber=dbh.get_msrn_no();
+  //      CC = MSRNNumber.substring(0, 2);
+   //     NDC = MSRNNumber.substring(2, 4);
+    //    SN = Long.toString((Long.parseLong(MSRNNumber)+1)).substring(4, 12);
+    //    Long new_msrn = Long.parseLong(MSRNNumber)+1;
+    //    cc1.setText(CC);
+     //   ndc1.setText(NDC);
+    //    sn1.setText(SN);
+    //    MSRN = CC+NDC+SN;
+        range.setInputVerifier(new RangeVerifier());
+        }
     }
 
     /** This method is called from within the constructor to
@@ -100,16 +116,16 @@ public class msrn_range extends javax.swing.JFrame {
             }
         });
 
-        cc1.setEnabled(false);
+        cc1.setEnabled(true);
         cc1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cc1ActionPerformed(evt);
             }
         });
 
-        ndc1.setEnabled(false);
+        ndc1.setEnabled(true);
 
-        sn1.setEnabled(false);
+        sn1.setEnabled(true);
 
         jLabel5.setText("-");
 
@@ -214,7 +230,13 @@ public class msrn_range extends javax.swing.JFrame {
     private void submit_commActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_commActionPerformed
 
         System.out.println(Integer.parseInt(sn1.getText()));
-        dbh.insert_msrn(Integer.parseInt(MSRNNumber), Integer.parseInt(range.getText()), MSCName);
+        
+         String msrnstartst = cc1.getText()+ndc1.getText()+sn1.getText();
+     //   long msrnstart = Long.parseLong(msrnstartst);
+        
+       // dbh.insert_msrn(Long.parseLong(MSRNNumber), Integer.parseInt(range.getText()), MSCName);
+        dbh.insert_msrn(Long.parseLong(msrnstartst), Integer.parseInt(range.getText()), MSCName);
+        
         range.setText("");
         this.dispose();
         // TODO add your handling code here:

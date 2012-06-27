@@ -76,6 +76,7 @@ public class DBhandler {
     public void addSubscriber(String IMSI, String info, String n) throws SQLException {
 
         System.out.println("add subscriber");
+        System.out.println("insert into " + n + " (imsi,isd) values ('" + IMSI + "','" + info + "');");
         stmt.executeUpdate("insert into " + n + " (imsi,isd) values ('" + IMSI + "','" + info + "');");
         System.out.println("add subscriber DONE");
 
@@ -94,15 +95,13 @@ public class DBhandler {
 
     }
 
-    void createDB(String name, long s, long e) throws SQLException {
+    void createDB(String name,String s,String e,String n,String g) throws SQLException {
         hlrName = StartFrame.getHlrName();
-        start = s;
-        end = e;
         System.out.println("create table " + hlrName);
         stmt.executeUpdate("create table " + hlrName + " (imsi varchar(50) primary key,vlr varchar(50),isd varchar(80));");
         System.out.println("create table DONE");
         stmt.executeUpdate("create table node_" + hlrName + " (nispc varchar(50),gt varchar(50) primary key);");
-        stmt.executeUpdate("insert into hlrs values ('" + hlrName + "');");
+        stmt.executeUpdate("insert into hlrs values ('" + hlrName + "','" + s + "','" + e + "','" + n + "','" + g + "');");
     }
 
     void deleteTable(String name) {

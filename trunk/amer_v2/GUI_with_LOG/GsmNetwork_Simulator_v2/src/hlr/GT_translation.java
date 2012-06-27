@@ -5,6 +5,7 @@
 package hlr;
 
 import java.util.*;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -111,8 +112,15 @@ public class GT_translation extends javax.swing.JFrame {
         int i = 0, j = 0;
         while(jTable1.getValueAt(i, 0) != null)
         {
+                  
+          try{
             gt_trans.put(jTable1.getValueAt(i, j).toString(), jTable1.getValueAt(i, j+1).toString());
             i++;
+            }
+            catch (Exception e ){
+                JOptionPane.showMessageDialog(this, "Please press tab ");
+                return;
+            }       
         }
         
        DBhandler conn = new hlr.DBhandler();

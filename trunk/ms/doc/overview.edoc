@@ -2,6 +2,7 @@ Overview page
 
 @copyright 2012 ITI Egypt.
 @author Marwa El-Shahed <marwa.elshahed@hotmail.com>
+@author Somaya Hassan
         [http://www.iti.gov.eg]
 
 @doc MS Application 
@@ -12,17 +13,10 @@ Overview page
 
 <ol>
   <li>{@section Introduction}</li>
-  <li>{@section Motivation}</li>
   <li>{@section Architecture}</li>
   <li>{@section Usage}
     <ol>
       <li>{@section Configuration}</li>
-    </ol>
-  </li>
-  <li>{@section Installation}</li>
-  <li>{@section Known issues}
-    <ol>
-      <li>{@section Performance constraints}</li>
     </ol>
   </li>
   <li>{@section TODO}</li>
@@ -31,59 +25,57 @@ Overview page
 
 === Introduction ===
 
-<p>This application is a simulation of mobile station.</p>
-
-=== Motivation ===
-
-<p>N/A</p>
+<p>The mobile station has 3 states which are off, on and idle. Each state has a different behaviour. In order to move from one state to another, the msc application needs to be informed. The ms_fsm sends the request to msc application and starts a timer, if there was no confirmation message, the ms_fsm sends the request again. The maximum number of re-trails and the time between them is configurable.</p>
 
 === Usage ===
 
-<p>APIs to be used will be explained later.</p>
+<p>This application is used in simulating 
+	1. IMSI Attach Request (Mobile Switching On).
+	2. Normal Location Update Request.
+	3. Periodic Location Update Request.
+	4. IMSI Deattach Request (Mobile Switching Off).
+	5. Mobile to Mobile Call Scenario.</p>
 
 == Configuration ==
 
-<p>The configuration parameters are defined in the <b>.config</b> file. A
+<p>The configuration parameters are defined in the <b>.app.src</b> file. A
 sample configuration file is shown below:</p>
 
 <pre>
-[{appname, [{param, value}, {opt_param, opt_value}]}].
+[{env, [{log_file,"/home/marwa/trunk_after_call/ms/priv/log.txt"},{periodic_time,120000},{normal_time, 30000},{no_of_trials, 3}].
 </pre>
 
 === Mandatory parameters ===
 
 <dl>
-  <dt>param: </dt><dd>N/A.</dd>
+  <dt>periodic_time: </dt><dd>   120000.</dd>
+  <dt>normal_time: </dt><dd>     30000.</dd>
+  <dt>no_of_trials: </dt><dd>    3.</dd>
 </dl>
 
 === Optional parameters ===
 
 <dl>
-  <dt>opt_param: </dt><dd>N/A.</dd>
+  <dt>log_file: </dt><dd>        "/home/marwa/trunk_after_call/ms/priv/log.txt".</dd>
 </dl>
 
 === Architecture ===
 
 <p></p>
 
-<img src="MS.png" alt="Architecture"/>
+<img src="ms.png" alt="Architecture"/>
 
 <p></p>
-
-=== Installation ===
-
-<p>
-First, you need to start the application. Then, you can the APIs.
-</p>
 
 === TODO ===
 
 <ul>
-  <li>N/A</li>
+  <li></li>
 </ul>
 
 === Contributors ===
 
 <ul>
   <li>Marwa El-Shahed</li>
+  <li>Somaya Hassan</li>
 </ul>

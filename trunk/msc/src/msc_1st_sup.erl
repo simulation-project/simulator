@@ -21,6 +21,7 @@
 %%% @copyright 2012 ITI Egypt.
 %%% @author Esraa Adel <esraa.elmelegy@hotmail.com>
 %%% @author Sherif Ashraf <sherif_ashraf89@hotmail.com>
+%%% @author Ahmed Samy <ahm.sam@live.com>
 %%%         [http://www.iti.gov.eg/]
 %%% @end
 -module(msc_1st_sup).

@@ -1,39 +1,40 @@
---- Test run on 2012/06/23 05:32:42 ---
-Converting "/home/marwa/GP/simulator/trunk/ms/." to "/home/marwa/GP/simulator/trunk/ms" and re-inserting with add_patha/1
+--- Test run on 2012/06/26 19:09:52 ---
+Converting "/home/marwa/trunk_after_call/ms/." to "/home/marwa/trunk_after_call/ms" and re-inserting with add_patha/1
 
 
-Common Test v1.6.1 starting (cwd is /home/marwa/GP/simulator/trunk/ms)
+Common Test v1.6.1 starting (cwd is /home/marwa/trunk_after_call/ms)
 
 
 Common Test: Running make in test directories...
+Recompile: ms_app_SUITE
 
-CWD set to: "/home/marwa/GP/simulator/trunk/ms/logs/ct_run.test@ubuntu.2012-06-23_05.32.43"
+CWD set to: "/home/marwa/trunk_after_call/ms/logs/ct_run.test@ubuntu.2012-06-26_19.09.52"
 
 TEST INFO: 1 test(s), 1 case(s) in 1 suite(s)
 
-Testing trunk.ms: Starting test, 1 test cases
+Testing trunk_after_call.ms: Starting test, 1 test cases
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:43 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
           supervisor: {local,sasl_safe_sup}
-             started: [{pid,<0.69.0>},
+             started: [{pid,<0.72.0>},
                        {name,alarm_handler},
                        {mfargs,{alarm_handler,start_link,[]}},
                        {restart_type,permanent},
                        {shutdown,2000},
                        {child_type,worker}]
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:43 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
           supervisor: {local,sasl_safe_sup}
-             started: [{pid,<0.70.0>},
+             started: [{pid,<0.73.0>},
                        {name,overload},
                        {mfargs,{overload,start_link,[]}},
                        {restart_type,permanent},
                        {shutdown,2000},
                        {child_type,worker}]
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:43 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
           supervisor: {local,sasl_sup}
-             started: [{pid,<0.68.0>},
+             started: [{pid,<0.71.0>},
                        {name,sasl_safe_sup},
                        {mfargs,
                            {supervisor,start_link,
@@ -42,115 +43,111 @@ Testing trunk.ms: Starting test, 1 test cases
                        {shutdown,infinity},
                        {child_type,supervisor}]
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:44 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
           supervisor: {local,sasl_sup}
-             started: [{pid,<0.71.0>},
+             started: [{pid,<0.74.0>},
                        {name,release_handler},
                        {mfargs,{release_handler,start_link,[]}},
                        {restart_type,permanent},
                        {shutdown,2000},
                        {child_type,worker}]
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:44 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
          application: sasl
           started_at: test@ubuntu
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:44 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
           supervisor: {local,ms_sup}
-             started: [{pid,<0.79.0>},
+             started: [{pid,<0.82.0>},
                        {name,ms_fsm_sup},
                        {mfargs,{ms_fsm_sup,start_link,[]}},
                        {restart_type,permanent},
                        {shutdown,2000},
                        {child_type,supervisor}]
 
-=PROGRESS REPORT==== 23-Jun-2012::05:32:44 ===
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
          application: ms
           started_at: test@ubuntu
 ----------------------------------------------------
-2012-06-23 05:32:44.110
+2012-06-26 19:09:52.575
 Starting test case normal_case
 
-{st,ms1,lai1,undefined}
+{st,ms1,lai1,undefined,120000,30000,3}
 turn_on_idle 
+{st,ms2,lai2,undefined,120000,30000,3}
+turn_on_idle 
+request{2,1,ms1,lai1} is sent to msc_apprequest{2,1,ms2,lai2} is sent to msc_app"/home/marwa/trunk_after_call/ms/priv/log.txt"
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.92.0>},
+                       {name,disk_log_sup},
+                       {mfargs,{disk_log_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 26-Jun-2012::19:09:52 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.93.0>},
+                       {name,disk_log_server},
+                       {mfargs,{disk_log_server,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+get_state : turn_on_idle
+
+request{2,2,ms2,lai1} is sent to msc_app"/home/marwa/trunk_after_call/ms/priv/log.txt"
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+get_state : turn_on_idle
+
+send_alert 
+
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+receiving_alert 
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+request{2,2,ms1,lai2} is sent to msc_app"/home/marwa/trunk_after_call/ms/priv/log.txt"
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+receive_alert 
+
 ----------------------------------------------------
-2012-06-23 05:32:44.115
+2012-06-26 19:09:52.607
 Test case normal_case completed
 
-exittttinggg
-=ERROR REPORT==== 23-Jun-2012::05:32:44 ===
-** State machine ms1 terminating 
-** Last event in was turn_on_idle
-** When State == turn_off
-**      Data  == {st,ms1,lai1,undefined}
-** Reason for termination = 
-** {'module could not be loaded',
-       [{msc_app,location_update_request,[{2,1,ms1,lai1}],[]},
-        {ms_fsm,loc_update,2,[{file,"src/ms_fsm.erl"},{line,383}]},
-        {ms_fsm,turn_off,2,[{file,"src/ms_fsm.erl"},{line,106}]},
-        {gen_fsm,handle_msg,7,[{file,"gen_fsm.erl"},{line,494}]},
-        {proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,227}]}]}
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+{st,ms1,lai2,#Ref<0.0.0.1231>,120000,30000,3}
+turn_on_active"/home/marwa/trunk_after_call/ms/priv/log.txt"
+get_state : turn_on_active
 
-=CRASH REPORT==== 23-Jun-2012::05:32:44 ===
-  crasher:
-    initial call: ms_fsm:init/1
-    pid: <0.87.0>
-    registered_name: ms1
-    exception exit: {undef,[{msc_app,location_update_request,
-                                     [{2,1,ms1,lai1}],
-                                     []},
-                            {ms_fsm,loc_update,2,
-                                    [{file,"src/ms_fsm.erl"},{line,383}]},
-                            {ms_fsm,turn_off,2,
-                                    [{file,"src/ms_fsm.erl"},{line,106}]},
-                            {gen_fsm,handle_msg,7,
-                                     [{file,"gen_fsm.erl"},{line,494}]},
-                            {proc_lib,init_p_do_apply,3,
-                                      [{file,"proc_lib.erl"},{line,227}]}]}
-      in function  gen_fsm:terminate/7 (gen_fsm.erl, line 611)
-    ancestors: [ms_fsm_sup,ms_sup,<0.75.0>]
-    messages: [{'$gen_all_state_event',lai2},
-                  {'$gen_all_state_event',turn_off}]
-    links: [<0.79.0>]
-    dictionary: []
-    trap_exit: false
-    status: running
-    heap_size: 987
-    stack_size: 24
-    reductions: 218
-  neighbours:
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+{st,ms2,lai1,#Ref<0.0.0.1237>,120000,30000,3}
+turn_on_active"/home/marwa/trunk_after_call/ms/priv/log.txt"
+get_state : turn_on_active
 
-=SUPERVISOR REPORT==== 23-Jun-2012::05:32:44 ===
-     Supervisor: {local,ms_fsm_sup}
-     Context:    child_terminated
-     Reason:     {undef,[{msc_app,location_update_request,[{2,1,ms1,lai1}],[]},
-                         {ms_fsm,loc_update,2,
-                                 [{file,"src/ms_fsm.erl"},{line,383}]},
-                         {ms_fsm,turn_off,2,
-                                 [{file,"src/ms_fsm.erl"},{line,106}]},
-                         {gen_fsm,handle_msg,7,
-                                  [{file,"gen_fsm.erl"},{line,494}]},
-                         {proc_lib,init_p_do_apply,3,
-                                   [{file,"proc_lib.erl"},{line,227}]}]}
-     Offender:   [{pid,<0.87.0>},
-                  {name,ms_fsm},
-                  {mfargs,{ms_fsm,start_link,[[ms1,lai1]]}},
-                  {restart_type,permanent},
-                  {shutdown,5000},
-                  {child_type,worker}]
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+{st,ms2,lai1,#Ref<0.0.0.1237>,120000,30000,3}
+turn_offrequest{2,4,ms2,lai1} is sent to msc_app"/home/marwa/trunk_after_call/ms/priv/log.txt"
+{st,ms1,lai2,#Ref<0.0.0.1231>,120000,30000,3}
+turn_offrequest{2,4,ms1,lai2} is sent to msc_app"/home/marwa/trunk_after_call/ms/priv/log.txt"
+get_state : turn_off
 
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+get_state : turn_off
 
-=INFO REPORT==== 23-Jun-2012::05:32:44 ===
+"/home/marwa/trunk_after_call/ms/priv/log.txt"
+
+=INFO REPORT==== 26-Jun-2012::19:09:52 ===
     application: ms
     exited: stopped
     type: temporary
 
-=INFO REPORT==== 23-Jun-2012::05:32:44 ===
+=INFO REPORT==== 26-Jun-2012::19:09:52 ===
     application: sasl
     exited: stopped
     type: temporary
-Testing trunk.ms: TEST COMPLETE, 1 ok, 0 failed of 1 test cases
+Testing trunk_after_call.ms: TEST COMPLETE, 1 ok, 0 failed of 1 test cases
 
-Updating /home/marwa/GP/simulator/trunk/ms/logs/index.html... done
-Updating /home/marwa/GP/simulator/trunk/ms/logs/all_runs.html... done
+Updating /home/marwa/trunk_after_call/ms/logs/index.html... done
+Updating /home/marwa/trunk_after_call/ms/logs/all_runs.html... done
 

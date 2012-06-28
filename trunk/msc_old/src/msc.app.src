@@ -1,0 +1,14 @@
+{application, msc,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { msc_app, []}},
+
+  {env, [{log_file,"/home/sony/GP/simulator/trunk/msc/priv/log.txt"}]}
+
+]}.

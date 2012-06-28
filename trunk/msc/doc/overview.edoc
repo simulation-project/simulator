@@ -1,7 +1,9 @@
 Overview page
 
 @copyright 2012 Ericsson Egypt Ltd.
-@author Ahmed Samy <ahm.sam@live.com> Esraa Adel <esraa.elmelegy@hotmail.com> Sherif Ashraf <sherif_ashraf89@hotmail.com>
+@author Esraa Adel <esraa.elmelegy@hotmail.com>
+@author Sherif Ashraf <sherif_ashraf89@hotmail.com>
+@author Ahmed Samy <ahm.sam@live.com>
         [http://www.iti.gov.eg]
 
 @doc Application Name
@@ -18,20 +20,40 @@ Overview page
       <li>{@section Configuration}</li>
     </ol>
   </li>
-  <li>{@section Installation}</li>
   <li>{@section Known issues}
     <ol>
       <li>{@section Performance constraints}</li>
     </ol>
   </li>
   <li>{@section Contributors}</li>
-
 </ol>
 
 === Introduction ===
 
-<p>This is the section related to our MSC application and configutration</p>
+<p>MSC application for MSC/VLR node (Mobile services Switching Center/Visitor Location Register)
+It is the node, which controls calls both to MS and from MS. The primary
+functions of an MSC include the following:</p>
+<p>
+1- Switching and call routing: A MSC controls call set-up,
+supervision and release and may interact with other nodes to
+successfully establish a call. This includes routing of calls
+from MSs to other networks.</p>
+<p>
+2- Communication with HLR: the primary occasion on which
+an MSC and HLR communicate is during the set-up of a call
+to an MS, when the HLR requests some routing information
+from the MSC.</p>
+<p>
+3- Communication with the VLR: associated with each MSC
+is a VLR, with which it communicates for subscription
+information, especially during call set-up and release.
+</p>
+<p>
+4- Communication with other MSCs : it may be necessary for
+two MSCs to communicate with each other during call set-
+up or handovers between cells belonging to different MSCs.
 
+</p>Alaa el 7md llh enha koisa kant gmda awi bs el 7md llh hya koisa msh mohm el 3rbya 
 
 === Usage ===
 
@@ -67,16 +89,9 @@ sample configuration file is shown below:</p>
 
 <p></p>
 
-=== Installation ===
-
-<p>
-
-</p>
-
 === Contributors ===
 
 <ul>
-  <li>Esraa Adel Mohamed</li>
-  <li>Sherif Ashraf</li>
-  <li>Ahmed Samy</li>
+  <li>Information Technology Institute</li>
+  <li>Ericsson</li>
 </ul>

@@ -1,0 +1,43 @@
+=== Suite started at 2012-06-18 14:24:45
+=== Starting test, 1 test cases
+=cases         1
+=user          sony
+=host          ubuntu.ubuntu-domain
+=hosts         ubuntu.ubuntu-domain 
+=emulator_vsn  5.8.5
+=emulator      beam
+=otp_release   R14B04
+=started       2012-06-18 14:24:45
+=case          msc_app_SUITE:init_per_suite
+=logfile       msc_app_suite.init_per_suite.html
+=started       2012-06-18 14:24:45
+=ended         2012-06-18 14:24:45
+=result        ok
+=elapsed       0.054543
+=case          msc_app_SUITE:my_test_case
+=logfile       msc_app_suite.my_test_case.html
+=started       2012-06-18 14:24:45
+=ended         2012-06-18 14:24:45
+=result        failed: {{badmatch,ok},
+                        [{msc_app_SUITE,my_test_case,1},
+                         {test_server,my_apply,3},
+                         {test_server,ts_tc,3},
+                         {test_server,run_test_case_eval1,6},
+                         {test_server,run_test_case_eval,9}]}, [{msc_app_SUITE,
+                                                                 my_test_case,
+                                                                 157}]
+=== *** FAILED *** test case 1 of 1
+=case          msc_app_SUITE:end_per_suite
+=logfile       msc_app_suite.end_per_suite.html
+=started       2012-06-18 14:24:45
+=ended         2012-06-18 14:24:45
+=result        ok
+=elapsed       0.002116
+=group_time    0.162s
+=== TEST COMPLETE, 0 ok, 1 failed of 1 test cases
+
+=finished      2012-06-18 14:24:45
+=failed        1
+=successful    0
+=user_skipped  0
+=auto_skipped  0

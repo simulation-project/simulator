@@ -4,5 +4,8 @@
               {registered,[]},
               {applications,[kernel,stdlib]},
               {mod,{ms_app,[]}},
-              {env,[]},
+              {env,[{log_file,"/home/marwa/trunk_after_call/ms/priv/log.txt"},
+                    {periodic_time,120000},
+                    {normal_time,30000},
+                    {no_of_trials,3}]},
               {modules,[ms_app,ms_fsm,ms_fsm_sup,ms_sup]}]}.

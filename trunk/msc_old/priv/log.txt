@@ -1,0 +1,352 @@
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc1: imsi attach request from 602020000000011
+MSC msc2: insert subscriber info in VLRMSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101MSC msc1: insert subscriber info in VLRMSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100MSC msc2: sending update location to HLR with SPC = 3-100MSC msc1: sending update location to HLR with SPC = 3-100MSC msc1: Received subsceiber info from HLR and update its state to idle MSC msc2: Received subsceiber info from HLR and update its state to idle MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc1: imsi attach request from 602020000000011
+MSC msc2: imsi attach request from 60202124555567
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 8
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: imsi attach request from 602020000000011
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 4
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: imsi attach request from 602020000000011
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 5
+MSC msc2: send to HLR MSRN 5
+MSC msc1: HLR answer with MSRN 5
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  5
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+MSC msc2: Ano send disconnect message to MSC msc2
+MSC msc2: Receive ISUP REL message from another MSC 
+MSC msc1: Receive ISUP RLC message from another MSC 
+MSC msc1: Received Release Complete message from Ano 
+MSC msc1: update status to be idle of Ano with IMSI 602020000000011
+MSC msc2: receive from Bno Release message
+MSC msc2: update status to be idle of Bno with IMSI 60202124555567
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc1: imsi attach request from 602020000000011
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 3
+MSC msc2: send to HLR MSRN 3
+MSC msc1: HLR answer with MSRN 3
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  3
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+MSC msc2: Ano send disconnect message to MSC msc2
+MSC msc2: Receive ISUP REL message from another MSC 
+MSC msc1: Receive ISUP RLC message from another MSC 
+MSC msc2: Received Release Complete message from Ano 
+MSC msc2: update status to be idle of Ano with IMSI 60202124555567
+MSC msc1: receive from Bno Release message
+MSC msc1: update status to be idle of Bno with IMSI 602020000000011
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: imsi attach request from 602020000000011
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 1
+MSC msc2: send to HLR MSRN 1
+MSC msc1: HLR answer with MSRN 1
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  1
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: imsi attach request from 602020000000011
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 2
+MSC msc2: send to HLR MSRN 2
+MSC msc1: HLR answer with MSRN 2
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  2
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc1: Ano send disconnect message to MSC msc1
+MSC msc2: Receive ISUP REL message from another MSC 
+MSC msc1: Receive ISUP RLC message from another MSC 
+MSC not_found: normal location update from  60202124555567
+MSC not_found: normal location update from  602020000000011
+MSC not_found: periodic location update from  60202124555567
+MSC not_found: periodic location update from  602020000000011
+MSC not_found: periodic location update from  60202124555567
+MSC not_found: periodic location update from  602020000000011
+MSC not_found: periodic location update from  60202124555567
+MSC not_found: periodic location update from  602020000000011
+MSC not_found: periodic location update from  60202124555567
+MSC not_found: periodic location update from  602020000000011
+MSC not_found: periodic location update from  60202124555567
+MSC not_found: periodic location update from  602020000000011
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: imsi attach request from 602020000000011
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 8
+MSC msc2: send to HLR MSRN 8
+MSC msc1: HLR answer with MSRN 8
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  8
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+MSC msc1: Ano send disconnect message to MSC msc1
+MSC msc2: Receive ISUP REL message from another MSC 
+MSC msc1: Receive ISUP RLC message from another MSC 
+MSC not_found: normal location update from  60202124555567
+MSC not_found: normal location update from  602020000000011
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc1: imsi attach request from 602020000000011
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 4
+MSC msc2: send to HLR MSRN 4
+MSC msc1: HLR answer with MSRN 4
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  4
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+MSC msc2: Bno send connect message to MSC msc2
+MSC msc1: receiving ANM  message 
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: Ano send disconnect message to MSC msc1
+MSC msc2: Receive ISUP REL message from another MSC 
+MSC msc1: Receive ISUP RLC message from another MSC 
+MSC msc2: receive from Bno Release message
+MSC msc2: update status to be idle of Bno with IMSI 60202124555567
+MSC msc1: Received Release Complete message from Ano 
+MSC msc1: update status to be idle of Ano with IMSI 602020000000011
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+New MSC created with given name msc1
+New MSC created with given name msc2
+MSC msc2: imsi attach request from 60202124555567
+MSC msc2: insert subscriber info in VLR
+MSC msc2: IMSI analysis, generating MGT from IMSI, MGT = 20101
+MSC msc2: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc2: sending update location to HLR with SPC = 3-100
+MSC msc2: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: imsi attach request from 602020000000011
+MSC msc1: insert subscriber info in VLR
+MSC msc1: IMSI analysis, generating MGT from IMSI, MGT = 20100
+MSC msc1: GT translation, geting SPC of HLR by MGT , SPC = 3-100
+MSC msc1: sending update location to HLR with SPC = 3-100
+MSC msc1: Received subsceiber info from HLR and update its state to idle 
+MSC msc1: received call setup message from IMSI  602020000000011
+MSC msc2: received PRN message from HLR with IMSI 60202124555567
+MSC msc2: get its MSRN 5
+MSC msc2: send to HLR MSRN 5
+MSC msc1: HLR answer with MSRN 5
+MSC msc1: send to another MSC which SPC is spc2
+MSC msc2: recived IAM message  5
+MSC msc2: send to MS Ano is 01001234567890
+MSC msc2: received alert_ack message from IMSI  60202124555567
+MSC msc2: update status to be active of IMSI 60202124555567
+MSC msc1: receiving ACM message  
+MSC msc2: Bno send connect message to MSC msc2
+MSC msc1: receiving ANM  message 
+MSC msc1: Ano send disconnect message to MSC msc1
+MSC msc2: Receive ISUP REL message from another MSC 
+MSC msc1: Receive ISUP RLC message from another MSC 
+MSC msc2: receive from Bno Release message
+MSC msc2: update status to be idle of Bno with IMSI 60202124555567
+MSC msc1: Received Release Complete message from Ano 
+MSC msc1: update status to be idle of Ano with IMSI 602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567
+MSC msc1: periodic location update from  602020000000011
+MSC msc2: periodic location update from  60202124555567

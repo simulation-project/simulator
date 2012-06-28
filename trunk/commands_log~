@@ -1,0 +1,32 @@
+c application:start(ms).
+code:add_path("../msc/test/stub").
+hlr_mgr:start_gen([{hlr_name,"esraa"}, {spc,"3-100"}, {gt,"20101"}]).
+msc_app:start_msc(msc1).
+msc_app:start_msc(msc2). 
+ms_app:create_ms({'60202124555567',lai2}).
+ms_app:create_ms({'602020000000011',lai1}).      
+
+ms_app:change_state({'60202124555567',turn_on_idle}).
+ms_app:change_state({'602020000000011',turn_on_idle}).
+
+ms_app:call_setup({'602020000000011', lai1,'010001233333'}).
+
+
+don't forget MSRN number in hlr.erl --> set to first free number in database
+
+ms_app:call_setup({'602020000000011',lai1,'0100012333'}).
+ms_app:receiving_setup('60202124555567','0100123456').
+//request_handler:erlang_send2({receiving_call,IMSI,Ano}).%%Ringing
+request_handler:erlang_send2({alert_msg,IMSI}),%%Alert
+ms_app:receiving_alert('602020000000011').
+ms_app:connect_msg('60202124555567',lai2).
+request_handler:erlang_send2('connected,602020000000011').
+
+
+ disk_log:open([{name, ms}, {file, "a.txt"}]).
+disk_log:log(ms, "hello from ms").
+disk_log:close(ms).
+
+disk_log:open([{name, ms}, {file, "b.txt"},{format, external},{type, halt}]).
+disk_log:blog(ms, list_to_binary("hello from ms1")).
+disk_log:close(ms).

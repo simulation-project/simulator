@@ -1,0 +1,81 @@
+Overview page
+
+@copyright 2012 ITI Egypt.
+@author Marwa El-Shahed <marwa.elshahed@hotmail.com>
+@author Somaya Hassan
+        [http://www.iti.gov.eg]
+
+@doc MS Application 
+
+<p>This application simulates the behaviour of the mobile station in the form of a finite state machine (ms_fsm) which is dynamically allocated to the supervisor (ms_fsm_sup) and the supervisor is the child of another supervisor (ms_sup) which is started with application (ms) itself.</p>
+
+=== Contents ===
+
+<ol>
+  <li>{@section Introduction}</li>
+  <li>{@section Architecture}</li>
+  <li>{@section Usage}
+    <ol>
+      <li>{@section Configuration}</li>
+    </ol>
+  </li>
+  <li>{@section TODO}</li>
+  <li>{@section Contributors}</li>
+</ol>
+
+=== Introduction ===
+
+<p>The mobile station has 3 states which are off, on and idle. Each state has a different behaviour. In order to move from one state to another, the msc application needs to be informed. The ms_fsm sends the request to msc application and starts a timer, if there was no confirmation message, the ms_fsm sends the request again. The maximum number of re-trails and the time between them is configurable.</p>
+
+=== Usage ===
+
+<p>This application is used in simulating 
+	1. IMSI Attach Request (Mobile Switching On).
+	2. Normal Location Update Request.
+	3. Periodic Location Update Request.
+	4. IMSI Deattach Request (Mobile Switching Off).
+	5. Mobile to Mobile Call Scenario.</p>
+
+== Configuration ==
+
+<p>The configuration parameters are defined in the <b>.app.src</b> file. A
+sample configuration file is shown below:</p>
+
+<pre>
+[{env, [{log_file,"/home/marwa/trunk_after_call/ms/priv/log.txt"},{periodic_time,120000},{normal_time, 30000},{no_of_trials, 3}].
+</pre>
+
+=== Mandatory parameters ===
+
+<dl>
+  <dt>periodic_time: </dt><dd>   120000.</dd>
+  <dt>normal_time: </dt><dd>     30000.</dd>
+  <dt>no_of_trials: </dt><dd>    3.</dd>
+</dl>
+
+=== Optional parameters ===
+
+<dl>
+  <dt>log_file: </dt><dd>        "/home/marwa/trunk_after_call/ms/priv/log.txt".</dd>
+</dl>
+
+=== Architecture ===
+
+<p></p>
+
+<img src="MS.png" alt="Architecture"/>
+
+<p></p>
+
+=== TODO ===
+
+<ul>
+  <li></li>
+</ul>
+
+=== Contributors ===
+
+<ul>
+  <li>Marwa El-Shahed</li>
+  <li>Somaya Hassan</li>
+</ul>

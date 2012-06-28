@@ -1,0 +1,3 @@
+{application,msc}.
+{packages,[]}.
+{modules,[msc_1st_sup,msc_2nd_sup,msc_app,msc_ch,msc_db]}.

@@ -170,13 +170,26 @@ normal_case()->
     [{userdata, [{doc, "Tests the public API."}]}].
 
 normal_case(_Conf)->
-   {ok,_PID} = ms_app:create_ms({ms1,lai1}),
-    %%{ok,_PID} = ms_app:create_ms({ms1,lai1}),
+    Path = code:get_path(),
+    io:format("~p~n",[Path]),
+   code:add_path("/home/marwa/trunk_after_call/ms/test/stubs"),
+   {ok,_PID1} = ms_app:create_ms({ms1,lai1}),
+   {ok,_PID2} = ms_app:create_ms({ms2,lai2}),
     ok = ms_app:change_state({ms1,turn_on_idle}),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_state({ms2,turn_on_idle}),
+    ok = ms_app:get_state(ms1),
     ok = ms_app:change_lai({ms1,lai2}),
-    ok = ms_app:change_lai({ms1,turn_off}).
+    ok = ms_app:change_lai({ms2,lai1}),
+    ok = ms_app:call_setup({ms1,lai2,bno2}),
+    ok = ms_app:connect_msg(ms2,lai1),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_state({ms1,turn_off}),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_state({ms2,turn_off}),
+    ok = ms_app:get_state(ms1).
     
-
 %%%-----------------------------------------------------------------------------
 %%% Tracing Util Functions
 %%%-----------------------------------------------------------------------------

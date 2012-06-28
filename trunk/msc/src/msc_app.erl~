@@ -20,6 +20,7 @@
 %%% @copyright 2012 ITI Egypt.
 %%% @author Esraa Adel <esraa.elmelegy@hotmail.com>
 %%% @author Sherif Ashraf <sherif_ashraf89@hotmail.com>
+%%% @author Ahmed Samy <ahm.sam@live.com>
 %%%         [http://www.iti.gov.eg/]
 %%% @end
 
@@ -33,7 +34,7 @@
 
 %%% External exports
 -export([ start_msc/1, location_update_request/1, insert_subscriber_data/3, check_msc_spc/2, call_setup/1,
-          receive_disconnect/1, isup_rel/1, isup_rlc/1, release_complete/1, release_msg/1]).
+	 receive_disconnect/1, isup_rel/1, isup_rlc/1, release_complete/1, release_msg/1]).
 
 -compile([export_all]).
 %%% Macros
@@ -72,7 +73,7 @@ stop(_St) ->
 %%    Result = {ok, Pid} 
 %%    Pid = pid()  
 %%    Name = atom() 
-%% @doc This function is called to build a msc with the given Name
+%% @doc Builds a msc with the given Name
 %% this name is then used to call the module of that msc.
 %% @end
 start_msc(Name)->
@@ -87,16 +88,15 @@ start_msc(Name)->
 
 %% @spec location_update_request(Parameter) -> Result
 %%    Result = ok   
-%%    Parameter = {2,1,IMSI,LAI} |
+%%    Parameter = {2, 1, IMSI, LAI} |
 %%                {2, 2, IMSI, LAI} |
-%%                {2, 3, IMSI, LAI}
+%%                {2, 3, IMSI, LAI} |
+%%                {2, 4, IMSI, LAI}
 %%    IMSI = atom()
 %%    LAI = atom() 
-%% @doc This function is called when the mobile station is turned on or moves to a new
-%% location area or make periodic update to update it's location and state in the VLR and HLR.
+%% @doc Updates the MS location and state in the VLR and HLR when
+%% the MS is turned on or moved to new LA and when executing periodic update.
 %% @end
-
-
 location_update_request({2, 1, IMSI, LAI})->
     msc_2nd_sup:location_update_request({2, 1, IMSI, LAI}),
     ok;
@@ -114,13 +114,12 @@ location_update_request({2, 4, IMSI, LAI}) ->
     msc_2nd_sup:location_update_request({2,4, IMSI, LAI}),
     ok.
 
-%% @spec insert_subscriber_data(IMSI,INFO,SPC) -> Result
-%% Result = ok
-%% IMSI = atom()
-%% SPC = atom()
-%% INFO = atom()
-%% @doc This function is called when the HLR sends the ISD message
-%% to the MSC to insert the subsceiber data in the VLR.
+%% @spec insert_subscriber_data(IMSI, INFO, SPC) -> Result
+%%     Result = ok
+%%     IMSI = atom()
+%%     SPC = atom()
+%%     INFO = atom()
+%% @doc Inserts the subsceiber data given from the HLR in the VLR.
 %% @end
 insert_subscriber_data(IMSI,INFO,SPC)->
     msc_2nd_sup:insert_subscriber_data(IMSI, INFO, SPC).
@@ -130,7 +129,7 @@ insert_subscriber_data(IMSI,INFO,SPC)->
 %%    MSC = atom() 
 %%    SPC = atom()
 %%    GT = atom() 
-%% @doc This function is called to check that both the SPC and GT 
+%% @doc Checks that both the SPC and GT 
 %% belong to a configured MSC.
 %% @end
 check_msc_spc(SPC,GT)->
@@ -139,44 +138,138 @@ check_msc_spc(SPC,GT)->
     Y.
 
 
+%% @spec call_setup(Param) -> Result
+%%    Result = ok
+%%    Param = {2, 1, IMSI, LAI, Bno} 
+%%    IMSI = atom()
+%%    LAI = atom() 
+%%    Bno = atom() 
+%% @doc Starts the call setup when MSC recieves a request from the MS and send SRI message to HLR.
+%% @end
 call_setup({2, 1, IMSI, LAI, Bno})-> %{2,1, '602020000000011',lai2, '010001233333'}
     msc_2nd_sup:call_setup({2, 1, IMSI, LAI, Bno}),
     ok.
-
+%% @spec receive_PRN(Param) -> Result
+%%    Result = atom()
+%%    Param= {6, 5, IMSI, SPC}
+%%    IMSI = atom()
+%%    SPC = atom() 
+%% @doc Assigns MSRN for IMSI.
+%% @end
 receive_PRN({6, 5, IMSI, SPC})->%IMSI for Bno to assign MSRN
     msc_2nd_sup:receive_PRN({6, 5, IMSI, SPC}).
 
+%% @spec result_SRI(Param) -> Result
+%%    Result = atom()
+%%    Param= {6, 7, MSRN, SPC}
+%%    MSRN = atom()
+%%    SPC = atom() 
+%% @doc Receives SRIA message from HLR to send IAM message to other MSC.
+%% @end
 result_SRI({6, 7, MSRN, SPC})->
     msc_2nd_sup:result_SRI({6, 7, MSRN, SPC}).
 
+%% @spec send_IAM(Param, SPC, GT) -> Result
+%%    Result = atom()
+%%    Param= {5, 1, Ano, MSRN}
+%%    MSRN = atom()
+%%    Ano = atom() 
+%%    SPC = atom()
+%%    GT = atom() 
+%% @doc Sends IAM message to other MSC.
+%% @end
 send_IAM({5, 1, Ano, MSRN},SPC,GT)->
     msc_2nd_sup:send_IAM({5, 1, Ano, MSRN},SPC,GT).
 
-receiving_alert({1,5,IMSI,LAI}) ->
+%% @spec receiving_alert(Param) -> Result
+%%    Result = atom()
+%%    Param= {1, 5, IMSI, LAI}
+%%    IMSI = atom()
+%%    LAI = atom()  
+%% @doc Receives alert message from MS.
+%% @end
+receiving_alert({1, 5, IMSI, LAI}) ->
     msc_2nd_sup:receive_alert({1, 5, IMSI, LAI}).
 
+%% @spec send_ACM(Param) -> Result
+%%    Result = atom()
+%%    Param= {5, 2, Ano, SPC}
+%%    Ano = atom()
+%%    SPC = atom()  
+%% @doc Sends ACM message to other MSC.
+%% @end
 send_ACM({5, 2, Ano, SPC})->
-    msc_2nd_sup:send_ACM({5,2,Ano,SPC}).
+    msc_2nd_sup:send_ACM({5, 2, Ano, SPC}).
 
+%% @spec receive_connect(Param) -> Result
+%%    Result = atom()
+%%    Param= {1, 6, IMSI, LAI}
+%%    IMSI = atom()
+%%    LAI = atom()  
+%% @doc Receives connect message from MS to send ANM message to other MSC.
+%% @end
 receive_connect({1, 6, IMSI, LAI})->
-    msc_2nd_sup:receive_connect({1,6,IMSI,LAI}).
+    msc_2nd_sup:receive_connect({1, 6, IMSI, LAI}).
  
+%% @spec send_ANM(Param) -> Result
+%%    Result = atom()
+%%    Param= {5, 3, Ano, SPC}
+%%    Ano = atom()
+%%    SPC = atom()  
+%% @doc Sends ANM message to other MSC.
+%% @end
 send_ANM({5, 3, Ano, SPC})->
     msc_2nd_sup:receive_ANM({5,3,Ano,SPC}).
 
+
 %%--------------- End Call Scenario -----------------------------------------
+%% @spec receive_disconnect(Param) -> Result
+%%    Result = atom()
+%%    Param= {1, 7, IMSI, LAI}
+%%    IMSI = atom()
+%%    LAI = atom()  
+%% @doc Receives disconnect message from MS to send ISUP REL message to other MSC.
+%% @end
 receive_disconnect({1, 7, IMSI, LAI})->
     msc_2nd_sup:receive_disconnect({1, 7, IMSI, LAI}).
 
+%% @spec isup_rel(Param) -> Result
+%%    Result = atom()
+%%    Param= {5, 4, SPC}
+%%    SPC = atom() 
+%% @doc Receives ISUP REL message from other MSC to reply by ISUP RLC message.
+%% @end
 isup_rel({5, 4, SPC})->
 	msc_2nd_sup:isup_rel({5, 4, SPC}).
 
+%% @spec isup_rlc(Param) -> Result
+%%    Result = atom()
+%%    Param= {5, 5, SPC}
+%%    SPC = atom() 
+%% @doc Receives ISUP RLC message from other MSC and send release message to MS.
+%% @end
 isup_rlc({5, 5, SPC})-> % spc of msc 1
 	msc_2nd_sup:isup_rlc({5, 5, SPC}).
 
+%% @spec release_complete(Param) -> Result
+%%    Result = atom()
+%%    Param= {5, 6, IMSI, LAI}
+%%    IMSI = atom() 
+%%    LAI = atom() 
+%% @doc Receives Release complete message from MS.
+%% @end
 release_complete({5, 6, IMSI, LAI})-> %at msc1
 	msc_2nd_sup:release_complete({5, 6, IMSI, LAI}).
 
-release_msg({5, 7, IMSI, LAI})->
+%% @spec release_msg(Param) -> Result
+%%    Result = atom()
+%%    Param= {5, 7, IMSI, LAI}
+%%    IMSI = atom() 
+%%    LAI = atom() 
+%% @doc Receives Release message from MS.
+%% @end
+release_msg({5, 7, IMSI, LAI})-> % to msc2
 	msc_2nd_sup:release_msg({5, 7, IMSI, LAI}).
+
+
 	

@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test ms_app_SUITE:normal_case result</title>
+<meta http-equiv="cache-control" content="no-cache">
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></head>
+<body>
+
+=== <a href="ms_app_suite.src.html#normal_case">source code for ms_app_SUITE:normal_case/1</a>
+
+<pre>
+<a name="top"></a>
+=== Test case started with:
+ms_app_SUITE:normal_case([{watchdog,<0.66.0>},
+                          {tc_logfile,"/home/marwa/trunk_after_call/ms/logs/ct_run.test@ubuntu.2012-06-26_19.09.19/trunk_after_call.ms.logs/run.2012-06-26_19.09.19/ms_app_suite.normal_case.html"},
+                          {tc_group_properties,[]},
+                          {tc_group_path,[]},
+                          {data_dir,"/home/marwa/trunk_after_call/ms/test/ms_app_SUITE_data/"},
+                          {priv_dir,"/home/marwa/trunk_after_call/ms/logs/ct_run.test@ubuntu.2012-06-26_19.09.19/trunk_after_call.ms.logs/run.2012-06-26_19.09.19/log_private/"}])
+
+=== Current directory is "/home/marwa/trunk_after_call/ms/logs/ct_run.test@ubuntu.2012-06-26_19.09.19"
+
+=== Started at 2012-06-26 19:09:19
+
+<br />
+["/home/marwa/trunk_after_call/ms/test","/home/marwa/trunk_after_call/ms",
+ "/home/marwa/trunk_after_call/ms/ebin",".",
+ "/usr/local/lib/erlang/lib/kernel-2.15.1/ebin",
+ "/usr/local/lib/erlang/lib/stdlib-1.18.1/ebin",
+ "/usr/local/lib/erlang/lib/xmerl-1.3.1/ebin",
+ "/usr/local/lib/erlang/lib/wx-0.99.2/ebin",
+ "/usr/local/lib/erlang/lib/webtool-0.8.9.1/ebin",
+ "/usr/local/lib/erlang/lib/typer-0.9.3/ebin",
+ "/usr/local/lib/erlang/lib/tv-2.1.4.9/ebin",
+ "/usr/local/lib/erlang/lib/tools-2.6.7/ebin",
+ "/usr/local/lib/erlang/lib/toolbar-1.4.2.2/ebin",
+ "/usr/local/lib/erlang/lib/test_server-3.5.1/ebin",
+ "/usr/local/lib/erlang/lib/syntax_tools-1.6.8/ebin",
+ "/usr/local/lib/erlang/lib/ssl-5.0.1/ebin",
+ "/usr/local/lib/erlang/lib/ssh-2.1/ebin",
+ "/usr/local/lib/erlang/lib/snmp-4.22/ebin",
+ "/usr/local/lib/erlang/lib/sasl-2.2.1/ebin",
+ "/usr/local/lib/erlang/lib/runtime_tools-1.8.8/ebin",
+ "/usr/local/lib/erlang/lib/reltool-0.6/ebin",
+ "/usr/local/lib/erlang/lib/public_key-0.15/ebin",
+ "/usr/local/lib/erlang/lib/pman-2.7.1.2/ebin",
+ "/usr/local/lib/erlang/lib/percept-0.8.6.1/ebin",
+ "/usr/local/lib/erlang/lib/parsetools-2.0.7/ebin",
+ "/usr/local/lib/erlang/lib/otp_mibs-1.0.7/ebin",
+ "/usr/local/lib/erlang/lib/os_mon-2.2.9/ebin",
+ "/usr/local/lib/erlang/lib/orber-3.6.24/ebin",
+ "/usr/local/lib/erlang/lib/observer-1.1/ebin",
+ "/usr/local/lib/erlang/lib/mnesia-4.7/ebin",
+ "/usr/local/lib/erlang/lib/megaco-3.16.0.1/ebin",
+ "/usr/local/lib/erlang/lib/jinterface-1.5.6",
+ "/usr/local/lib/erlang/lib/inviso-0.6.3/ebin",
+ "/usr/local/lib/erlang/lib/inets-5.9/ebin",
+ "/usr/local/lib/erlang/lib/ic-4.2.30/ebin",
+ "/usr/local/lib/erlang/lib/hipe-3.9.1/ebin",
+ "/usr/local/lib/erlang/lib/gs-1.5.15.1/ebin",
+ "/usr/local/lib/erlang/lib/eunit-2.2.2/ebin",
+ "/usr/local/lib/erlang/lib/et-1.4.4.1/ebin",
+ "/usr/local/lib/erlang/lib/erts-5.9.1/ebin",
+ "/usr/local/lib/erlang/lib/erl_interface-3.7.7",
+ "/usr/local/lib/erlang/lib/erl_docgen-0.3.1/ebin",
+ "/usr/local/lib/erlang/lib/eldap-1.0/ebin",
+ "/usr/local/lib/erlang/lib/edoc-0.7.9.1/ebin",
+ "/usr/local/lib/erlang/lib/diameter-1.1/ebin",
+ "/usr/local/lib/erlang/lib/dialyzer-2.5.1/ebin",
+ "/usr/local/lib/erlang/lib/debugger-3.2.8/ebin",
+ "/usr/local/lib/erlang/lib/crypto-2.1/ebin",
+ "/usr/local/lib/erlang/lib/cosTransactions-1.2.12/ebin",
+ "/usr/local/lib/erlang/lib/cosTime-1.1.12/ebin",
+ "/usr/local/lib/erlang/lib/cosProperty-1.1.15/ebin",
+ "/usr/local/lib/erlang/lib/cosNotification-1.1.18/ebin",
+ "/usr/local/lib/erlang/lib/cosFileTransfer-1.1.13/ebin",
+ "/usr/local/lib/erlang/lib/cosEventDomain-1.1.12/ebin",
+ "/usr/local/lib/erlang/lib/cosEvent-2.1.12/ebin",
+ "/usr/local/lib/erlang/lib/compiler-4.8.1/ebin",
+ "/usr/local/lib/erlang/lib/common_test-1.6.1/ebin",
+ "/usr/local/lib/erlang/lib/asn1-1.7/ebin",
+ "/usr/local/lib/erlang/lib/appmon-2.1.14.1/ebin"]
+
+start_child 
+{ms1,lai1}
+
+start_child 
+{ms2,lai2}
+
+change_state 
+{ms1,turn_on_idle}
+
+turn_on_idle
+
+change_state 
+{ms2,turn_on_idle}
+
+turn_on_idle
+
+change_lai 
+ms1
+lai2
+
+change_lai 
+ms2
+lai1
+
+callsetup 
+
+<div class="ct_error_notify"><b>*** CT Error Notification 2012-06-26 19:09:19.910 ***</b>
+msc_app:call_setup failed
+Reason: undef
+</div>
+<div class="error_logger"><b>*** User 2012-06-26 19:09:19.910 ***</b>
+
+=ERROR REPORT==== 26-Jun-2012::15:09:19 ===
+** State machine ms2 terminating 
+** Last event in was turn_on_idle
+** When State == turn_off
+**      Data  == {st,ms2,lai2,undefined,120000,30000,3}
+** Reason for termination = 
+** {'module could not be loaded',
+       [{msc_app,location_update_request,[{2,1,ms2,lai2}],[]},
+        {ms_fsm,loc_update,2,[{file,"src/ms_fsm.erl"},{line,427}]},
+        {ms_fsm,turn_off,2,[{file,"src/ms_fsm.erl"},{line,106}]},
+        {gen_fsm,handle_msg,7,[{file,"gen_fsm.erl"},{line,494}]},
+        {proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,227}]}]}
+
+</div>
+<div class="error_logger"><b>*** User 2012-06-26 19:09:19.911 ***</b>
+
+=ERROR REPORT==== 26-Jun-2012::15:09:19 ===
+** State machine ms1 terminating 
+** Last event in was turn_on_idle
+** When State == turn_off
+**      Data  == {st,ms1,lai1,undefined,120000,30000,3}
+** Reason for termination = 
+** {'module could not be loaded',
+       [{msc_app,location_update_request,[{2,1,ms1,lai1}],[]},
+        {ms_fsm,loc_update,2,[{file,"src/ms_fsm.erl"},{line,427}]},
+        {ms_fsm,turn_off,2,[{file,"src/ms_fsm.erl"},{line,106}]},
+        {gen_fsm,handle_msg,7,[{file,"gen_fsm.erl"},{line,494}]},
+        {proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,227}]}]}
+
+</div>
+<div class="sasl"><b>*** User 2012-06-26 19:09:19.914 ***</b>
+
+=CRASH REPORT==== 26-Jun-2012::19:09:19 ===
+  crasher:
+    initial call: ms_fsm:init/1
+    pid: <0.90.0>
+    registered_name: ms1
+    exception exit: {undef,[{msc_app,location_update_request,
+                                     [{2,1,ms1,lai1}],
+                                     []},
+                            {ms_fsm,loc_update,2,
+                                    [{file,"src/ms_fsm.erl"},{line,427}]},
+                            {ms_fsm,turn_off,2,
+                                    [{file,"src/ms_fsm.erl"},{line,106}]},
+                            {gen_fsm,handle_msg,7,
+                                     [{file,"gen_fsm.erl"},{line,494}]},
+                            {proc_lib,init_p_do_apply,3,
+                                      [{file,"proc_lib.erl"},{line,227}]}]}
+      in function  gen_fsm:terminate/7 (gen_fsm.erl, line 611)
+    ancestors: [ms_fsm_sup,ms_sup,<0.78.0>]
+    messages: [{'$gen_all_state_event',get_state},
+                  {'$gen_all_state_event',get_state},
+                  {'$gen_all_state_event',lai2}]
+    links: [<0.82.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 610
+    stack_size: 24
+    reductions: 246
+  neighbours:
+
+</div>
+<div class="sasl"><b>*** User 2012-06-26 19:09:19.915 ***</b>
+
+=CRASH REPORT==== 26-Jun-2012::19:09:19 ===
+  crasher:
+    initial call: ms_fsm:init/1
+    pid: <0.91.0>
+    registered_name: ms2
+    exception exit: {undef,[{msc_app,location_update_request,
+                                     [{2,1,ms2,lai2}],
+                                     []},
+                            {ms_fsm,loc_update,2,
+                                    [{file,"src/ms_fsm.erl"},{line,427}]},
+                            {ms_fsm,turn_off,2,
+                                    [{file,"src/ms_fsm.erl"},{line,106}]},
+                            {gen_fsm,handle_msg,7,
+                                     [{file,"gen_fsm.erl"},{line,494}]},
+                            {proc_lib,init_p_do_apply,3,
+                                      [{file,"proc_lib.erl"},{line,227}]}]}
+      in function  gen_fsm:terminate/7 (gen_fsm.erl, line 611)
+    ancestors: [ms_fsm_sup,ms_sup,<0.78.0>]
+    messages: [{'$gen_all_state_event',lai1}]
+    links: [<0.82.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 610
+    stack_size: 24
+    reductions: 244
+  neighbours:
+
+</div>
+<div class="sasl"><b>*** User 2012-06-26 19:09:19.916 ***</b>
+
+=SUPERVISOR REPORT==== 26-Jun-2012::19:09:19 ===
+     Supervisor: {local,ms_fsm_sup}
+     Context:    child_terminated
+     Reason:     {undef,[{msc_app,location_update_request,[{2,1,ms1,lai1}],[]},
+                         {ms_fsm,loc_update,2,
+                                 [{file,"src/ms_fsm.erl"},{line,427}]},
+                         {ms_fsm,turn_off,2,
+                                 [{file,"src/ms_fsm.erl"},{line,106}]},
+                         {gen_fsm,handle_msg,7,
+                                  [{file,"gen_fsm.erl"},{line,494}]},
+                         {proc_lib,init_p_do_apply,3,
+                                   [{file,"proc_lib.erl"},{line,227}]}]}
+     Offender:   [{pid,<0.90.0>},
+                  {name,ms_fsm},
+                  {mfargs,{ms_fsm,start_link,[[ms1,lai1]]}},
+                  {restart_type,permanent},
+                  {shutdown,5000},
+                  {child_type,worker}]
+
+
+</div>
+<div class="sasl"><b>*** User 2012-06-26 19:09:19.917 ***</b>
+
+=SUPERVISOR REPORT==== 26-Jun-2012::19:09:19 ===
+     Supervisor: {local,ms_fsm_sup}
+     Context:    child_terminated
+     Reason:     {undef,[{msc_app,location_update_request,[{2,1,ms2,lai2}],[]},
+                         {ms_fsm,loc_update,2,
+                                 [{file,"src/ms_fsm.erl"},{line,427}]},
+                         {ms_fsm,turn_off,2,
+                                 [{file,"src/ms_fsm.erl"},{line,106}]},
+                         {gen_fsm,handle_msg,7,
+                                  [{file,"gen_fsm.erl"},{line,494}]},
+                         {proc_lib,init_p_do_apply,3,
+                                   [{file,"proc_lib.erl"},{line,227}]}]}
+     Offender:   [{pid,<0.91.0>},
+                  {name,ms_fsm},
+                  {mfargs,{ms_fsm,start_link,[[ms2,lai2]]}},
+                  {restart_type,permanent},
+                  {shutdown,5000},
+                  {child_type,worker}]
+
+
+</div>
+<a name="end"></a>
+
+
+=== Ended at 2012-06-26 19:09:19
+=== location [{msc_app,call_setup},
+ {ms_app,call_setup,80},
+ {ms_app_SUITE,normal_case,184},
+ {test_server,ts_tc,1834},
+ {test_server,run_test_case_eval1,1364},
+ {test_server,run_test_case_eval,1302}]
+=== reason = undefined function msc_app:call_setup/1
+  in function  ms_app:call_setup/1 (src/ms_app.erl, line 80)
+  in call from ms_app_SUITE:normal_case/1 (ms_app_SUITE.erl, line 184)
+  in call from test_server:ts_tc/3 (test_server.erl, line 1834)
+  in call from test_server:run_test_case_eval1/6 (test_server.erl, line 1364)
+  in call from test_server:run_test_case_eval/9 (test_server.erl, line 1302)
+</pre>
+<center>
+<br /><hr /><p>
+<a href="../../../all_runs.html">Test run history
+</a>  |  <a href="../../../index.html">Top level test index
+</a>
+</p>
+<div class="copyright">Copyright &copy; 2012 <a href="http://www.erlang.org">Open Telecom Platform</a><br />
+Updated: <!date>Tue Jun 26 2012 19:09:19<!/date><br />
+</div>
+</center>
+</body>
+</html>

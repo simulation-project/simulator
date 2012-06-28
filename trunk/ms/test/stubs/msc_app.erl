@@ -33,8 +33,14 @@ location_update_request({2,3,_IMSI,_LAI}) ->
 location_update_request({2,4,_IMSI,_LAI}) ->
     ok.
 
+call_setup({2,1,IMSI,LAI,Bno})->
+	ms_app:receiving_setup(ms2,ano).
 
+receiving_alert({1,5,IMSI,LAI})->
+	ms_app:receiving_alert(ms2).
 
+receive_connect({1,6,IMSI,LAI})->
+	ms_app:receiving_answer(ms1).
 
 
 

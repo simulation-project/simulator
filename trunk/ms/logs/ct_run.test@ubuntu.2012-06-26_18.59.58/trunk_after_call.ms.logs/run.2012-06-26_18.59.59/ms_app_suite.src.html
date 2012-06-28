@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Module /home/marwa/trunk_after_call/ms/test/ms_app_SUITE.erl</title>
+<meta http-equiv="cache-control" content="no-cache">
+<link rel="stylesheet" href="../../ct_default.css" type="text/css"></head>
+<body>
+
+<pre>
+    1:<i>%%% Copyright (C) 2012 ITI Egypt.</i>
+    2:<i>%%%</i>
+    3:<i>%%% The contents of this file are subject to the Erlang Public License,</i>
+    4:<i>%%% Version 1.1, (the "License"); you may not use this file except in</i>
+    5:<i>%%% compliance with the License. You should have received a copy of the</i>
+    6:<i>%%% Erlang Public License along with this software. If not, it can be</i>
+    7:<i>%%% retrieved via the world wide web at http://www.erlang.org/.</i>
+    8:<i>%%%</i>
+    9:<i>%%% Software distributed under the License is distributed on an "AS IS"</i>
+<a name="10"></a>   10:<i>%%% basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See</i>
+   11:<i>%%% the License for the specific language governing rights and limitations</i>
+   12:<i>%%% under the License.</i>
+   13:<i>%%%</i>
+   14:<i>%%% The Initial Developer of the Original Code is Ericsson Utvecklings AB.</i>
+   15:<i>%%% Portions created by Ericsson are Copyright 1999, Ericsson Utvecklings</i>
+   16:<i>%%% AB. All Rights Reserved.</i>
+   17:
+   18:<i>%%% @doc</i>
+   19:<i>%%%</i>
+<a name="20"></a>   20:<i>%%% @copyright 2012 ITI Egypt.</i>
+   21:<i>%%% @author Marwa El-Shahed &lt;marwa.elshahed@hotmail.com&gt;</i>
+   22:<i>%%%         [http://www.iti.gov.eg/]</i>
+   23:<i>%%% @end</i>
+   24:-<b>module</b>(ms_app_SUITE).
+   25:
+   26:<i>%%% Include files</i>
+   27:<i>%-include("/usr/lib/erlang/lib/common_test-1.5.5/include/ct.hrl").</i>
+   28:<i>%-include("ct.hrl").</i>
+   29:
+<a name="30"></a>   30:<i>%%% External exports</i>
+   31:-<b>compile</b>(export_all).
+   32:
+   33:<i>%%% Macros</i>
+   34:-<b>define</b>(MATCH_SPEC, [{'_', [], [{message, {return_trace}}]}]).
+   35:-<b>define</b>(MAX_TIME, 10000).
+   36:-<b>define</b>(STUBS_DIR, "../../stubs").  % Tests run in log/ct_run.*
+   37:
+   38:
+   39:<i>%%%-----------------------------------------------------------------------------</i>
+<a name="40"></a>   40:<i>%%% Suite Exports</i>
+   41:<i>%%%-----------------------------------------------------------------------------</i>
+   42:<i>%% @spec all() -&gt; Result</i>
+   43:<i>%%    Result = TestCases | {skip, Reason}</i>
+   44:<i>%%    TestCases = [TestCase]</i>
+   45:<i>%%    TestCase = atom()</i>
+   46:<i>%%    Reason   = term()</i>
+   47:<i>%%</i>
+   48:<i>%% @doc Returns the list of test cases that are to be executed.</i>
+   49:<i>%% @end</i>
+<a name=all><a name="50"></a>   50:<b>all</b></a>() -&gt;
+   51:    [normal_case].
+   52:
+   53:<i>%% @spec sequences() -&gt; Sequences</i>
+   54:<i>%%    Sequences = [{Name, Cases}]</i>
+   55:<i>%%    Name = atom()</i>
+   56:<i>%%    Cases = [Case]</i>
+   57:<i>%%    Case = atom()</i>
+   58:<i>%%</i>
+   59:<i>%% @doc Specifies test case sequences.</i>
+<a name="60"></a>   60:<i>%% @end</i>
+<a name=sequences>   61:<b>sequences</b></a>() -&gt;
+   62:    [].
+   63:
+   64:<i>%% @spec suite() -&gt; Info</i>
+   65:<i>%%    Info = [tuple()]</i>
+   66:<i>%%</i>
+   67:<i>%% @doc Returns a list of tuples to set default properties for the suite.</i>
+   68:<i>%% @end</i>
+<a name=suite>   69:<b>suite</b></a>() -&gt;
+<a name="70"></a>   70:    [{timetrap, {minutes, 60}},
+   71:     {required, conf_file}].
+   72:
+   73:<i>%%%-----------------------------------------------------------------------------</i>
+   74:<i>%%% Init Suite Exports</i>
+   75:<i>%%%-----------------------------------------------------------------------------</i>
+   76:<i>%% @spec init_per_suite(Conf) -&gt; Conf</i>
+   77:<i>%%     Conf = [tuple()]</i>
+   78:<i>%%</i>
+   79:<i>%% @doc Initiation before the whole suite.</i>
+<a name="80"></a>   80:<i>%%</i>
+   81:<i>%% &lt;b&gt;Note:&lt;/b&gt; This function is free to add any key/value pairs to the</i>
+   82:<i>%% &lt;u&gt;Conf&lt;/u&gt; variable, but should NOT alter/remove any existing entries.</i>
+   83:<i>%% @end</i>
+<a name=init_per_suite>   84:<b>init_per_suite</b></a>(Conf) -&gt;
+   85:    ok = application:start(sasl),
+   86:    ok = application:start(ms),
+   87:    lists:foreach(fun(X) -&gt; code:add_path(X) end, ct:get_config(paths, [])),
+   88:    {A1, A2, A3} = now(),
+   89:    random:seed(A1, A2, A3),
+<a name="90"></a>   90:    dbg:tracer(),
+   91:    dbg:p(all, [c, sos, sol]),
+   92:    %MaxTime = ct:get_config(max_time, ?MAX_TIME),
+   93:    %AdpConf = xml_schema:parse(ct:get_config(conf_file)),
+   94:    %[{max_time, MaxTime} | Conf].
+   95:    %[{conf, AdpConf} | Conf].
+   96:    Conf.
+   97:
+   98:<i>%%%-----------------------------------------------------------------------------</i>
+   99:<i>%%% End Suite Exports</i>
+<a name="100"></a>  100:<i>%%%-----------------------------------------------------------------------------</i>
+  101:<i>%% @spec end_per_suite(Conf) -&gt; Result</i>
+  102:<i>%%    Conf = [tuple()]</i>
+  103:<i>%%    Result = ok | {save_config, Conf1}</i>
+  104:<i>%%</i>
+  105:<i>%% @doc Cleanup after the suite.</i>
+  106:<i>%% @end</i>
+<a name=end_per_suite>  107:<b>end_per_suite</b></a>(_Conf) -&gt;
+  108:    ok = application:stop(ms),
+  109:    ok = application:stop(sasl).
+<a name="110"></a>  110:
+  111:<i>%%%-----------------------------------------------------------------------------</i>
+  112:<i>%%% Init Case Exports</i>
+  113:<i>%%%-----------------------------------------------------------------------------</i>
+  114:<i>%% @spec init_per_testcase(Case, Conf) -&gt; Result</i>
+  115:<i>%%    Case = atom()</i>
+  116:<i>%%    Conf = [tuple()]</i>
+  117:<i>%%    Result = NewConf |</i>
+  118:<i>%%             {skip, Reason} |</i>
+  119:<i>%%             {skip_and_save, Reason, NewConf}</i>
+<a name="120"></a>  120:<i>%%    NewConf = [tuple()]</i>
+  121:<i>%%    Reason = term()</i>
+  122:<i>%%</i>
+  123:<i>%% @doc Initialization before each test case.</i>
+  124:<i>%% @end</i>
+<a name=init_per_testcase>  125:<b>init_per_testcase</b></a>(Case, Conf) -&gt;
+  126:    ct:print("Starting test case ~p", [Case]),
+  127:    init_stubs(Case),
+  128:    init_traces(Case),
+  129:    Conf.
+<a name="130"></a>  130:
+<a name=init_stubs>  131:<b>init_stubs</b></a>(Case) -&gt;
+  132:    NegCases = ct:get_config(neg_cases, []),
+  133:    Stubs = proplists:get_value(Case, NegCases, []),
+  134:    lists:foreach(fun(Stub) -&gt; load_stub(Stub, true) end, Stubs).
+  135:
+<a name=init_traces>  136:<b>init_traces</b></a>(Case) -&gt;
+  137:    TpCases = ct:get_config(tp_cases, []),
+  138:    Tps = proplists:get_value(Case, TpCases, []),
+  139:    lists:foreach(fun(Tp) -&gt; add_trace(tp, Tp) end, Tps),
+<a name="140"></a>  140:    TplCases = ct:get_config(tpl_cases, []),
+  141:    Tpls = proplists:get_value(Case, TplCases, []),
+  142:    lists:foreach(fun(Tpl) -&gt; add_trace(tp, Tpl) end, Tpls).
+  143:
+  144:<i>%%%-----------------------------------------------------------------------------</i>
+  145:<i>%%% End Case Exports</i>
+  146:<i>%%%-----------------------------------------------------------------------------</i>
+<a name=end_per_testcase>  147:<b>end_per_testcase</b></a>(Case, Conf) -&gt;
+  148:    end_traces(Case),
+  149:    end_stubs(Case),
+<a name="150"></a>  150:    ct:print("Test case ~p completed", [Case]),
+  151:    Conf.
+  152:
+<a name=end_stubs>  153:<b>end_stubs</b></a>(Case) -&gt;
+  154:    NegCases = ct:get_config(neg_cases, []),
+  155:    Stubs = proplists:get_value(Case, NegCases, []),
+  156:    lists:foreach(fun purge_stub/1, Stubs).
+  157:
+<a name=end_traces>  158:<b>end_traces</b></a>(Case) -&gt;
+  159:    TpCases = ct:get_config(tp_cases, []),
+<a name="160"></a>  160:    Tps = proplists:get_value(Case, TpCases, []),
+  161:    lists:foreach(fun(Tp) -&gt; del_trace(ctp, Tp) end, Tps),
+  162:    TplCases = ct:get_config(tpl_cases, []),
+  163:    Tpls = proplists:get_value(Case, TplCases, []),
+  164:    lists:foreach(fun(Tpl) -&gt; del_trace(ctpl, Tpl) end, Tpls).
+  165:
+  166:<i>%%%-----------------------------------------------------------------------------</i>
+  167:<i>%%% Test Cases</i>
+  168:<i>%%%-----------------------------------------------------------------------------</i>
+<a name=normal_case>  169:<b>normal_case</b></a>()-&gt;
+<a name="170"></a>  170:    [{userdata, [{doc, "Tests the public API."}]}].
+  171:
+<a name=normal_case>  172:<b>normal_case</b></a>(_Conf)-&gt;
+  173:   code:add_path("/home/marwa/trunk_after_call/ms/test/stubs"),
+  174:   {ok,_PID1} = ms_app:create_ms({ms1,lai1}),
+  175:   {ok,_PID2} = ms_app:create_ms({ms2,lai2}),
+  176:    ok = ms_app:change_state({ms1,turn_on_idle}),
+  177:    ok = ms_app:get_state(ms1),
+  178:    ok = ms_app:change_state({ms2,turn_on_idle}),
+  179:    ok = ms_app:get_state(ms1),
+<a name="180"></a>  180:    ok = ms_app:change_lai({ms1,lai2}),
+  181:    ok = ms_app:change_lai({ms2,lai1}),
+  182:    ok = ms_app:call_setup({ms1,lai2,bno2}),
+  183:    ok = ms_app:connect_msg(ms2,lai1),
+  184:    ok = ms_app:get_state(ms1),
+  185:    ok = ms_app:get_state(ms1),
+  186:    ok = ms_app:change_state({ms1,turn_off}),
+  187:    ok = ms_app:get_state(ms1),
+  188:    ok = ms_app:change_state({ms2,turn_off}),
+  189:    ok = ms_app:get_state(ms1).
+<a name="190"></a>  190:    
+  191:<i>%%%-----------------------------------------------------------------------------</i>
+  192:<i>%%% Tracing Util Functions</i>
+  193:<i>%%%-----------------------------------------------------------------------------</i>
+<a name=add_trace>  194:<b>add_trace</b></a>(TpFun, {Mod, Fun, Spec}) -&gt;
+  195:    dbg:TpFun(Mod, Fun, Spec);
+<a name=add_trace>  196:<b>add_trace</b></a>(TpFun, {Mod, Fun}) -&gt;
+  197:    dbg:TpFun(Mod, Fun, ?MATCH_SPEC);
+<a name=add_trace>  198:<b>add_trace</b></a>(TpFun, Mod) -&gt;
+  199:    dbg:TpFun(Mod, ?MATCH_SPEC).
+<a name="200"></a>  200:
+  201:
+<a name=del_trace>  202:<b>del_trace</b></a>(CtpFun, {Mod, Fun, _Spec}) -&gt;
+  203:    dbg:CtpFun(Mod, Fun);
+<a name=del_trace>  204:<b>del_trace</b></a>(CtpFun, {Mod, Fun}) -&gt;
+  205:    dbg:CtpFun(Mod, Fun);
+<a name=del_trace>  206:<b>del_trace</b></a>(CtpFun, Mod) -&gt;
+  207:    dbg:CtpFun(Mod).
+  208:
+  209:<i>%%%-----------------------------------------------------------------------------</i>
+<a name="210"></a>  210:<i>%%% Stub Util Functions</i>
+  211:<i>%%%-----------------------------------------------------------------------------</i>
+<a name=load_stub>  212:<b>load_stub</b></a>(Stub, NegTest) -&gt;
+  213:    Opts = if NegTest -&gt; [binary, {d, neg_case}]; true -&gt;  [binary] end,
+  214:    Erl = atom_to_list(Stub) ++ ".erl",
+  215:    ct:print("Compiling ~s with options ~p", [Erl, Opts]),
+  216:    {ok, Mod, Bin} = compile:file(filename:join(?STUBS_DIR, Erl), Opts),
+  217:    ct:print("Purge default ~p stub", [Mod]),
+  218:    code:purge(Mod),
+  219:    code:delete(Mod),
+<a name="220"></a>  220:    ct:print("Loading new ~p stub", [Mod]),
+  221:    Beam = atom_to_list(Mod) ++ code:objfile_extension(),
+  222:    {module, Mod} = code:load_binary(Mod, Beam, Bin).
+  223:
+  224:
+<a name=purge_stub>  225:<b>purge_stub</b></a>(Stub) -&gt;
+  226:    ct:print("Purge ~p stub", [Stub]),
+  227:    code:purge(Stub),
+  228:    code:delete(Stub),
+  229:    ct:print("Reloading default ~p stub", [Stub]),
+<a name="230"></a>  230:    {module, Stub} = code:load_file(Stub).
+</pre>
+</body>
+</html>

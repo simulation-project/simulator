@@ -20,6 +20,7 @@
 %%% @copyright 2012 ITI Egypt.
 %%% @author Esraa Adel <esraa.elmelegy@hotmail.com>
 %%% @author Sherif Ashraf <sherif_ashraf89@hotmail.com>
+%%% @author Ahmed Samy <ahm.sam@live.com>
 %%%         [http://www.iti.gov.eg/]
 %%% @end
 
@@ -27,7 +28,7 @@
 
 
 %%% External exports
--export([ get_msc_name/1, get_SPC/1, get_GT/1, get_VLR/1, insert_subscriber/4, update_subscriber_info/2, check_msc_imsi/2,
+-export([ get_msc_name/1, get_SPC/2, get_GT/1, get_VLR/1, insert_subscriber/4, update_subscriber_info/2, check_msc_imsi/2,
 	  check_periodic_lai/2]).
 
 -compile([export_all]).
@@ -84,21 +85,74 @@ get_msc_name({SPC,GT}) ->
     ok = pgsql:close(C),
     MSC.   
 
-%% @spec get_SPC(MGT) -> Result
+%% @spec get_SPC(Number_series, MSC) -> Result
 %%    Result = atom()
-%%    MGT = atom()  
+%%    Number_series = atom() 
+%%    MSC = atom() 
 %%% @doc This function returns the SPC for a given MGT .
 %% @end
-get_SPC(MGT)->
+%get_SPC(MGT, MSC)->
+ %   {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+  %  {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1 and msc_name=$2", [MGT, MSC]),
+   % SPC = show(Rows),
+   % SPC.
+
+get_SPC(Number_series, MSC)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1", [MGT]),
+    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1 and msc_name=$2", [Number_series, MSC]),
     SPC = show(Rows),
     SPC.
 
 
-get_MSRN_SPC(MSRN)->
+%% @spec get_SPC_MSISDN(MGT, MSC) -> Result
+%%    Result = atom()
+%%    Number_series = atom() 
+%%    MSC = atom() 
+%%% @doc This function returns the SPC for a given MGT .
+%% @end
+get_SPC_MSISDN(MGT, MSC)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _C, Rows} = pgsql:equery(C, "select spc from gt_translation where number_series=$1", [MSRN]),
+    {ok, _C, Rows} = pgsql:equery(C, "select spc from bno_analysis where number_series=$1 and msc_name=$2", [MGT, MSC]), %%%%% bno
+    SPC = show(Rows),
+    SPC.
+
+%% *******************************
+%% @spec get_MSRN_IMSI(IMSI) -> Result
+%%    Result = atom()
+%%    IMSI = atom()  
+%%% @doc Returns the MSRN for a given IMSI .
+%% @end
+get_MSRN_IMSI(IMSI)->
+	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select msrn from sub_info where imsi=$1 ", [IMSI]),
+    I = show(Rows),
+    I.
+
+%% @spec release_MSRN(IMSI) -> Result
+%%    Result = atom()
+%%    IMSI = atom()  
+%%% @doc Realeses the MSRN for a given IMSI when the call ends .
+%% @end
+release_MSRN(IMSI)->
+	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update sub_info set msrn='' where imsi=$1", [IMSI]),
+    io:format("msc_db:reset MSRN to empty to a certain subscriber: done  ~n").
+
+%% @spec reset_MSRN(IMSI) -> Result
+%%    Result = atom()
+%%    IMSI = atom()  
+%%% @doc Frees the MSRN when the call ends .
+%% @end
+reset_MSRN(MSRN)->
+	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _} = pgsql:equery(C, "update msrn set state='free' where msrn_no=$1", [MSRN]),
+    io:format("msc_db:reset MSRN to be free: done  ~n").
+%% *******************************
+
+
+get_MSRN_SPC(MSRN,MSC)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select spc from bno_analysis where number_series=$1 and msc_name=$2", [MSRN,MSC]),%%%% bno
     SPC = show(Rows),
     SPC.
 
@@ -163,23 +217,7 @@ update_status(IMSI)->
     {ok, _} = pgsql:equery(C, "update sub_info set status='active' where imsi=$1", [IMSI]),
     io:format("msc_db:update status to active: done  ~n").
 
-%% *******************************
-get_MSRN_IMSI(IMSI)->
-	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _C, Rows} = pgsql:equery(C, "select msrn from sub_info where imsi=$1 ", [IMSI]),
-    I = show(Rows),
-    I.
 
-release_MSRN(IMSI)->
-	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _} = pgsql:equery(C, "update sub_info set msrn='' where imsi=$1", [IMSI]),
-    io:format("msc_db:reset MSRN to empty to a certain subscriber: done  ~n").
-
-reset_MSRN(MSRN)->
-	{ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
-    {ok, _} = pgsql:equery(C, "update msrn set state='free' where msrn_no=$1", [MSRN]),
-    io:format("msc_db:reset MSRN to be free: done  ~n").
-%% *******************************
 
 
 update_MSRN_sub(MSRN, IMSI)->
@@ -261,11 +299,12 @@ update_subscriber_info(IMSI, LAI) ->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _} = pgsql:equery(C, "update sub_info set lai=$1 where imsi=$2", [LAI, IMSI]),
     io:format("msc_db:update_subscriber_info(intra msc): done  ~n").
+
 %% @spec check_msc_imsi(MSC, IMSI) -> Result
 %%   MSC = atom() 
 %%   IMSI = atom()   
 %%   Result = atom()
-%%% @doc This function checks that the IMSI belongs to the given MSC .
+%%% @doc Checks that the IMSI belongs to the given MSC .
 %% @end
 check_msc_imsi(MSC, IMSI)->
 {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
@@ -273,7 +312,11 @@ check_msc_imsi(MSC, IMSI)->
 R = show(Rows),
 R.
 
-
+%% @spec get_IMSI_MSRN(MSRN) -> Result
+%%   MSRN = atom() 
+%%   Result = atom()
+%%% @doc Gets the IMSI for a given MSRN .
+%% @end
 get_IMSI_MSRN(MSRN)->
     {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
     {ok, _C, Rows} = pgsql:equery(C, "select imsi from sub_info where msrn = $1", [MSRN]),
@@ -301,6 +344,20 @@ check_periodic_lai(IMSI, LAI)->
 R = show(Rows),
 R.
 
+
+
+get_number_series(gt,MSC)->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select number_series from gt_translation where msc_name=$1 ",[MSC]),
+    No = show_all(Rows,[]),
+    No;
+get_number_series(bno,MSC) ->
+    {ok, C} = pgsql:connect("localhost", "postgres", "iti", [{database, "msc"}]),
+    {ok, _C, Rows} = pgsql:equery(C, "select number_series from bno_analysis where msc_name=$1 ",[MSC]),
+    No = show_all(Rows,[]),
+    No.
+
+
 %% ===================================================================
 %% Internal exports
 %% ===================================================================
@@ -316,3 +373,9 @@ show([H|_])->
     {A} = H,
     C = list_to_atom(binary_to_list(A)),
     C.
+show_all([],L)->
+L;
+show_all([H|T],L)->
+    {A}=H,
+    C =binary_to_list(A),
+    show_all(T,[C|L]).

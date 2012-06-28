@@ -31,10 +31,11 @@
 -export([start_link/1]).
 
 %%% External exports
--export([send_event/1,change_loc_area/2,call_setup/1,send_alert/2,receiving_alert/1,connect_msg/2, reply_msg/2]).
+-export([send_event/1,change_loc_area/2,call_setup/1,send_alert/2,receiving_alert/1,connect_msg/2, reply_msg/2,receiving_answer/1,get_state/1]).
+-export([release_msg/1,send_disconnect/1]).
 
 %%% States exports
--export([turn_off/2,turn_on_idle/2,turn_on_active/2]).
+-export([turn_off/2,turn_on_idle/2,turn_on_active/2,log_info/1]).
 
 %%% Init/Terminate exports
 -export([init/1, terminate/3]).
@@ -60,7 +61,7 @@
 %%   <dt>: </dt><dd>
 %%   </dd>
 %% </dl>
--record(st, {imsi,lai,timer}).
+-record(st, {imsi, lai, timer, periodic_time, normal_time, no_of_trials}).
 
 %%%-----------------------------------------------------------------------------
 %%% Start/Stop exports
@@ -102,9 +103,9 @@ start_link(Param) ->
 turn_off(turn_on_idle, Std) ->
     io:format("~p~n",[Std]),
     io:format("turn_on_idle ~n"),
-    T_ref = erlang:send_after(30000,self(),{idle,3}),
+    T_ref = erlang:send_after(Std#st.normal_time,self(),{idle,Std#st.no_of_trials}),
     loc_update(T_ref,{2,1,Std#st.imsi,Std#st.lai}),%% imsi_attach
-    P_ref = erlang:send_after(120000,self(),repeat),
+    P_ref = erlang:send_after(Std#st.periodic_time,self(),repeat),
     {next_state, turn_on_idle, Std#st{timer = P_ref}};
 turn_off(turn_on_active, Std) ->
      io:format("~p~n",[Std]),
@@ -137,7 +138,8 @@ turn_on_idle(turn_on_active, Std) ->
 turn_on_idle(turn_off, Std) ->
     io:format("~p~n",[Std]),
     io:format("turn_off"),
-    T_ref = erlang:send_after(30000,self(),{off,3}),
+	T_ref = erlang:send_after(Std#st.normal_time,self(),{off,Std#st.no_of_trials}),
+    %%T_ref = erlang:send_after(30000,self(),{off,3}),
     loc_update(T_ref,{2,4,Std#st.imsi,Std#st.lai}),%%imsi_deattach
     erlang:cancel_timer(Std#st.timer),
     {next_state, turn_off, Std}.
@@ -166,7 +168,8 @@ turn_on_active(turn_on_idle,Std)->
 turn_on_active(turn_off, Std) ->
     io:format("~p~n",[Std]),
     io:format("turn_off"),
-    T_ref = erlang:send_after(30000,self(),{off,3}),
+	T_ref = erlang:send_after(Std#st.normal_time,self(),{off,Std#st.no_of_trials}),
+    %%T_ref = erlang:send_after(30000,self(),{off,3}),
     loc_update(T_ref,{2,4,Std#st.imsi,Std#st.lai}),%%imsi_deattach
     erlang:cancel_timer(Std#st.timer),
     {next_state, turn_off, Std}.
@@ -189,7 +192,10 @@ turn_on_active(turn_off, Std) ->
 %% @doc Initializes the the fsm.
 %% @end
 init(Param) ->
-    {ok, turn_off, #st{imsi = lists:nth(1,Param),lai = lists:nth(2,Param)}}.
+	{ok, Periodic_time} = application:get_env(ms, periodic_time),
+	{ok, Normal_time} = application:get_env(ms, normal_time),
+	{ok, N} = application:get_env(ms, no_of_trials),
+    {ok, turn_off, #st{imsi = lists:nth(1,Param),lai = lists:nth(2,Param), periodic_time = Periodic_time, normal_time = Normal_time, no_of_trials = N }}.
 %% @private
 %% @spec terminate(Reason, Stn, Std) -> ok
 %%    Reason = normal | shutdown | term()
@@ -271,18 +277,52 @@ state_name(_Event, _From, Std) ->
 %%
 %% @doc Handles events received by <u>gen_fsm:send_all_state_event/2</u>.
 %% @end
-handle_event(send_alert, turn_on_idle,Std) ->
+handle_event({send_alert,Ano}, turn_on_idle,Std) ->
 	io:format("send_alert ~n~n"),
     msc_app:receiving_alert({1,5,Std#st.imsi,Std#st.lai}),
+	IMSI = atom_to_list(Std#st.imsi),
+	Msg1 = string:concat("receiving_call,",IMSI),
+	Ano_str = atom_to_list(Ano),
+	Msg2 = string:concat(Msg1,","),
+	Msg3 = string:concat(Msg2,Ano_str),
+	MSG = list_to_atom(Msg3),
+	request_handler:erlang_send2(MSG),%%Ringing
     reply_msg(Std#st.imsi,' : Sending Alert message to MSC'),
     {next_state,turn_on_idle, Std};
+
 handle_event(receive_alert, turn_on_idle,Std) ->
 	io:format("receive_alert ~n~n"),
     %%msc_app:receiving_alert({1,5,Std#st.imsi,Std#st.lai}),
+	IMSI = atom_to_list(Std#st.imsi),
+	Msg = string:concat("alert_msg,",IMSI),
+	MSG = list_to_atom(Msg),
+	request_handler:erlang_send2(MSG),%%Alert
     reply_msg(Std#st.imsi,' : Sending Alert message to MSC'),
     {next_state,turn_on_idle, Std};
+
+handle_event(release_msg,turn_on_active,Std)->
+    io:format("release_msg~n"),
+    msc_app:release_complete({5,6,Std#st.imsi,Std#st.lai}),
+    {next_state,turn_on_idle, Std};
+
+handle_event(send_disconnect,turn_on_active,Std)->
+    io:format("send_disconnect~n"),
+    msc_app:release_msg({5,7,Std#st.imsi,Std#st.lai}),
+    {next_state,turn_on_active, Std};
+
+handle_event(get_state, Stn,Std) ->
+	io:format("get_state : ~p~n~n",[Stn]),
+	%%IMSI = atom_to_list(Std#st.imsi),
+	%%Msg1 = string:concat("ms_state,",IMSI),
+	%%Msg2 = string:concat(Msg1,atom_to_list(Stn)),
+	%%MSG = list_to_atom(Msg2),
+	%%request_handler:erlang_send2(MSG),%%get_state
+        ms_app:reply_msg(Std#st.imsi,' : Sending Mobile Station State: ',Stn),
+    {next_state,Stn, Std};
+
 handle_event(Event, turn_on_idle, Std) ->
-    T_ref = erlang:send_after(30000,self(),{normal,3}),
+	T_ref = erlang:send_after(Std#st.normal_time,self(),{normal,Std#st.no_of_trials}),
+    %%T_ref = erlang:send_after(30000,self(),{normal,3}),
     loc_update(T_ref,{2,2,Std#st.imsi,Event}),%%normal_loc_update
     {next_state, turn_on_idle, Std#st{lai = Event}};
 handle_event(_Event, Stn, Std) ->
@@ -308,7 +348,8 @@ handle_info(repeat, Stn, Std) ->
     %%loc_update(T_ref,{2,3,Std#st.imsi,Std#st.lai}),
     periodic_loc_update(Std#st.imsi,Std#st.lai),
     reply_msg(Std#st.imsi,' : periodic location update is sent'),
-    P_ref = erlang:send_after(30000,self(),repeat),
+    P_ref = erlang:send_after(Std#st.periodic_time,self(),repeat),
+	%%P_ref = erlang:send_after(30000,self(),repeat),
     {next_state, Stn, Std#st{timer = P_ref}};
 
 handle_info({idle,0},Stn,Std) ->
@@ -318,7 +359,8 @@ handle_info({idle,0},Stn,Std) ->
     {next_state, Stn, Std};
 handle_info({idle,N},Stn,Std) ->
     io:format("idle request retry "),
-    T_ref = erlang:send_after(30000,self(),{idle,N-1}),
+	T_ref = erlang:send_after(Std#st.normal_time,self(),{idle,N-1}),
+    %%T_ref = erlang:send_after(30000,self(),{idle,N-1}),
     loc_update(T_ref,{2,1,Std#st.imsi,Std#st.lai}),%%imsi_attach
     {next_state, Stn, Std};
 
@@ -328,7 +370,8 @@ handle_info({off,0},Stn,Std) ->
     {next_state, Stn, Std};
 handle_info({off,N},Stn,Std) ->
     io:format("off request retry "),
-    T_ref = erlang:send_after(30000,self(),{off,N-1}),
+	T_ref = erlang:send_after(Std#st.normal_time,self(),{off,N-1}),
+    %%T_ref = erlang:send_after(30000,self(),{off,N-1}),
     loc_update(T_ref,{2,4,Std#st.imsi,Std#st.lai}),%%imsi_deattach
     erlang:cancel_timer(Std#st.timer),
     {next_state, Stn, Std};
@@ -339,7 +382,8 @@ handle_info({normal,0},Stn,Std)->
     {next_state, Stn, Std};
 handle_info({normal,N},Stn,Std)->
     io:format("normal request retry "),
-    T_ref = erlang:send_after(30000,self(),{normal,N-1}),
+	T_ref = erlang:send_after(Std#st.normal_time,self(),{normal,N-1}),
+    %%T_ref = erlang:send_after(30000,self(),{normal,N-1}),
     loc_update(T_ref,{2,2,Std#st.imsi,Std#st.lai}),%%normal_loc_update
     {next_state, Stn, Std};
 
@@ -438,6 +482,7 @@ reply_msg(Var,Msg) ->
     Ms=string:concat(K,Msgs),
     M=list_to_atom(Ms),
     request_handler:erlang_send(M),
+    log_info(M),
     ok.
 %%%-----------------------------------------------------------------------------
 %%% API functions
@@ -464,16 +509,81 @@ change_loc_area(IMSI,New_LAI) ->
     gen_fsm:send_all_state_event(IMSI,New_LAI).
 
 
+%% @spec call_setup(Value) -> Result
+%%    Value = {2,1, IMSI, LAI, Bno}
+%%    IMSI = atom()
+%%    LAI = atom()
+%%    Bno = atom()
+%%    Result = atom() 
+%% @doc Sends a call setup request to MSC.
+%% @end
+
 call_setup({2,1,IMSI,LAI,Bno})->
     msc_app:call_setup({2,1,IMSI,LAI,Bno}).
 
+%% @spec send_alert(IMSI,Ano) -> Result
+%%    IMSI = atom()
+%%    Ano = atom()
+%%    Result = atom() 
+%% @doc Sends an alert message to MSC.
+%% @end
 send_alert(IMSI,Ano)->
     io:format("send_alert to ~p~n",[Ano]),
-    gen_fsm:send_all_state_event(IMSI,send_alert).
+    gen_fsm:send_all_state_event(IMSI,{send_alert,Ano}).
 
+%% @spec receiving_alert(IMSI) -> Result
+%%    IMSI = atom()
+%%    Result = atom() 
+%% @doc Receives an alert message from MSC.
+%% @end
 receiving_alert(IMSI)->
     gen_fsm:send_all_state_event(IMSI,receive_alert).
 
+%% @spec connect_msg(IMSI,LAI) -> Result
+%%    IMSI = atom()
+%%    LAI = atom()
+%%    Result = atom() 
+%% @doc Sends a connect message to MSC.
+%% @end
 connect_msg(IMSI,LAI)->
     msc_app:receive_connect({1,6,IMSI,LAI}),
     ms_fsm:send_event({IMSI,turn_on_active}).
+
+%% @spec receiving_answer(IMSI) -> Result
+%%    IMSI = atom()
+%%    Result = atom() 
+%% @doc Sends an alert message to MSC.
+%% @end
+receiving_answer(IMSI)->
+   Msg = string:concat("connected,",atom_to_list(IMSI)),
+   MSG = list_to_atom(Msg),
+   request_handler:erlang_send2(MSG),
+   ms_fsm:send_event({IMSI,turn_on_active}).
+
+%% @spec get_state(IMSI) -> Result
+%%    IMSI = atom()
+%%    Result = atom() 
+%% @doc Returns the state of the MS.
+%% @end
+get_state(IMSI)->
+	gen_fsm:send_all_state_event(IMSI,get_state).
+
+%% @spec log_info(Msg) -> Result
+%%    Msg = atom()
+%%    Result = atom() 
+%% @doc Logs message to a log file.
+%% @end
+log_info(Msg)->
+    {ok, Path} = application:get_env(ms,log_file),
+    io:format("~p~n",[Path]),
+    M = string:concat(atom_to_list(Msg),"\n"),
+    disk_log:open([{name, ms}, {file, Path},{format, external},{type, halt}]),
+    disk_log:blog(ms,list_to_binary(M)),
+    disk_log:close(ms).
+
+
+release_msg(IMSI)->
+    gen_fsm:send_all_state_event(IMSI,release_msg).
+
+send_disconnect(IMSI)->
+     gen_fsm:send_all_state_event(IMSI,send_disconnect).

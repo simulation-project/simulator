@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Module msc_db</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module msc_db</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+   This module is responsible of handling all the requests from %%% the MSC to the Database.
+<p>Copyright © 2012 ITI Egypt.</p>
+
+<p><b>Authors:</b> Esraa Adel (<a href="mailto:esraa.elmelegy@hotmail.com"><tt>esraa.elmelegy@hotmail.com</tt></a>), Sherif Ashraf (<a href="mailto:sherif_ashraf89@hotmail.com"><tt>sherif_ashraf89@hotmail.com</tt></a>) [<em>web site:</em> <tt><a href="http://www.iti.gov.eg/" target="_top">http://www.iti.gov.eg/</a></tt>].</p>
+
+<h2><a name="description">Description</a></h2>
+   This module is responsible of handling all the requests from %%% the MSC to the Database.
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#check_msc_imsi-2">check_msc_imsi/2</a></td><td>This function checks that the IMSI belongs to the given MSC .</td></tr>
+<tr><td valign="top"><a href="#check_periodic_lai-2">check_periodic_lai/2</a></td><td>This function checks that the LAI for the given IMSI is correct in perodic update.</td></tr>
+<tr><td valign="top"><a href="#get_GT-1">get_GT/1</a></td><td>This function returns the GT for a given VLR .</td></tr>
+<tr><td valign="top"><a href="#get_SPC-1">get_SPC/1</a></td><td>This function returns the SPC for a given MGT .</td></tr>
+<tr><td valign="top"><a href="#get_VLR-1">get_VLR/1</a></td><td>This function returns the VLR address for a given MSC .</td></tr>
+<tr><td valign="top"><a href="#get_msc_name-1">get_msc_name/1</a></td><td>This function returns the MSC name for a given Input Parameter .</td></tr>
+<tr><td valign="top"><a href="#insert_subscriber-4">insert_subscriber/4</a></td><td>This function inserts the Input data for a given IMSI into the Database.</td></tr>
+<tr><td valign="top"><a href="#update_subscriber_info-2">update_subscriber_info/2</a></td><td>This function updates the status for a given IMSI .</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="check_msc_imsi-2">check_msc_imsi/2</a></h3>
+<div class="spec">
+<p><tt>check_msc_imsi(MSC, IMSI) -&gt; Result</tt>
+<ul class="definitions"><li><tt>MSC = atom()</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>Result = atom()</tt></li></ul></p>
+</div><p>This function checks that the IMSI belongs to the given MSC .</p>
+
+<h3 class="function"><a name="check_periodic_lai-2">check_periodic_lai/2</a></h3>
+<div class="spec">
+<p><tt>check_periodic_lai(IMSI, LAI) -&gt; Result</tt>
+<ul class="definitions"><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li><li><tt>Result = atom()</tt></li></ul></p>
+</div><p>This function checks that the LAI for the given IMSI is correct in perodic update.</p>
+
+<h3 class="function"><a name="get_GT-1">get_GT/1</a></h3>
+<div class="spec">
+<p><tt>get_GT(VLR) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = atom()</tt></li><li><tt>VLR = atom()</tt></li></ul></p>
+</div><p>This function returns the GT for a given VLR .</p>
+
+<h3 class="function"><a name="get_SPC-1">get_SPC/1</a></h3>
+<div class="spec">
+<p><tt>get_SPC(MGT) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = atom()</tt></li><li><tt>MGT = atom()</tt></li></ul></p>
+</div><p>This function returns the SPC for a given MGT .</p>
+
+<h3 class="function"><a name="get_VLR-1">get_VLR/1</a></h3>
+<div class="spec">
+<p><tt>get_VLR(MSC) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = atom()</tt></li><li><tt>MSC = atom()</tt></li></ul></p>
+</div><p>This function returns the VLR address for a given MSC .</p>
+
+<h3 class="function"><a name="get_msc_name-1">get_msc_name/1</a></h3>
+<div class="spec">
+<p><tt>get_msc_name(X1::{Parameter1, Parameter2}) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = atom()</tt></li><li><tt>Parameter1 = SPC | LAI | GT</tt></li><li><tt>Parameter2 = spc | lai | gt | gt</tt></li><li><tt>SPC = atom()</tt></li><li><tt>LAI = atom()</tt></li><li><tt>GT = atom()</tt></li></ul></p>
+</div><p>This function returns the MSC name for a given Input Parameter .</p>
+
+<h3 class="function"><a name="insert_subscriber-4">insert_subscriber/4</a></h3>
+<div class="spec">
+<p><tt>insert_subscriber(IMSI, LAI, MSC, VLR) -&gt; Result</tt>
+<ul class="definitions"><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li><li><tt>MSC = atom()</tt></li><li><tt>VLR = atom()</tt></li><li><tt>Result = ok</tt></li></ul></p>
+</div><p>This function inserts the Input data for a given IMSI into the Database.</p>
+
+<h3 class="function"><a name="update_subscriber_info-2">update_subscriber_info/2</a></h3>
+<div class="spec">
+<p><tt>update_subscriber_info(IMSI::Parameter, LAI::Status) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Parameter = IMSI | {IMSI, LAI, MSC, VLR} | {IMSI, LAI}</tt></li><li><tt>IMSI = atom()</tt></li><li><tt>LAI = atom()</tt></li><li><tt>MSC = atom()</tt></li><li><tt>VLR = atom()</tt></li><li><tt>Status = idle | newstatus</tt></li><li><tt>Result = ok</tt></li></ul></p>
+</div><p>This function updates the status for a given IMSI .</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jun 25 2012, 20:46:08.</i></p>
+</body>
+</html>

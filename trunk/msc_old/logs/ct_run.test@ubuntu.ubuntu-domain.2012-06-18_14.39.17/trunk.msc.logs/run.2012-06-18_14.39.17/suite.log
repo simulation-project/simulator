@@ -1,0 +1,36 @@
+=== Suite started at 2012-06-18 14:39:17
+=== Starting test, 1 test cases
+=cases         1
+=user          sony
+=host          ubuntu.ubuntu-domain
+=hosts         ubuntu.ubuntu-domain 
+=emulator_vsn  5.8.5
+=emulator      beam
+=otp_release   R14B04
+=started       2012-06-18 14:39:17
+=case          msc_app_SUITE:init_per_suite
+=logfile       msc_app_suite.init_per_suite.html
+=started       2012-06-18 14:39:17
+=ended         2012-06-18 14:39:17
+=result        ok
+=elapsed       0.048752
+=case          msc_app_SUITE:my_test_case
+=logfile       msc_app_suite.my_test_case.html
+=started       2012-06-18 14:39:17
+=ended         2012-06-18 14:39:17
+=result        ok
+=elapsed       0.05331
+=case          msc_app_SUITE:end_per_suite
+=logfile       msc_app_suite.end_per_suite.html
+=started       2012-06-18 14:39:17
+=ended         2012-06-18 14:39:17
+=result        ok
+=elapsed       0.002783
+=group_time    0.156s
+=== TEST COMPLETE, 1 ok, 0 failed of 1 test cases
+
+=finished      2012-06-18 14:39:17
+=failed        0
+=successful    1
+=user_skipped  0
+=auto_skipped  0

@@ -84,6 +84,8 @@ suite() ->
 init_per_suite(Conf) ->
     ok = application:start(sasl),
     ok = application:start(ms),
+    ok = application:start(msc),
+    ok = application:start(hlr),
     lists:foreach(fun(X) -> code:add_path(X) end, ct:get_config(paths, [])),
     {A1, A2, A3} = now(),
     random:seed(A1, A2, A3),
@@ -105,6 +107,8 @@ init_per_suite(Conf) ->
 %% @doc Cleanup after the suite.
 %% @end
 end_per_suite(_Conf) ->
+    ok = application:stop(hlr),
+    ok = application:stop(msc),
     ok = application:stop(ms),
     ok = application:stop(sasl).
 
@@ -170,12 +174,23 @@ normal_case()->
     [{userdata, [{doc, "Tests the public API."}]}].
 
 normal_case(_Conf)->
-   {ok,_PID} = ms_app:create_ms({ms1,lai1}),
+   {ok,_PID1} = ms_app:create_ms({ms1,lai1}),
+   {ok,_PID2} = ms_app:create_ms({ms2,lai2}),
     ok = ms_app:change_state({ms1,turn_on_idle}),
-    ok = ms_app:change_state({ms1,turn_on_idle}),
-    ok = ms_app:change_lai({ms1,lai2}).
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_state({ms2,turn_on_idle}),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_lai({ms1,lai2}),
+    ok = ms_app:change_lai({ms2,lai1}),
+    ok = ms_app:call_setup({ms1,lai2,bno2}),
+    ok = ms_app:connect_msg(ms2,lai1),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_state({ms1,turn_off}),
+    ok = ms_app:get_state(ms1),
+    ok = ms_app:change_state({ms2,turn_off}),
+    ok = ms_app:get_state(ms1).
     
-
 %%%-----------------------------------------------------------------------------
 %%% Tracing Util Functions
 %%%-----------------------------------------------------------------------------

@@ -26,6 +26,16 @@ ms_app:change_lai(Msg),
 io:format("mobile location update : ~p ~n ",[Msg]),
 erlang_send(location_update);
 
+erlang_receive(call_request,Msg)->
+ms_app:call_setup(Msg),
+io:format("mobile call request : ~p ~n ",[Msg]),
+erlang_send(call_request);
+
+erlang_receive(accept_call,{IMSI,LAI})->
+ms_app:connect_msg(IMSI,LAI),
+io:format("mobile accept msg : ~p   ~p ~n ",[IMSI,LAI]),
+erlang_send(accept_call);
+
 erlang_receive(newhlr,Msg)->
 io:format("new hlr : ~p ~n",[Msg]),
 hlr_mgr:start_gen(Msg),
@@ -51,6 +61,15 @@ M=list_to_atom(Ms),
 {mbox,java_receiver@localhost} ! M,
 data_sent.
 
+
+erlang_send2(Msg)->
+H='signal|',
+Hs=atom_to_list(H),
+Msgs=atom_to_list(Msg),
+Ms=string:concat(Hs,Msgs),
+M=list_to_atom(Ms),
+{mbox,java_receiver@localhost} ! M,
+data_sent.
 
 
 

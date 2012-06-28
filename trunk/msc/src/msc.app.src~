@@ -1,0 +1,12 @@
+{application, msc,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { msc_app, []}},
+  {env, [{log_file,"/home/alaa/trunk wiz 3ak sherif/msc/priv/log.txt"}]}
+ ]}.
